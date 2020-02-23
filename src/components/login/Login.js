@@ -157,7 +157,13 @@ class Login extends React.Component {
             </ButtonContainer>
           </Form>
         </FormContainer>
+        <ButtonContainer>
+          <Button>
+            Register
+          </Button>
+        </ButtonContainer>
       </BaseContainer>
+
     );
   }
 }
