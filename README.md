@@ -1,4 +1,4 @@
-npnp# SoPra FS20 - Client Template
+npnpnpm# SoPra FS20 - Client Template
 
 ## Getting started with React
 
