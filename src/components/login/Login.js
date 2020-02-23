@@ -5,6 +5,7 @@ import { api, handleError } from '../../helpers/api';
 import User from '../shared/models/User';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
+import Link from "react-router-dom/Link";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -159,7 +160,9 @@ class Login extends React.Component {
         </FormContainer>
         <ButtonContainer>
           <Button>
+            <Link to = "/Register" style={{ textDecoration: 'none' }}>
             Register
+            </Link>
           </Button>
         </ButtonContainer>
       </BaseContainer>
