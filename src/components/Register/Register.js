@@ -5,6 +5,7 @@ import { api, handleError } from '../../helpers/api';
 import User from '../shared/models/User';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../../views/design/Button';
+import Link from "react-router-dom/Link";
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -98,8 +99,6 @@ class Register extends React.Component {
             // Get the returned user and update a new object.
             const user = new User(response.data);
 
-            // Store the token into the local storage.
-            localStorage.setItem('token', user.token);
 
             // Login successfully worked --> navigate to the route /game in the GameRouter, why doesnt this work
             this.props.history.push(`/Login`);
@@ -168,6 +167,13 @@ class Register extends React.Component {
                         </ButtonContainer>
                     </Form>
                 </FormContainer>
+                <ButtonContainer>
+                    <Button>
+                        <Link to = "/Login" style={{ textDecoration: 'none' }}>
+                            Login
+                        </Link>
+                    </Button>
+                </ButtonContainer>
             </BaseContainer>
         );
     }
