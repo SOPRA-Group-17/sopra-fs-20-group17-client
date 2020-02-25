@@ -37,6 +37,10 @@ class Game extends React.Component {
     this.props.history.push('/login');
   }
 
+  profile(){
+    this.props.history.push('/Profile');
+  }
+
   async componentDidMount() {
     try {
       const response = await api.get('/users');
@@ -87,6 +91,14 @@ class Game extends React.Component {
               }}
             >
               Logout
+            </Button>
+            <Button
+                width="100%"
+                onClick={() => {
+                  this.profile();
+                }}
+            >
+              Profile
             </Button>
           </div>
         )}

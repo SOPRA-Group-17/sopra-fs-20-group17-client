@@ -91,7 +91,7 @@ class Login extends React.Component {
         username: this.state.username,
         password: this.state.password
       });
-      const response = await api.post('/users', requestBody);
+      const response = await api.post('/users/auth', requestBody);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
@@ -147,7 +147,7 @@ class Login extends React.Component {
             />
             <ButtonContainer>
               <Button
-                disabled={!this.state.username || !this.state.name}
+                disabled={!this.state.username || !this.state.password}
                 width="50%"
                 onClick={() => {
                   this.login();
