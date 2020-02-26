@@ -1,6 +1,9 @@
 /**
  * User model
+ *
  */
+
+//TODO add fields
 class User {
   constructor(data = {}) {
     this.id = null;

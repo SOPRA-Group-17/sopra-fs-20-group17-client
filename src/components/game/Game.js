@@ -38,7 +38,7 @@ class Game extends React.Component {
   }
 
   profile(){
-    this.props.history.push('/Profile');
+    this.props.history.push('/game/profile');
   }
 
   async componentDidMount() {
