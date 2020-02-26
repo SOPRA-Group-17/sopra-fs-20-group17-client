@@ -13,6 +13,8 @@ class GameRouter extends React.Component {
   render() {
     /**
      * "this.props.base" is "/app" because as been passed as a prop in the parent of GameRouter, i.e., App.js
+     *
+     *  left away exact with profile, so that no matter of the id at the end of the url the routing works
      */
     return (
       <Container>
@@ -21,9 +23,10 @@ class GameRouter extends React.Component {
           path={`${this.props.base}/dashboard`}
           render={() => <Game />}
         />
+
        <Route
-          exact
-          path= {`${this.props.base}/profile`}
+           exact
+          path= {`${this.props.base}/profile/:id`}
           render={() => <Profile />}
        />
 

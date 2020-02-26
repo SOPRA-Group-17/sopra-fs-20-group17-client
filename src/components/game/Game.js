@@ -36,10 +36,13 @@ class Game extends React.Component {
     localStorage.removeItem('token');
     this.props.history.push('/login');
   }
+  profile() {
 
-  profile(){
-    this.props.history.push('/game/profile');
+    this.props.history.push('game/profile');
   }
+
+
+
 
   async componentDidMount() {
     try {
@@ -91,14 +94,6 @@ class Game extends React.Component {
               }}
             >
               Logout
-            </Button>
-            <Button
-                width="100%"
-                onClick={() => {
-                  this.profile();
-                }}
-            >
-              Profile
             </Button>
           </div>
         )}
