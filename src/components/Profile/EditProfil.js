@@ -58,7 +58,7 @@ const Label = styled.label`
   text-transform: uppercase;
 `;
 
-class Profile extends React.Component {
+class EditProfile extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -116,7 +116,7 @@ class Profile extends React.Component {
                         <Label>Username</Label>
                         <InputField
                             placeholder={this.state.user.username}
-                            />
+                        />
                         <Label>Online Status</Label>
                         <InputField
                             placeholder={this.state.user.status}
@@ -153,4 +153,4 @@ class Profile extends React.Component {
     }
 }
 
-export default withRouter(Profile);
+export default withRouter(EditProfile);

@@ -12,6 +12,7 @@ class User {
     this.date = null;
     this.token = null;
     this.status = null;
+    this.birthDate = null;
     Object.assign(this, data);
   }
 }

@@ -28,17 +28,14 @@ class Game extends React.Component {
   constructor() {
     super();
     this.state = {
-      users: null
+      users: null,
+      ID: null
     };
   }
 
   logout() {
     localStorage.removeItem('token');
     this.props.history.push('/login');
-  }
-  profile() {
-
-    this.props.history.push('game/profile');
   }
 
 
@@ -47,6 +44,7 @@ class Game extends React.Component {
   async componentDidMount() {
     try {
       const response = await api.get('/users');
+      this.state.ID = this.props.match.params.id;
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
       // feel free to remove it :)
@@ -68,6 +66,7 @@ class Game extends React.Component {
       alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
     }
   }
+
 
   render() {
     return (

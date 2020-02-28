@@ -47,7 +47,10 @@ const ButtonContainer = styled.div`
 const Player = ({ user }) => {
   return (
     <Container>
-      <Name>{user.name}</Name> <UserName>{user.username}</UserName>
+      <Name>{user.name}
+      </Name>
+
+        <UserName>{user.username}</UserName>
       <Id>Id: {user.id}</Id>
 
 
@@ -58,6 +61,7 @@ const Player = ({ user }) => {
              </Button>
         </ButtonContainer>
      </Link>
+
 
 
 
