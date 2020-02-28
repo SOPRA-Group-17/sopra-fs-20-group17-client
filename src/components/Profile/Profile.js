@@ -96,7 +96,7 @@ class Profile extends React.Component {
         }
     }
     editProfile(){
-        this.props.history.push(`/game/editProfile/${user.id}`);
+        this.props.history.push(`/game/editProfile/${this.state.user.id}`);
     }
 
 
@@ -109,7 +109,7 @@ class Profile extends React.Component {
                         this.editProfile();
                     }}
                 >
-                    Logout
+                    Edit Profile
                 </Button>
                 <FormContainer>
                     <Form>

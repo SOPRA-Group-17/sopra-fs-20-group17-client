@@ -11,6 +11,7 @@ import user from "../shared/models/User";
 const Container = styled(BaseContainer)`
   color: white;
   text-align: center;
+  
 `;
 
 const FormContainer = styled.div`
@@ -20,6 +21,7 @@ const FormContainer = styled.div`
   align-items: center;
   min-height: 300px;
   justify-content: center;
+
 `;
 
 const Form = styled.div`
@@ -49,6 +51,20 @@ const InputField = styled.input`
   border-radius: 50px;
   margin-bottom: 20px;
   background: rgba(255, 255, 255, 0.2);
+  color: red;
+`;
+const OutputField = styled.input`
+  &::placeholder {
+    color: yellow;
+  }
+  height: 50px;
+  width: 100%;
+  padding-left: 15px;
+  margin-left: -4px;
+  border: none;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.2);
   color: white;
   pointer-events:none;
 `;
@@ -63,7 +79,9 @@ class EditProfile extends React.Component {
         super();
         this.state = {
             user: new user(),
-            ID: null
+            ID: null,
+            newUsername:null,
+            newBirthDate:null,
         };
     }
 
@@ -89,53 +107,36 @@ class EditProfile extends React.Component {
     }
     getBirthDate(){
         if(this.state.user.birthDate == null){
-            return "Birth date is not set"
+            return "Format : XX/XX/XXXX"
         }
         else{
             return this.state.user.birthDate
         }
     }
-    editProfile(){
-        this.props.history.push(`/game/editProfile/${user.id}`);
+    handleInputChange(key, value) {
+        // Example: if the key is username, this statement is the equivalent to the following one:
+        // this.setState({'username': value});
+        this.setState({ [key]: value });
+    }
+
+    //TODO make a correct format checker
+    correctFormat(value){
+        if(value == "test"){
+            return true;
+        }
+        return false;
+    }
+
+
+    saveChange(){
+
+
     }
 
 
     render() {
         return (
             <BaseContainer>
-                <Button
-                    width="100%"
-                    onClick={() => {
-                        this.editProfile();
-                    }}
-                >
-                    Logout
-                </Button>
-                <FormContainer>
-                    <Form>
-                        <Label>Username</Label>
-                        <InputField
-                            placeholder={this.state.user.username}
-                        />
-                        <Label>Online Status</Label>
-                        <InputField
-                            placeholder={this.state.user.status}
-                        />
-                        <Label>ID</Label>
-                        <InputField
-                            placeholder={this.state.user.id}
-                        />
-                        <Label>Creation date</Label>
-                        <InputField
-                            placeholder={this.state.user.date}
-                        />
-                        <Label>Birth date</Label>
-                        <InputField
-                            placeholder= {this.getBirthDate()}
-                        />
-
-                    </Form>
-                </FormContainer>
                 <Button
                     width="100%"
                     margin-top="100px"
@@ -145,6 +146,59 @@ class EditProfile extends React.Component {
                 >
                     Return to Dashboard
                 </Button>
+                <FormContainer>
+                    <Form>
+                        <Label>Username</Label>
+                        <InputField
+                            placeholder={this.state.user.username}
+                            onChange={e => {
+                                this.handleInputChange('newUsername', e.target.value);
+                            }}
+                        />
+                        <Label>Online Status</Label>
+                        <OutputField
+                            placeholder={this.state.user.status}
+                        />
+                        <Label>ID</Label>
+                        <OutputField
+                            placeholder={this.state.user.id}
+
+                        />
+                        <Label>Creation date</Label>
+                        <OutputField
+                            placeholder={this.state.user.date}
+                        />
+                        <Label>Birth date</Label>
+                        <InputField
+                            placeholder= {this.getBirthDate()}
+
+                            onChange={e => {
+                                if(this.correctFormat(e.target.value)){
+                                    this.handleInputChange('newBirthDate', e.target.value);
+                                }
+                                else{
+                                    this.handleInputChange('newBirthDate', null);
+                                }
+
+                            }}
+
+                        />
+
+                    </Form>
+                </FormContainer>
+
+
+                <Button
+                    disabled={(!this.state.newBirthDate & !this.correctFormat(this.state.newBirthDate)) & !this.state.newUsername}
+                    width="100%"
+                    margin-top="100px"
+                    onClick={() => {
+                        this.saveChange();
+                    }}
+                >
+                    Save Changes
+                </Button>
+
 
             </BaseContainer>
 

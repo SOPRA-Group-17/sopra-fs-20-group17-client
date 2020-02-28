@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
 import Game from "../../game/Game";
 import Profile from "../../Profile/Profile";
-import EditP
+import EditProfile from "../../Profile/EditProfile";
 
 const Container = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ class GameRouter extends React.Component {
 
           <Route
               exact
-              path= {`${this.props.base}/profile/:id`}
+              path= {`${this.props.base}/EditProfile/:id`}
               render={() => <EditProfile />}
           />
 
