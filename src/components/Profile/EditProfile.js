@@ -7,6 +7,11 @@ import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import user from "../shared/models/User";
+import DatePicker from 'react-datepicker' ;
+import User from '../shared/models/User';
+
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -29,12 +34,13 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 375px;
+  height: 400px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
+  margin-button: 20px;
   background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
@@ -74,16 +80,22 @@ const Label = styled.label`
   text-transform: uppercase;
 `;
 
+
+
 class EditProfile extends React.Component {
+
+
     constructor() {
         super();
         this.state = {
             user: new user(),
             ID: null,
             newUsername:null,
-            newBirthDate:null,
+            birthDate: null
         };
     }
+
+
 
     async componentDidMount() {
         try {
@@ -96,23 +108,56 @@ class EditProfile extends React.Component {
 
             // Get the returned users and update the state.
             this.setState({ user: response.data[0] });
+            console.log(this.state.ID);
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
         }
     }
 
+    async saveChange(){
+
+
+        try {
+            let requestBody;
+            if (this.state.newUsername != null && this.state.birthDate != null) {
+                requestBody = JSON.stringify({
+                    username: this.state.newUsername,
+                    birthDate: this.state.birthDate
+                });
+            }
+            else if(this.state.newUsername != null){
+                requestBody = JSON.stringify({
+                    username: this.state.newUsername,
+                });
+            }
+            else if(this.state.birthDate != null){
+                requestBody = JSON.stringify({
+                    birthDate: this.state.birthDate,
+                });
+            }
+            console.log(requestBody);
+            const response = await api.put(`/users/${this.state.ID}`, requestBody);
+
+            // Get the returned user and update a new object.
+            const user = new User(response.data);
+
+
+            // edit profile worked --> navigate to the route /game in the GameRouter
+            this.props.history.push(`/game/profile/${this.state.ID}`);
+        } catch (error) {
+            alert(`Something went wrong during updating your data: \n${handleError(error)}`);
+            this.props.history.push(`/Register`);
+        }
+
+    }
+
     dashboard(){
         this.props.history.push('/game/dashboard');
     }
-    getBirthDate(){
-        if(this.state.user.birthDate == null){
-            return "Format : XX/XX/XXXX"
-        }
-        else{
-            return this.state.user.birthDate
-        }
-    }
+
+
+
     handleInputChange(key, value) {
         // Example: if the key is username, this statement is the equivalent to the following one:
         // this.setState({'username': value});
@@ -120,18 +165,16 @@ class EditProfile extends React.Component {
     }
 
     //TODO make a correct format checker
-    correctFormat(value){
-        if(value == "test"){
-            return true;
-        }
-        return false;
-    }
+    //this is a regex checker that checks if the format is of the form 12.59.1959, no optimazation for months with less the 31 days
+
+    handleChange = date => {
+        this.setState({
+            birthDate: date
+        });
+        console.log(this.state.birthDate)
+    };
 
 
-    saveChange(){
-
-
-    }
 
 
     render() {
@@ -139,7 +182,7 @@ class EditProfile extends React.Component {
             <BaseContainer>
                 <Button
                     width="100%"
-                    margin-top="100px"
+
                     onClick={() => {
                         this.dashboard();
                     }}
@@ -167,31 +210,21 @@ class EditProfile extends React.Component {
                         <Label>Creation date</Label>
                         <OutputField
                             placeholder={this.state.user.date}
+
                         />
                         <Label>Birth date</Label>
-                        <InputField
-                            placeholder= {this.getBirthDate()}
-
-                            onChange={e => {
-                                if(this.correctFormat(e.target.value)){
-                                    this.handleInputChange('newBirthDate', e.target.value);
-                                }
-                                else{
-                                    this.handleInputChange('newBirthDate', null);
-                                }
-
-                            }}
-
+                        <DatePicker
+                            placeholderText={this.state.user.birthDate}
+                            selected={this.state.birthDate}
+                            onChange={this.handleChange}
                         />
+
 
                     </Form>
                 </FormContainer>
-
-
                 <Button
-                    disabled={(!this.state.newBirthDate & !this.correctFormat(this.state.newBirthDate)) & !this.state.newUsername}
+                    disabled={(!this.state.birthDate & !this.state.newUsername)}
                     width="100%"
-                    margin-top="100px"
                     onClick={() => {
                         this.saveChange();
                     }}
@@ -206,5 +239,27 @@ class EditProfile extends React.Component {
         );
     }
 }
+
+/*
+    <InputField
+        placeholder= {this.getBirthDate()}
+
+        onChange={
+
+            () => {
+                const [startDate, setStartDate] = useState(new Date());
+                return (
+                    <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+                );
+            }}
+
+            if(this.correctFormat(e.target.value)){
+                this.handleInputChange('newBirthDate', e.target.value);
+            }
+            else{
+                this.handleInputChange('newBirthDate', null);
+            }
+            }}
+     */
 
 export default withRouter(EditProfile);
