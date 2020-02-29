@@ -117,7 +117,6 @@ class EditProfile extends React.Component {
 
     async saveChange(){
 
-
         try {
             let requestBody;
             if (this.state.newUsername != null && this.state.birthDate != null) {
@@ -133,7 +132,7 @@ class EditProfile extends React.Component {
             }
             else if(this.state.birthDate != null){
                 requestBody = JSON.stringify({
-                    birthDate: this.state.birthDate,
+                    birthDate: this.state.birthDate
                 });
             }
             console.log(requestBody);
@@ -164,8 +163,7 @@ class EditProfile extends React.Component {
         this.setState({ [key]: value });
     }
 
-    //TODO make a correct format checker
-    //this is a regex checker that checks if the format is of the form 12.59.1959, no optimazation for months with less the 31 days
+    //used a pre build datepicker, so that only correct dates can be selected, need to change format, since i dont want to keep the hours
 
     handleChange = date => {
         this.setState({
@@ -174,6 +172,18 @@ class EditProfile extends React.Component {
         console.log(this.state.birthDate)
     };
 
+    getBirthDate(){
+        if(this.state.user.birthDate == null){
+            return "Birth date is not set"
+        }
+        else{
+            console.log(this.state.user.birthDate);
+            let niceFormat = this.state.user.birthDate.toString();
+            niceFormat = niceFormat.slice(0,10);
+            return niceFormat;
+
+        }
+    }
 
 
 
@@ -214,7 +224,7 @@ class EditProfile extends React.Component {
                         />
                         <Label>Birth date</Label>
                         <DatePicker
-                            placeholderText={this.state.user.birthDate}
+                            placeholderText={this.getBirthDate()}
                             selected={this.state.birthDate}
                             onChange={this.handleChange}
                         />

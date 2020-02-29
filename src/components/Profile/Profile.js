@@ -87,12 +87,18 @@ class Profile extends React.Component {
     dashboard(){
         this.props.history.push('/game/dashboard');
     }
+
+    //this method is used to format the saved BirthDate into a nice format ;)
     getBirthDate(){
         if(this.state.user.birthDate == null){
             return "Birth date is not set"
         }
         else{
-            return this.state.user.birthDate
+            console.log(this.state.user.birthDate);
+            let niceFormat = this.state.user.birthDate.toString();
+            niceFormat = niceFormat.slice(0,10);
+            return niceFormat;
+
         }
     }
     editProfile(){
@@ -131,6 +137,7 @@ class Profile extends React.Component {
                         />
                         <Label>Birth date</Label>
                         <InputField
+
                             placeholder= {this.getBirthDate()}
                         />
 

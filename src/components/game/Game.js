@@ -6,6 +6,7 @@ import Player from '../../views/Player';
 import { Spinner } from '../../views/design/Spinner';
 import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
+import User from "../shared/models/User";
 
 const Container = styled(BaseContainer)`
   color: white;
@@ -33,9 +34,28 @@ class Game extends React.Component {
     };
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    this.props.history.push('/login');
+  //logout the user and set to offline in backend
+  async logout() {
+    try {
+
+
+      const requestBody = JSON.stringify({
+        username: this.state.ID,
+      })
+
+      const response = await api.post("/users/logout", requestBody);
+
+      // Get the returned user and update a new object.
+      const user = new User(response.data);
+
+      localStorage.removeItem('token');
+
+      this.props.history.push('/login');
+    } catch (error) {
+      alert(`Something went wrong during updating your data: \n${handleError(error)}`);
+      this.props.history.push(`/game`);
+
+    }
   }
 
 
