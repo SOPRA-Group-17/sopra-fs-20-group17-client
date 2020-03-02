@@ -63,7 +63,8 @@ class Profile extends React.Component {
         super();
         this.state = {
             user: new user(),
-            ID: null
+            ID: null,
+            tokenMatch: null
         };
     }
 
@@ -78,6 +79,13 @@ class Profile extends React.Component {
 
             // Get the returned users and update the state.
             this.setState({ user: response.data[0] });
+            console.log(this.state.tokenMatch);
+            if(localStorage.getItem('token') === this.state.user.token){
+                this.setState({tokenMatch : "true"});
+                console.log(this.state.tokenMatch);
+            }
+
+
 
         } catch (error) {
             alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
@@ -106,10 +114,12 @@ class Profile extends React.Component {
     }
 
 
+
     render() {
         return (
             <BaseContainer>
                 <Button
+                    disabled={!this.state.tokenMatch}
                     width="100%"
                     onClick={() => {
                         this.editProfile();

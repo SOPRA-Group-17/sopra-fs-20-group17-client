@@ -30,33 +30,43 @@ class Game extends React.Component {
     super();
     this.state = {
       users: null,
-      ID: null
     };
   }
-
-  //logout the user and set to offline in backend
-  async logout() {
-    try {
-
-
-      const requestBody = JSON.stringify({
-        username: this.state.ID,
-      })
-
-      const response = await api.post("/users/logout", requestBody);
-
-      // Get the returned user and update a new object.
-      const user = new User(response.data);
-
+  /*
+    logout(){
       localStorage.removeItem('token');
 
       this.props.history.push('/login');
-    } catch (error) {
-      alert(`Something went wrong during updating your data: \n${handleError(error)}`);
-      this.props.history.push(`/game`);
-
     }
-  }
+    */
+
+    //logout the user and set to offline in backend
+
+    async logout() {
+      try {
+
+        const requestBody = JSON.stringify({
+          token: localStorage.getItem('token')
+        })
+        // Get the returned user and update a new object.
+
+        localStorage.removeItem('token');
+
+        this.props.history.push('/login');
+
+        const response = await api.post("/users/logout", requestBody);
+        const user = new User(response.data);
+
+
+
+      } catch (error) {
+        alert(`Something went wrong during updating your data: \n${handleError(error)}`);
+        this.props.history.push(`/login`);
+
+      }
+    }
+
+
 
 
 

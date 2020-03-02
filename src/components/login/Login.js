@@ -160,7 +160,7 @@ class Login extends React.Component {
         </FormContainer>
         <ButtonContainer>
           <Button>
-            <Link to = "/Register" style={{ textDecoration: 'none' }}>
+            <Link to = "/register" style={{ textDecoration: 'none' }}>
             Register
             </Link>
           </Button>
