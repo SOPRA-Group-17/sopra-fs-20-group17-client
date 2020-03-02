@@ -49,14 +49,15 @@ const Player = ({ user }) => {
     <Container>
       <Name>{user.name}
       </Name>
-
+        <Link to = {`/game/profile/${user.id}`} style={{ textDecoration: 'none', color: 'white'}}>
         <UserName>{user.username}</UserName>
+        </Link>
       <Id>Id: {user.id}</Id>
 
 
      <Link to = {`/game/profile/${user.id}`} style={{ textDecoration: 'none'}} >
          <ButtonContainer>
-             <Button>
+             <Button >
              Profile
              </Button>
         </ButtonContainer>
