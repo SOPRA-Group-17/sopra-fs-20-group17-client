@@ -104,6 +104,7 @@ class Login extends React.Component {
       this.props.history.push(`/game`);
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
+
     }
   }
 
