@@ -108,6 +108,7 @@ class Login extends React.Component {
     }
   }
 
+
   /**
    *  Every time the user enters something in the input field, the state gets updated.
    * @param key (the key of the state for identifying the field that needs to be updated)
