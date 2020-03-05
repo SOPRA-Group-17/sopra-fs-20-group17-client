@@ -103,7 +103,7 @@ class Register extends React.Component {
             // Login successfully worked --> navigate to the route /game in the GameRouter, why doesnt this work
             this.props.history.push(`/Login`);
         } catch (error) {
-            alert(`Something went wrong during the login: \n${handleError(error)}`);
+            alert(`Something went wrong during the login, probably:  \n${handleError(error)}`);
             this.props.history.push(`/Register`);
         }
     }

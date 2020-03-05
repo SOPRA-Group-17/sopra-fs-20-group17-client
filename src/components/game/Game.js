@@ -54,7 +54,9 @@ class Game extends React.Component {
 
         this.props.history.push('/login');
 
-        const response = await api.post("/users/logout", requestBody);
+        const response = await api.put("/users/logout", requestBody);
+
+        //gets igonred
         const user = new User(response.data);
 
 

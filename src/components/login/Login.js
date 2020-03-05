@@ -91,7 +91,7 @@ class Login extends React.Component {
         username: this.state.username,
         password: this.state.password
       });
-      const response = await api.post('/users/auth', requestBody);
+      const response = await api.put('/login', requestBody);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
