@@ -103,10 +103,7 @@ class Profile extends React.Component {
         }
         else{
             console.log(this.state.user.birthDate);
-            let niceFormat = this.state.user.birthDate.toString();
-            niceFormat = niceFormat.slice(0,10);
-            return niceFormat;
-
+            return this.state.user.birthDate
         }
     }
     editProfile(){

@@ -8,6 +8,7 @@ import { Button } from '../../views/design/Button';
 import { withRouter } from 'react-router-dom';
 import user from "../shared/models/User";
 import DatePicker from 'react-datepicker' ;
+import formatDate from 'react-datepicker' ;
 import User from '../shared/models/User';
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -122,7 +123,7 @@ class EditProfile extends React.Component {
             if (this.state.newUsername != null && this.state.birthDate != null) {
                 requestBody = JSON.stringify({
                     username: this.state.newUsername,
-                    birthDate: this.state.birthDate
+                    birthDate: this.state.birthDate.toString().slice(0,10)
                 });
             }
             else if(this.state.newUsername != null){
@@ -132,7 +133,7 @@ class EditProfile extends React.Component {
             }
             else if(this.state.birthDate != null){
                 requestBody = JSON.stringify({
-                    birthDate: this.state.birthDate
+                    birthDate: this.state.birthDate.toString().slice(4,16)
                 });
             }
             console.log(requestBody);
@@ -177,11 +178,7 @@ class EditProfile extends React.Component {
             return "Birth date is not set"
         }
         else{
-            console.log(this.state.user.birthDate);
-            let niceFormat = this.state.user.birthDate.toString();
-            niceFormat = niceFormat.slice(0,10);
-            return niceFormat;
-
+            return this.state.user.birthDate
         }
     }
 
