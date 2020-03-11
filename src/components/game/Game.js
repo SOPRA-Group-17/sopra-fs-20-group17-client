@@ -68,10 +68,6 @@ class Game extends React.Component {
     }
 
 
-
-
-
-
   async componentDidMount() {
     try {
       const response = await api.get('/users');
