@@ -136,7 +136,7 @@ class Login extends React.Component {
     return (
       <BaseContainer>
       <Label>
-                    SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Dominic
+                    SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Domenic
                 </Label>
         <img className="logoImg" src={logo} alt="Just One Logo" >
         </img>

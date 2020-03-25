@@ -131,7 +131,7 @@ class Register extends React.Component {
         return (
             <BaseContainer>
                 <Label>
-                    SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Dominic
+                    SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Domenic
                 </Label>
                 <img className="logoImg" src={logo} alt="Just One Logo" >
                 </img>
@@ -139,7 +139,7 @@ class Register extends React.Component {
                     <Form>
                         <Label>Username</Label>
                         <InputField
-                            placeholder="Enter here, "
+                            placeholder="Enter here.. "
                             onChange={e => {
                                 this.handleInputChange('username', e.target.value);
                             }}
