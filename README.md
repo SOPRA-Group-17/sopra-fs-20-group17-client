@@ -1,8 +1,11 @@
 npnpnpm# SoPra FS20 - Client Template
 
 ## Getting started with React
+<<<<<<< HEAD
 ## TEST LENNART
 ## TEST MARKUS
+=======
+>>>>>>> 250444be46d36c02278b7bda309c4f8e10a63fc6
 
 
 Read and go through those Tutorials, It will make your life easier!
