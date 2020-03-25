@@ -62,6 +62,4 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-This is Janosch
-
 >Thanks to Lucas Pelloni for the template
