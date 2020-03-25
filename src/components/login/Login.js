@@ -4,15 +4,21 @@ import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import User from '../shared/models/User';
 import { withRouter } from 'react-router-dom';
-import { Button } from '../../views/design/Button';
+import { Button } from "react-bootstrap";
 import Link from "react-router-dom/Link";
+import logo from "../styling/JustOne_logo_white.svg";
+
+
 
 const FormContainer = styled.div`
-  margin-top: 2em;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
+  
+  
+  
   align-items: center;
-  min-height: 300px;
+  min-height: 200px;
   justify-content: center;
 `;
 
@@ -27,7 +33,7 @@ const Form = styled.div`
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
+  background: linear-gradient(rgb(47, 32, 64), rgb(30, 18, 43));
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
@@ -93,7 +99,6 @@ class Login extends React.Component {
       });
       const response = await api.put('/login', requestBody);
 
-
       // Get the returned user and update a new object.
       const user = new User(response.data);
 
@@ -104,12 +109,8 @@ class Login extends React.Component {
       this.props.history.push(`/game`);
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
-
     }
   }
-
-
-
 
   /**
    *  Every time the user enters something in the input field, the state gets updated.
@@ -134,6 +135,11 @@ class Login extends React.Component {
   render() {
     return (
       <BaseContainer>
+      <Label>
+                    SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Dominic
+                </Label>
+        <img className="logoImg" src={logo} alt="Just One Logo" >
+        </img>
         <FormContainer>
           <Form>
             <Label>Username</Label>
@@ -151,9 +157,8 @@ class Login extends React.Component {
               }}
             />
             <ButtonContainer>
-              <Button
+              <Button variant="outline-info" style={{paddingLeft: "25px", paddingRight: "25px"}}
                 disabled={!this.state.username || !this.state.password}
-                width="50%"
                 onClick={() => {
                   this.login();
                 }}
@@ -164,9 +169,14 @@ class Login extends React.Component {
           </Form>
         </FormContainer>
         <ButtonContainer>
-          <Button>
-            <Link to = "/register" style={{ textDecoration: 'none' }}>
+          <Button variant= "outline-light" >
+            <Link to = "/register" style={{ textDecoration: 'none',color: "inherit"}}>
             Register
+            </Link>
+          </Button>
+          <Button  variant= "outline-light">
+            <Link to = "/test" style={{ textDecoration: 'none', color: "inherit" }}>
+              Test Bootstrap
             </Link>
           </Button>
         </ButtonContainer>
