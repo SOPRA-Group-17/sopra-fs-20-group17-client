@@ -1,6 +1,6 @@
 npnpnpm# SoPra FS20 - Client Template
 
-## Getting started with React
+## Getting started with React,,
 
 Read and go through those Tutorials, It will make your life easier!
 
@@ -38,7 +38,7 @@ This has to be done before starting the application for the first time (only onc
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
+n
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console (use Google Chrome!).
 

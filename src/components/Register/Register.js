@@ -4,15 +4,16 @@ import { BaseContainer } from '../../helpers/layout';
 import { api, handleError } from '../../helpers/api';
 import User from '../shared/models/User';
 import { withRouter } from 'react-router-dom';
-import { Button } from '../../views/design/Button';
 import Link from "react-router-dom/Link";
+import logo from "../styling/JustOne_logo_white.svg";
+import { Button} from "react-bootstrap";
+
 
 const FormContainer = styled.div`
-  margin-top: 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 300px;
+  min-height: 200px;
   justify-content: center;
 `;
 
@@ -27,7 +28,7 @@ const Form = styled.div`
   padding-left: 37px;
   padding-right: 37px;
   border-radius: 5px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
+  background: linear-gradient(rgb(42, 33, 79), rgb(30, 18, 43));
   transition: opacity 0.5s ease, transform 0.5s ease;
 `;
 
@@ -76,7 +77,6 @@ class Register extends React.Component {
     constructor() {
         super();
         this.state = {
-            name: null,
             username: null,
             password: null
         };
@@ -90,7 +90,6 @@ class Register extends React.Component {
         try {
             const requestBody = JSON.stringify({
                 username: this.state.username,
-                name: this.state.name,
                 password: this.state.password
 
             });
@@ -131,6 +130,11 @@ class Register extends React.Component {
     render() {
         return (
             <BaseContainer>
+                <Label>
+                    SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Dominic
+                </Label>
+                <img className="logoImg" src={logo} alt="Just One Logo" >
+                </img>
                 <FormContainer>
                     <Form>
                         <Label>Username</Label>
@@ -138,13 +142,6 @@ class Register extends React.Component {
                             placeholder="Enter here, "
                             onChange={e => {
                                 this.handleInputChange('username', e.target.value);
-                            }}
-                        />
-                        <Label>Name</Label>
-                        <InputField
-                            placeholder="Enter here.."
-                            onChange={e => {
-                                this.handleInputChange('name', e.target.value);
                             }}
                         />
                         <Label> Password</Label>
@@ -155,9 +152,9 @@ class Register extends React.Component {
                             }}
                         />
                         <ButtonContainer>
-                            <Button
-                                disabled={!this.state.username || !this.state.name || !this.state.password}
-                                width="50%"
+                            <Button variant="outline-info" style={{paddingLeft: "25px", paddingRight: "25px"}}
+                                disabled={!this.state.username || !this.state.password}
+
                                 onClick={() => {
                                     this.register();
                                 }}
@@ -168,8 +165,8 @@ class Register extends React.Component {
                     </Form>
                 </FormContainer>
                 <ButtonContainer>
-                    <Button>
-                        <Link to = "/Login" style={{ textDecoration: 'none' }}>
+                    <Button variant= "outline-light">
+                        <Link to = "/Login" style={{ textDecoration: 'none', color: "inherit"}}>
                             Login
                         </Link>
                     </Button>
