@@ -78,7 +78,8 @@ class Register extends React.Component {
         super();
         this.state = {
             username: null,
-            password: null
+            password: null,
+            confirmedPassword: null
         };
     }
     /**
@@ -88,19 +89,28 @@ class Register extends React.Component {
      */
     async register() {
         try {
-            const requestBody = JSON.stringify({
-                username: this.state.username,
-                password: this.state.password
+            // checks whether password and confirmedPassword are matching and if so, sets passwordMatch to true
+            var passwordMatch = (this.state.password == this.state.confirmedPassword) ? true : false;
 
-            });
-            const response = await api.post('/users', requestBody);
+            // post request is only done if the passwords are matching
+            if (passwordMatch == true){
+                const requestBody = JSON.stringify({
+                    username: this.state.username,
+                    password: this.state.password,
+                    confirmedPassword: this.state.confirmedPassword
 
-            // Get the returned user and update a new object.
-            const user = new User(response.data);
+                });
+                const response = await api.post('/users', requestBody);
+
+                // Get the returned user and update a new object.
+                const user = new User(response.data);
 
 
-            // Login successfully worked --> navigate to the route /game in the GameRouter, why doesnt this work
-            this.props.history.push(`/Login`);
+                // Login successfully worked --> navigate to the route /game in the GameRouter, why doesnt this work
+                this.props.history.push(`/Login`);
+            } else {
+                alert('Password and confirmed password do not match. Please try again.');
+            }
         } catch (error) {
             alert(`Something went wrong during the login, probably:  \n${handleError(error)}`);
             this.props.history.push(`/Register`);
@@ -152,9 +162,15 @@ class Register extends React.Component {
                             }}
                         />
                         <Label> Confirm Password</Label>
+                        <InputField
+                            placeholder="Enter here..."
+                            onChange={e => {
+                                this.handleInputChange('confirmedPassword', e.target.value);
+                            }}
+                        />
                         <ButtonContainer>
                             <Button variant="outline-info" style={{paddingLeft: "25px", paddingRight: "25px"}}
-                                disabled={!this.state.username || !this.state.password}
+                                disabled={!this.state.username || !this.state.password || !this.state.confirmedPassword}
 
                                 onClick={() => {
                                     this.register();
