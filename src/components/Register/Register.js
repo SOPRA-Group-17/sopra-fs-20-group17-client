@@ -151,6 +151,7 @@ class Register extends React.Component {
                                 this.handleInputChange('password', e.target.value);
                             }}
                         />
+                        <Label> Confirm Password</Label>
                         <ButtonContainer>
                             <Button variant="outline-info" style={{paddingLeft: "25px", paddingRight: "25px"}}
                                 disabled={!this.state.username || !this.state.password}
