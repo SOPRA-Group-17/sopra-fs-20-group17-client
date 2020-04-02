@@ -29,6 +29,18 @@ button{
   width: 25%;
 }
 
+.logoImgSmall{
+
+  margin-bottom: 1vw;
+  margin-top: 1vw;
+  width: 80%;
+
+}
+
+.outlineWhite-Dashboard{
+  margin-left: 1vw;
+  margin-top: 0.8vw;
+}
 
 
 *:focus {
