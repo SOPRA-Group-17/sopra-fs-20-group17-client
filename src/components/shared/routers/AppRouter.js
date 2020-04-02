@@ -3,7 +3,7 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
-import { RegisterGuard} from "../routeProtectors/RegisterGuard";
+import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../login/Login";
 import Register from "../../Register/Register";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
@@ -19,7 +19,7 @@ import Dashboard from "../../dashboard/Dashboard";
  * Documentation about routing in React: https://reacttraining.com/react-router/web/guides/quick-start
  */
 
- /**didnt add registerguard yet, what can it be used for*/
+/**didnt add registerguard yet, what can it be used for*/
 class AppRouter extends React.Component {
   render() {
     return (
@@ -44,25 +44,25 @@ class AppRouter extends React.Component {
               )}
             />
 
-          <Route
+            <Route
               path="/register"
               exact
               render={() => (
-                  <RegisterGuard>
-                      <Register />
-                  </RegisterGuard>
+                <RegisterGuard>
+                  <Register />
+                </RegisterGuard>
               )}
-          />
+            />
 
-          <Route
+            <Route
               path="/dashboard"
               exact
               render={() => (
-                  <DashboardGuard>
-                      <Dashboard />
-                  </DashboardGuard>
+                <DashboardGuard>
+                  <Dashboard />
+                </DashboardGuard>
               )}
-          />
+            />
 
             <Route path="/" exact render={() => <Redirect to={"/game"} />} />
           </div>
@@ -72,6 +72,6 @@ class AppRouter extends React.Component {
   }
 }
 /*
-* Don't forget to export your component!
+ * Don't forget to export your component!
  */
 export default AppRouter;

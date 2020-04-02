@@ -9,6 +9,7 @@ body {
   font-family: 'Oxanium', cursive;
   font-size: large;
   background: #1e122b;
+  color: white;
 }
 
 button{
@@ -41,6 +42,18 @@ button{
   margin-left: 1vw;
   margin-top: 0.8vw;
 }
+
+.DashboardForm{
+  margin-left: 10vw;
+  margin-top: 8vw;
+}
+
+.outlineWhite-Form{
+  margin-left: 1vw;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 
 
 *:focus {
