@@ -41,11 +41,11 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     return (
       <Container fluid>
         <Row>
-          <Col xs sm md lg xl="2">
+          <Col xs ="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
-          <Col xs sm md lg xl={{ span: 1, offset: 9 }}>
-            <Row>
+          <Col xs ={{ span: 3, offset: 4 }} md={{span:2, offset:7}} >
+            <Row className = "d-flex justify-content-end">
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
@@ -53,7 +53,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
                 Edit Profil
               </Button>
             </Row>
-            <Row>
+            <Row className = "d-flex justify-content-end">
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
@@ -61,7 +61,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
                 Rules
               </Button>
             </Row>
-            <Row>
+            <Row className = "d-flex justify-content-end">
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
@@ -85,7 +85,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               </Form.Group>
               <Form.Group as={Col} controlId="Lobbys">
                 <Button variant="outline-light" className="outlineWhite-Form">
-                  Creat Lobby
+                  Create Lobby
                 </Button>
               </Form.Group>
             </Form.Row>
