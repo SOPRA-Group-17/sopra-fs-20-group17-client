@@ -8,6 +8,8 @@ import Login from "../../login/Login";
 import Register from "../../Register/Register";
 import Lobby from "../../lobby/Lobby";
 import { LobbyGuard } from "../routeProtectors/LobbyGuard";
+import { DashboardGuard } from "../routeProtectors/DashboardGuard";
+import Dashboard from "../../dashboard/Dashboard";
 
 /**
  * Main router of your application.
@@ -19,7 +21,7 @@ import { LobbyGuard } from "../routeProtectors/LobbyGuard";
  * Documentation about routing in React: https://reacttraining.com/react-router/web/guides/quick-start
  */
 
- /**didnt add registerguard yet, what can it be used for*/
+/**didnt add registerguard yet, what can it be used for*/
 class AppRouter extends React.Component {
   render() {
     return (
@@ -44,13 +46,13 @@ class AppRouter extends React.Component {
               )}
             />
 
-          <Route
+            <Route
               path="/register"
               exact
               render={() => (
-                  <RegisterGuard>
-                      <Register />
-                  </RegisterGuard>
+                <RegisterGuard>
+                  <Register />
+                </RegisterGuard>
               )}
           />
                     <Route
@@ -62,6 +64,18 @@ class AppRouter extends React.Component {
                   </LobbyGuard>
               )}
           />
+            />
+
+            <Route
+              path="/dashboard"
+              exact
+              render={() => (
+                <DashboardGuard>
+                  <Dashboard />
+                </DashboardGuard>
+              )}
+            />
+
             <Route path="/" exact render={() => <Redirect to={"/game"} />} />
           </div>
         </Switch>
@@ -70,6 +84,6 @@ class AppRouter extends React.Component {
   }
 }
 /*
-* Don't forget to export your component!
+ * Don't forget to export your component!
  */
 export default AppRouter;

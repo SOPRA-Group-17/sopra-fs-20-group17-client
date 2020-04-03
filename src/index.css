@@ -9,6 +9,7 @@ body {
   font-family: 'Oxanium', cursive;
   font-size: large;
   background: #1e122b;
+  color: white;
 }
 
 button{
@@ -27,6 +28,30 @@ button{
   margin-bottom: 20px;
   margin-top: 10px;
   width: 25%;
+}
+
+.logoImgSmall{
+
+  margin-bottom: 1vw;
+  margin-top: 1vw;
+  width: 80%;
+
+}
+
+.outlineWhite-Dashboard{
+  margin-left: 1vw;
+  margin-top: 0.8vw;
+}
+
+.DashboardForm{
+  margin-left: 10vw;
+  margin-top: 8vw;
+}
+
+.outlineWhite-Form{
+  margin-left: 1vw;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 

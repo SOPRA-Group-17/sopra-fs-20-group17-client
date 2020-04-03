@@ -29,7 +29,7 @@ class Game extends React.Component {
   constructor() {
     super();
     this.state = {
-      users: null,
+      users: {  data: [] },
     };
   }
   /*
@@ -54,6 +54,8 @@ class Game extends React.Component {
         this.props.history.push('/login');
 
         const response = await api.put("/users/logout", requestBody);
+
+        
 
         //gets igonred
         const user = new User(response.data);
