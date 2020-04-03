@@ -129,13 +129,13 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
           <Form className="DashboardForm">
             <Form.Row>
               <p style={{ color: "red" }} hidden={!this.state.toLong}>
-                Lobby Name is to long
+                Lobbyname is to long
               </p>
             </Form.Row>
             <Form.Row>
               <Form.Group as={Col} controlId="Lobbys">
                 <Form.Control
-                  placeholder="Enter a lobby Name"
+                  placeholder="Enter a Lobbyname"
                   onChange={e => {
                     this.handleInputChange("newGame", e.target.value);
                   }}
