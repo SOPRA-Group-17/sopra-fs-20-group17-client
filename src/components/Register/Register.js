@@ -179,17 +179,31 @@ class Register extends React.Component {
                 this.handleInputChange("confirmedPassword", e.target.value);
               }}
             />
-            <ButtonContainer>
-              <Button
-                variant="outline-info"
-                style={{ paddingLeft: "25px", paddingRight: "25px" }}
-                onClick={() => {
-                  this.showOrHidePassword("passwordHidden");
-                }}
-              >
-                Show Password
-              </Button>
-            </ButtonContainer>
+            {this.state.passwordHidden ? (
+              <ButtonContainer>
+                <Button
+                  variant="outline-info"
+                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  onClick={() => {
+                    this.showOrHidePassword("passwordHidden");
+                  }}
+                >
+                  Show Password
+                </Button>
+              </ButtonContainer>
+            ) : (
+              <ButtonContainer>
+                <Button
+                  variant="outline-info"
+                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  onClick={() => {
+                    this.showOrHidePassword("passwordHidden");
+                  }}
+                >
+                  Hide Password
+                </Button>
+              </ButtonContainer>
+            )}
             <ButtonContainer>
               <Button
                 variant="outline-info"

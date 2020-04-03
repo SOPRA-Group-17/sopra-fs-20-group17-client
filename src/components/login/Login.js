@@ -10,6 +10,7 @@ import logo from "../styling/JustOne_logo_white.svg";
 
 const FormContainer = styled.div`
   margin-top: 0px;
+
   display: flex;
   flex-direction: column;
 
@@ -28,6 +29,7 @@ const Form = styled.div`
   font-weight: 300;
   padding-left: 37px;
   padding-right: 37px;
+
   border-radius: 5px;
   background: linear-gradient(rgb(47, 32, 64), rgb(30, 18, 43));
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -131,7 +133,6 @@ class Login extends React.Component {
   render() {
     return (
       <BaseContainer>
-        <Label>SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Domenic</Label>
         <img className="logoImg" src={logo} alt="Just One Logo"></img>
         <FormContainer>
           <Form>
@@ -144,6 +145,7 @@ class Login extends React.Component {
             />
             <Label>Password</Label>
             <InputField
+              type="password"
               placeholder="Enter here.."
               onChange={e => {
                 this.handleInputChange("password", e.target.value);
@@ -170,14 +172,6 @@ class Login extends React.Component {
               style={{ textDecoration: "none", color: "inherit" }}
             >
               Register
-            </Link>
-          </Button>
-          <Button variant="outline-light">
-            <Link
-              to="/test"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              Test Bootstrap
             </Link>
           </Button>
         </ButtonContainer>
