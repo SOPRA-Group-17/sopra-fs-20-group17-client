@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "react-router-dom/Link";
-import {Button} from "./design/Button";
-
+import { Button } from "./design/Button";
 
 const Container = styled.div`
   margin: 6px 0;
@@ -35,7 +34,6 @@ const ButtonContainer = styled.div`
   justify-content: center;
 `;
 
-
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
  * Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
@@ -47,25 +45,20 @@ const ButtonContainer = styled.div`
 const Player = ({ user }) => {
   return (
     <Container>
-      <Name>{user.name}
-      </Name>
-        <Link to = {`/game/profile/${user.id}`} style={{ textDecoration: 'none', color: 'white'}}>
+      <Name>{user.name}</Name>
+      <Link
+        to={`/game/profile/${user.id}`}
+        style={{ textDecoration: "none", color: "white" }}
+      >
         <UserName>{user.username}</UserName>
-        </Link>
+      </Link>
       <Id>Id: {user.id}</Id>
 
-
-     <Link to = {`/game/profile/${user.id}`} style={{ textDecoration: 'none'}} >
-         <ButtonContainer>
-             <Button >
-             Profile
-             </Button>
+      <Link to={`/game/profile/${user.id}`} style={{ textDecoration: "none" }}>
+        <ButtonContainer>
+          <Button>Profile</Button>
         </ButtonContainer>
-     </Link>
-
-
-
-
+      </Link>
     </Container>
   );
 };

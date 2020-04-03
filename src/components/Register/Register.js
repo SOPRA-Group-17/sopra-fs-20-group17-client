@@ -54,7 +54,7 @@ const Label = styled.label`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 0px;
 `;
 
 /**
@@ -78,7 +78,8 @@ class Register extends React.Component {
     this.state = {
       username: null,
       password: null,
-      confirmedPassword: null
+      confirmedPassword: null,
+      passwordHidden: true
     };
   }
   /**
@@ -121,6 +122,14 @@ class Register extends React.Component {
     }
   }
 
+  showOrHidePassword(key) {
+    if (this.state.passwordHidden) {
+      this.setState({ [key]: false });
+    } else {
+      this.setState({ [key]: true });
+    }
+  }
+
   /**
    *  Every time the user enters something in the input field, the state gets updated.
    * @param key (the key of the state for identifying the field that needs to be updated)
@@ -144,7 +153,6 @@ class Register extends React.Component {
   render() {
     return (
       <BaseContainer>
-        <Label>SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Domenic</Label>
         <img className="logoImg" src={logo} alt="Just One Logo"></img>
         <FormContainer>
           <Form>
@@ -158,7 +166,7 @@ class Register extends React.Component {
             <Label> Password</Label>
             <InputField
               placeholder="Enter here..."
-              type="password"
+              type={this.state.passwordHidden ? "password" : "text"}
               onChange={e => {
                 this.handleInputChange("password", e.target.value);
               }}
@@ -166,11 +174,22 @@ class Register extends React.Component {
             <Label> Confirm Password</Label>
             <InputField
               placeholder="Enter here..."
-              type="password"
+              type={this.state.passwordHidden ? "password" : "text"}
               onChange={e => {
                 this.handleInputChange("confirmedPassword", e.target.value);
               }}
             />
+            <ButtonContainer>
+              <Button
+                variant="outline-info"
+                style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                onClick={() => {
+                  this.showOrHidePassword("passwordHidden");
+                }}
+              >
+                Show Password
+              </Button>
+            </ButtonContainer>
             <ButtonContainer>
               <Button
                 variant="outline-info"
