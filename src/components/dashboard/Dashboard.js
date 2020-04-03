@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import User from "../shared/models/User";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import Lobby from "../../views/Lobby";
+import Lobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
 
 class Dashboard extends React.Component {
@@ -41,11 +41,11 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     return (
       <Container fluid>
         <Row>
-          <Col xs ="5" md="3">
+          <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
-          <Col xs ={{ span: 3, offset: 4 }} md={{span:2, offset:7}} >
-            <Row className = "d-flex justify-content-end">
+          <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+            <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
@@ -53,7 +53,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
                 Edit Profil
               </Button>
             </Row>
-            <Row className = "d-flex justify-content-end">
+            <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
@@ -61,7 +61,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
                 Rules
               </Button>
             </Row>
-            <Row className = "d-flex justify-content-end">
+            <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"

@@ -3,10 +3,10 @@ import Link from "react-router-dom/Link";
 import {Container} from "react-bootstrap"
 
 
-const Lobby = ({ game }) => {
+const aLobby = ({ game }) => {
     return (
         <option>{game.name}</option>
     );
   };
   
-  export default Lobby;
+  export default aLobby;
