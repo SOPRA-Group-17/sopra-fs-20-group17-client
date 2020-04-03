@@ -29,7 +29,7 @@ class Game extends React.Component {
   constructor() {
     super();
     this.state = {
-      users: {  data: [] },
+      users: null,
     };
   }
   /*

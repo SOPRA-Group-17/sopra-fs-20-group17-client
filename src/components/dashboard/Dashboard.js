@@ -27,6 +27,47 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
     this.setState({ [key]: value });
+    console.log(this.state.newGame);
+  }
+
+  async creatLobby() {
+    try {
+      const requestBody = JSON.stringify({
+        token: localStorage.getItem("token"),
+        Game: this.state.newGame
+      });
+      const response = await api.post("/games");
+
+      const game = new Game(response.Data);
+
+      //TODO: get this to work
+      this.props.history.push(`/lobby/host/${game.id}`);
+    } catch (error) {
+      alert(`Couldnt creat the lobby: \n${handleError(error)}`);
+    }
+  }
+
+  async logout() {
+    try {
+      const requestBody = JSON.stringify({
+        token: localStorage.getItem("token")
+      });
+      // Get the returned user and update a new object.
+
+      const response = await api.put("/logout", requestBody);
+
+      //gets igonred
+      const user = new User(response.data);
+
+      localStorage.removeItem("token");
+
+      this.props.history.push("/login");
+    } catch (error) {
+      alert(`Something went wrong during logout \n${handleError(error)}`);
+
+      //maybe take this out
+      this.props.history.push("/login");
+    }
   }
 
   /*{this.state.games.map(game => {
@@ -65,6 +106,9 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
+                onClick={() => {
+                  this.logout();
+                }}
               >
                 Logout
               </Button>
@@ -84,7 +128,14 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
                 />
               </Form.Group>
               <Form.Group as={Col} controlId="Lobbys">
-                <Button variant="outline-light" className="outlineWhite-Form">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Form"
+                  disabled={!this.state.newGame}
+                  onClick={() => {
+                    this.creatLobby();
+                  }}
+                >
                   Create Lobby
                 </Button>
               </Form.Group>
