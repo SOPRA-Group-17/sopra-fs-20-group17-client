@@ -1,22 +1,18 @@
-import React from 'react';
-import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
-import User from '../shared/models/User';
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { BaseContainer } from "../../helpers/layout";
+import { api, handleError } from "../../helpers/api";
+import User from "../shared/models/User";
+import { withRouter } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Link from "react-router-dom/Link";
 import logo from "../styling/JustOne_logo_white.svg";
-
-
 
 const FormContainer = styled.div`
   margin-top: 0px;
   display: flex;
   flex-direction: column;
-  
-  
-  
+
   align-items: center;
   min-height: 200px;
   justify-content: center;
@@ -39,7 +35,7 @@ const Form = styled.div`
 
 const InputField = styled.input`
   &::placeholder {
-    color: rgba(255, 255, 255, 1.0);
+    color: rgba(255, 255, 255, 1);
   }
   height: 35px;
   padding-left: 15px;
@@ -97,13 +93,13 @@ class Login extends React.Component {
         username: this.state.username,
         password: this.state.password
       });
-      const response = await api.put('/login', requestBody);
+      const response = await api.put("/login", requestBody);
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
 
       // Store the token into the local storage.
-      localStorage.setItem('token', user.token);
+      localStorage.setItem("token", user.token);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       this.props.history.push(`/game`);
@@ -135,29 +131,28 @@ class Login extends React.Component {
   render() {
     return (
       <BaseContainer>
-      <Label>
-                    SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Domenic
-                </Label>
-        <img className="logoImg" src={logo} alt="Just One Logo" >
-        </img>
+        <Label>SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Domenic</Label>
+        <img className="logoImg" src={logo} alt="Just One Logo"></img>
         <FormContainer>
           <Form>
             <Label>Username</Label>
             <InputField
               placeholder="Enter here.."
               onChange={e => {
-                this.handleInputChange('username', e.target.value);
+                this.handleInputChange("username", e.target.value);
               }}
             />
             <Label>Password</Label>
             <InputField
               placeholder="Enter here.."
               onChange={e => {
-                this.handleInputChange('password', e.target.value);
+                this.handleInputChange("password", e.target.value);
               }}
             />
             <ButtonContainer>
-              <Button variant="outline-info" style={{paddingLeft: "25px", paddingRight: "25px"}}
+              <Button
+                variant="outline-info"
+                style={{ paddingLeft: "25px", paddingRight: "25px" }}
                 disabled={!this.state.username || !this.state.password}
                 onClick={() => {
                   this.login();
@@ -169,19 +164,24 @@ class Login extends React.Component {
           </Form>
         </FormContainer>
         <ButtonContainer>
-          <Button variant= "outline-light" >
-            <Link to = "/register" style={{ textDecoration: 'none',color: "inherit"}}>
-            Register
+          <Button variant="outline-light">
+            <Link
+              to="/register"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Register
             </Link>
           </Button>
-          <Button  variant= "outline-light">
-            <Link to = "/test" style={{ textDecoration: 'none', color: "inherit" }}>
+          <Button variant="outline-light">
+            <Link
+              to="/test"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               Test Bootstrap
             </Link>
           </Button>
         </ButtonContainer>
       </BaseContainer>
-
     );
   }
 }
