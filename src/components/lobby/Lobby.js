@@ -2,115 +2,164 @@ import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import User from "../shared/models/User";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import Lobby from "../../views/Lobby";
+import aLobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
+
+const lobbyname = {
+  fontSize: "4vw",
+  textAlign: "center",
+  marginTop: "2vw"
+};
+
+
+
+
+const bigbutton = {
+  width: "22vw",
+  height: "8vw"
+};
 
 class Lobby extends React.Component {
   constructor() {
     super();
     this.state = {
       games: null,
-      newGame: null
+      newGame: null,
+      ready: false
     };
+    this.changeReadyState = this.changeReadyState.bind(this);
   }
-  /*
-({data:{id: 2, name: "Jonas", usernames: null, status: "not ready"}}),
-this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "not ready"}}.data });
-*/
+
   async componentDidMount() {
     try {
     } catch (error) {}
   }
-  handleInputChange(key, value) {
-    // Example: if the key is username, this statement is the equivalent to the following one:
-    // this.setState({'username': value});
-    this.setState({ [key]: value });
+  changeReadyState() {
+    this.setState(state => ({
+      ready: !this.state.ready
+    }));
   }
-
-  /*{this.state.games.map(game => {
-                    return (
-                        
-                        <Lobby game = {game}/>
-                       
-                    );
-                    })} */
 
   render() {
     return (
-      <Container fluid>
-        <Row>
-          <Col xs sm md lg xl="2">
-            <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
-          </Col>
-          <Col xs sm md lg xl={{ span: 1, offset: 9 }}>
-            <Row>
-              <Button
-                variant="outline-light"
-                className="outlineWhite-Dashboard"
-              >
-                Edit Profil
-              </Button>
-            </Row>
-            <Row>
-              <Button
-                variant="outline-light"
-                className="outlineWhite-Dashboard"
-              >
-                Rules
-              </Button>
-            </Row>
-            <Row>
-              <Button
-                variant="outline-light"
-                className="outlineWhite-Dashboard"
-              >
-                Logout
-              </Button>
-            </Row>
-          </Col>
-        </Row>
-
-        <Row>
-          <Form className="DashboardForm">
-            <Form.Row>
-              <Form.Group as={Col} controlId="Lobbys">
-                <Form.Control
-                  placeholder="Enter a lobby Name"
-                  onChange={e => {
-                    this.handleInputChange("newGame", e.target.value);
-                  }}
-                />
-              </Form.Group>
-              <Form.Group as={Col} controlId="Lobbys">
-                <Button variant="outline-light" className="outlineWhite-Form">
-                  Creat Lobby
+      <div>
+        <Container fluid>
+          <Row>
+            <Col xs="5" md="3">
+              <img
+                className="logoImgSmall"
+                src={logo}
+                alt="Just One Logo"
+              ></img>
+            </Col>
+            <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 3 }}>
+              <Row>
+                <p style={lobbyname}>LOBBYNAME</p>
+              </Row>
+            </Col>
+            <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>
+              <Row className="d-flex justify-content-end">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                >
+                  Exit Lobby
                 </Button>
-              </Form.Group>
-            </Form.Row>
-
-            <Form.Row class="row align-items-end">
-              <Form.Group as={Col} controlId="Lobbys">
-                <Form.Label>Select a Lobby</Form.Label>
-                <Form.Control as="select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                </Form.Control>
-              </Form.Group>
-
-              <Form.Group as={Col} controlId="Lobbys">
-                <Button variant="outline-light" className="outlineWhite-Form">
-                  Join Lobby
+              </Row>
+              <Row className="d-flex justify-content-end">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                >
+                  Rules
                 </Button>
-              </Form.Group>
-            </Form.Row>
-          </Form>
-        </Row>
-      </Container>
+              </Row>
+            </Col>
+          </Row>
+
+          <Row style={{ marginTop: "4vw" }}>
+            <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 0 }}></Col>
+            <Col xs="7" md="3">
+              <Table striped bordered hover size="sm">
+                <thead class="text-white">
+                  <tr>
+                    <th>#</th>
+                    <th>username</th>
+                    <th>status</th>
+                  </tr>
+                </thead>
+                <tbody class="text-white">
+                  <tr class="text-white">
+                    <td>1</td>
+                    <td>heino</td>
+                    <td class="text-danger">not ready</td>
+                  </tr>
+                  <tr class="text-white">
+                    <td>2</td>
+                    <td>maria</td>
+                    <td class="text-success">ready</td>
+                  </tr>
+                  <tr class="text-white">
+                    <td>3</td>
+                    <td>pflanze3</td>
+                    <td class="text-danger">not ready</td>
+                  </tr>
+                  <tr class="text-white">
+                    <td>4</td>
+                    <td>kugelschreiber</td>
+                    <td class="text-danger">not ready</td>
+                  </tr>
+                  <tr class="text-white">
+                    <td>5</td>
+                    <td>helmut</td>
+                    <td class="text-success">ready</td>
+                  </tr>
+                  <tr class="text-white">
+                    <td>6</td>
+                    <td>boxinator</td>
+                    <td class="text-danger">not ready</td>
+                  </tr>
+                  <tr class="text-white">
+                    <td>7</td>
+                    <td>eiermensch</td>
+                    <td class="text-success">not ready</td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Col>
+            <Col xs={{ span: 2, offset: 3 }} md={{ span: 2, offset: 2 }}>
+              {console.log(this.state.ready)}
+              {this.state.ready ? (
+                <div>
+                  <button
+                    class="btn btn-outline-success"
+                    style={bigbutton}
+                    onClick={this.changeReadyState}
+                    
+                  >
+                    <h1>ready</h1>
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <button
+                    onClick={this.changeReadyState}
+                    class="btn btn-outline-danger"
+                    style={bigbutton}
+                  >
+                   <h1> Not Ready</h1>
+                  </button>
+                </div>
+              )}
+              {console.log(this.state.ready)}
+            </Col>
+          </Row>
+        </Container>
+      </div>
     );
   }
 }
 
-export default withRouter(Dashboard);
+export default withRouter(Lobby);

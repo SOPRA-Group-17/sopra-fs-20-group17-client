@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import User from "../shared/models/User";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import Lobby from "../../views/aLobby";
+import aLobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
 
 class Dashboard extends React.Component {

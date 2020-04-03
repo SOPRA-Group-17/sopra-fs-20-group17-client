@@ -6,10 +6,11 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../login/Login";
 import Register from "../../Register/Register";
-import Lobby from "../../lobby/Lobby";
+import Lobbyboard from "../../lobby/Lobby";
 import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
 import Dashboard from "../../dashboard/Dashboard";
+
 
 /**
  * Main router of your application.
@@ -60,7 +61,7 @@ class AppRouter extends React.Component {
               exact
               render={() => (
                   <LobbyGuard>
-                      <Lobby />
+                      <Lobbyboard />
                   </LobbyGuard>
               )}
           />
