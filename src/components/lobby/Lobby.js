@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import User from "../shared/models/User";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import aLobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
 
 const lobbyname = {
@@ -12,9 +11,6 @@ const lobbyname = {
   textAlign: "center",
   marginTop: "2vw"
 };
-
-
-
 
 const bigbutton = {
   width: "22vw",
@@ -137,7 +133,6 @@ class Lobby extends React.Component {
                     class="btn btn-outline-success"
                     style={bigbutton}
                     onClick={this.changeReadyState}
-                    
                   >
                     <h1>ready</h1>
                   </button>
@@ -149,7 +144,7 @@ class Lobby extends React.Component {
                     class="btn btn-outline-danger"
                     style={bigbutton}
                   >
-                   <h1> Not Ready</h1>
+                    <h1> Not Ready</h1>
                   </button>
                 </div>
               )}
