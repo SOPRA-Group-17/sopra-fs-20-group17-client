@@ -12,7 +12,8 @@ class Dashboard extends React.Component {
     super();
     this.state = {
       games: null,
-      newGame: null
+      newGame: null,
+      toLong: null
     };
   }
   /*
@@ -26,7 +27,14 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   handleInputChange(key, value) {
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
-    this.setState({ [key]: value });
+    if (value.length > 15) {
+      this.setState({ ["toLong"]: "YES" });
+      this.setState({ [key]: null });
+    } else {
+      this.setState({ ["toLong"]: null });
+      this.setState({ [key]: value });
+    }
+
     console.log(this.state.newGame);
   }
 
@@ -115,9 +123,15 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
             </Row>
           </Col>
         </Row>
+        <Row></Row>
 
         <Row>
           <Form className="DashboardForm">
+            <Form.Row>
+              <p style={{ color: "red" }} hidden={!this.state.toLong}>
+                Lobby Name is to long
+              </p>
+            </Form.Row>
             <Form.Row>
               <Form.Group as={Col} controlId="Lobbys">
                 <Form.Control
