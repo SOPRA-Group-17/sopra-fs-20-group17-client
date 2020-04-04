@@ -55,6 +55,8 @@ class Game extends React.Component {
 
         const response = await api.put("/users/logout", requestBody);
 
+        
+
         //gets igonred
         const user = new User(response.data);
 
