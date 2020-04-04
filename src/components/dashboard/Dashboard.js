@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
     this.state = {
       games: null,
       newGame: null,
-      toLong: null
+      toLong: null,
     };
   }
   /*
@@ -42,7 +42,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     try {
       const requestBody = JSON.stringify({
         token: localStorage.getItem("token"),
-        Game: this.state.newGame
+        Game: this.state.newGame,
       });
       const response = await api.post("/games");
 
@@ -58,7 +58,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   async logout() {
     try {
       const requestBody = JSON.stringify({
-        token: localStorage.getItem("token")
+        token: localStorage.getItem("token"),
       });
       // Get the returned user and update a new object.
 
@@ -136,7 +136,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               <Form.Group as={Col} controlId="Lobbys">
                 <Form.Control
                   placeholder="Enter a Lobbyname"
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleInputChange("newGame", e.target.value);
                   }}
                 />
