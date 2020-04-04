@@ -77,13 +77,9 @@ class Register extends React.Component {
     super();
     this.state = {
       username: null,
-<<<<<<< HEAD
       password: null,
       confirmedPassword: null,
       passwordHidden: true
-=======
-      password: null
->>>>>>> devJonas
     };
   }
   /**
@@ -93,7 +89,6 @@ class Register extends React.Component {
    */
   async register() {
     try {
-<<<<<<< HEAD
       // checks whether password and confirmedPassword are matching and if so, sets passwordMatch to true
       var passwordMatch =
         this.state.password == this.state.confirmedPassword ? true : false;
@@ -117,19 +112,6 @@ class Register extends React.Component {
           "Password and confirmed password do not match. Please try again."
         );
       }
-=======
-      const requestBody = JSON.stringify({
-        username: this.state.username,
-        password: this.state.password
-      });
-      const response = await api.post("/users", requestBody);
-
-      // Get the returned user and update a new object.
-      const user = new User(response.data);
-
-      // Login successfully worked --> navigate to the route /game in the GameRouter, why doesnt this work
-      this.props.history.push(`/Login`);
->>>>>>> devJonas
     } catch (error) {
       alert(
         `Something went wrong during the login, probably:  \n${handleError(
@@ -137,7 +119,6 @@ class Register extends React.Component {
         )}`
       );
       this.props.history.push(`/Register`);
-<<<<<<< HEAD
     }
   }
 
@@ -146,8 +127,6 @@ class Register extends React.Component {
       this.setState({ [key]: false });
     } else {
       this.setState({ [key]: true });
-=======
->>>>>>> devJonas
     }
   }
 
@@ -174,10 +153,6 @@ class Register extends React.Component {
   render() {
     return (
       <BaseContainer>
-<<<<<<< HEAD
-=======
-        <Label>SOPRA GROUP 17: Janosch, Jonas, Markus, Lennart, Domenic</Label>
->>>>>>> devJonas
         <img className="logoImg" src={logo} alt="Just One Logo"></img>
         <FormContainer>
           <Form>
@@ -191,15 +166,11 @@ class Register extends React.Component {
             <Label> Password</Label>
             <InputField
               placeholder="Enter here..."
-<<<<<<< HEAD
               type={this.state.passwordHidden ? "password" : "text"}
-=======
->>>>>>> devJonas
               onChange={e => {
                 this.handleInputChange("password", e.target.value);
               }}
             />
-<<<<<<< HEAD
             <Label> Confirm Password</Label>
             <InputField
               placeholder="Enter here..."
@@ -233,21 +204,15 @@ class Register extends React.Component {
                 </Button>
               </ButtonContainer>
             )}
-=======
->>>>>>> devJonas
             <ButtonContainer>
               <Button
                 variant="outline-info"
                 style={{ paddingLeft: "25px", paddingRight: "25px" }}
-<<<<<<< HEAD
                 disabled={
                   !this.state.username ||
                   !this.state.password ||
                   !this.state.confirmedPassword
                 }
-=======
-                disabled={!this.state.username || !this.state.password}
->>>>>>> devJonas
                 onClick={() => {
                   this.register();
                 }}
