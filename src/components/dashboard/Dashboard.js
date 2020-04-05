@@ -14,7 +14,13 @@ class Dashboard extends React.Component {
       games: null,
       newGame: null,
       toLong: null,
+      selectLobby: "1",
+      userId: null,
+      user: new User(), 
+      timer: null
+      
     };
+    this.selectLobby = this.selectLobby.bind(this);
   }
   /*
 ({data:{id: 2, name: "Jonas", usernames: null, status: "not ready"}}),
@@ -22,8 +28,36 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 */
   async componentDidMount() {
     try {
-    } catch (error) {}
+      this.state.userId = this.props.match.params.id;
+
+      const response = await api.get(`/users/${this.state.ID}`);
+
+      // Get the returned users and update the state.
+      this.setState({ user: response.data[0] });
+
+      this.getGames();
+      // this.timer = setInterval(() => this.getGames(), 5000);
+
+    } catch (error) {
+      alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+    }
   }
+
+  async getGames(){
+    try {
+      
+      const response = await api.get(`/games`);
+
+      // Get the returned users and update the state.
+      this.setState({games: response});
+     
+
+    } catch (error) {
+      alert(`Something went wrong while fetching the data: \n${handleError(error)}`);
+    }
+
+  }
+
   handleInputChange(key, value) {
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
@@ -34,7 +68,6 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       this.setState({ ["toLong"]: null });
       this.setState({ [key]: value });
     }
-
     console.log(this.state.newGame);
   }
 
@@ -47,6 +80,8 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       const response = await api.post("/games");
 
       const game = new Game(response.Data);
+
+      //add put to add player to the lobby that we got back
 
       //TODO: get this to work
       this.props.history.push(`/lobby/host/${game.id}`);
@@ -75,6 +110,29 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
       //maybe take this out
       this.props.history.push("/login");
+    }
+  }
+
+  selectLobby(event){
+        this.setState({selectLobby: event.target.value})
+  }
+
+  async joinLobby(){
+    try {
+      
+      const requestBody = JSON.stringify({
+        name: this.state.user.username
+      });
+
+      const response = await api.post(`/games/${this.state.selectLobby}/player/${this.state.userId}`, requestBody);
+      const game = new Game(response.data);
+
+      //TODO: get this to work
+      this.props.history.push(`/lobby/member/${game.id}`);
+
+    } catch (error) {
+      alert(`Something went wrong while joining the lobby: \n${handleError(error)}`);
+      
     }
   }
 
@@ -158,21 +216,24 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
             <Form.Row class="row align-items-end">
               <Form.Group as={Col} controlId="Lobbys">
                 <Form.Label style= {{fontSize: "calc(0.9em + 0.45vw)"}}>Select a Lobby</Form.Label>
-                <Form.Control as="select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
+                <Form.Control as="select" value={this.state.selectLobby} onChange={this.selectLobby}>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
                 </Form.Control>
               </Form.Group>
 
               <Form.Group as={Col} controlId="Lobbys">
-                <Button variant="outline-light" className="outlineWhite-Form">
+                <Button variant="outline-light" className="outlineWhite-Form" onClick={() => {this.joinLobby();}}>
                   Join Lobby
                 </Button>
               </Form.Group>
             </Form.Row>
           </Form>
         </Row>
+        <p>
+          {this.state.selectLobby}
+        </p>
       </Container>
     );
   }
