@@ -157,7 +157,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
             <Form.Row class="row align-items-end">
               <Form.Group as={Col} controlId="Lobbys">
-                <Form.Label>Select a Lobby</Form.Label>
+                <Form.Label style= {{fontSize: "calc(0.9em + 0.45vw)"}}>Select a Lobby</Form.Label>
                 <Form.Control as="select">
                   <option>1</option>
                   <option>2</option>
