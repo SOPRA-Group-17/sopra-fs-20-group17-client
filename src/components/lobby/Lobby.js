@@ -38,17 +38,28 @@ class Lobby extends React.Component {
     player3.id = "3";
     player3.username = "test3";
     player3.token = null;
-    player3.status = false;
+    player3.status = true;
     player3.game = null;
+
+    var player4 = new Player();
+    player4.id = "4";
+    player4.username = "test4";
+    player4.token = null;
+    player4.status = true;
+    player4.game = null;
+
+    var game1 = new game();
+    game1.name = "testname";
+
     this.state = {
-      game: new game(),
+      game: game1,
       player: new Player(),
-      players: [player1, player2, player3],
+      players: [player1, player2, player3, player4],
       ID_game: null,
-      ID_player: null,
+      ID_player: "1",
       status: false,
     };
-
+    
     this.changeStatusState = this.changeStatusState.bind(this);
   }
 
@@ -59,8 +70,13 @@ class Lobby extends React.Component {
       //id aus url
       this.state.ID_game = this.props.match.params.id;
       //TODO was bekommen wir genau zurück, Annahme: Players liste
-      const response = await api.get(`/games/${this.state.ID}/players`);
+      const response = await api.get(`/games/${this.state.ID_game}/players`);
       this.setState({ players: response.data });
+
+      const response1 = await api.get(`/games/${this.state.ID_game}`);
+      this.setState({ game: response1.data });
+
+      //TODO: player_id has to get the correct id
 
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
@@ -88,9 +104,71 @@ class Lobby extends React.Component {
   changeStatusState() {
     this.setState((state) => ({
       status: !this.state.status,
-      //TODO put request to change status state of this player
     }));
+    this.saveChange();
   }
+
+  async saveChange() {
+    try {
+      var arraynumber = null;
+      for (var i = 0; i < this.state.players.length; i++) {
+        if (this.state.players[i].id === this.state.ID_player) {
+          arraynumber = i;
+        }
+      }
+      let requestBody;
+
+      requestBody = JSON.stringify({
+        id: this.state.ID_player,
+        status: this.state.status,
+      });
+
+      console.log(requestBody);
+      const response = await api.put(
+        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+        requestBody
+      );
+
+      // Get the returned Player and update a new object.
+      const player = new Player(response.data);
+    } catch (error) {
+      alert(
+        `Something went wrong during updating your data: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
+  createTable = () => {
+    let table = [];
+
+    // Outer loop to create parent
+    for (let i = 0; i < this.state.players.length; i++) {
+      let children = [];
+      //Inner loop to create children
+      for (let j = 0; j < 3; j++) {
+        if (j === 0) {
+          children.push(<td>{this.state.players[i].id}</td>);
+        }
+        if (j === 1) {
+          children.push(<td>{this.state.players[i].username}</td>);
+        }
+
+        if (j === 2) {
+          if (this.state.players[i].status) {
+            children.push(<td class="text-success">{`ready`}</td>);
+          } else {
+            children.push(<td class="text-danger">{`not ready`}</td>);
+          }
+        }
+      }
+      table.push(<tr class="text-white">{children}</tr>);
+    }
+    //Create the parent and add the children
+
+    return table;
+  };
 
   render() {
     return (
@@ -107,7 +185,7 @@ class Lobby extends React.Component {
             </Col>
             <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 3 }}>
               <Row>
-                <p style={lobbyname}>LOBBYNAME</p>
+    <p style={lobbyname}>{this.state.game.name}</p>
               </Row>
             </Col>
             <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>
@@ -141,43 +219,7 @@ class Lobby extends React.Component {
                     <th>status</th>
                   </tr>
                 </thead>
-                <tbody class="text-white">
-                  <tr class="text-white">
-                    <td>1</td>
-                    <td>heino</td>
-                    <td class="text-danger">not status</td>
-                  </tr>
-                  <tr class="text-white">
-                    <td>2</td>
-                    <td>maria</td>
-                    <td class="text-success">status</td>
-                  </tr>
-                  <tr class="text-white">
-                    <td>3</td>
-                    <td>pflanze3</td>
-                    <td class="text-danger">not status</td>
-                  </tr>
-                  <tr class="text-white">
-                    <td>4</td>
-                    <td>kugelschreiber</td>
-                    <td class="text-danger">not status</td>
-                  </tr>
-                  <tr class="text-white">
-                    <td>5</td>
-                    <td>helmut</td>
-                    <td class="text-success">status</td>
-                  </tr>
-                  <tr class="text-white">
-                    <td>6</td>
-                    <td>boxinator</td>
-                    <td class="text-danger">not status</td>
-                  </tr>
-                  <tr class="text-white">
-                    <td>7</td>
-                    <td>eiermensch</td>
-                    <td class="text-success">not status</td>
-                  </tr>
-                </tbody>
+                <tbody class="text-white">{this.createTable()}</tbody>
               </Table>
             </Col>
             <Col xs={{ span: 2, offset: 3 }} md={{ span: 2, offset: 2 }}>
