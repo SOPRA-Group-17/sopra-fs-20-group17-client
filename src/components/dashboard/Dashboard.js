@@ -16,9 +16,8 @@ class Dashboard extends React.Component {
       toLong: null,
       selectLobby: "1",
       userId: null,
-      user: new User(), 
-      timer: null
-      
+      user: null,
+      timer: null,
     };
     this.selectLobby = this.selectLobby.bind(this);
   }
@@ -30,32 +29,35 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     try {
       this.state.userId = this.props.match.params.id;
 
-      const response = await api.get(`/users/${this.state.ID}`);
+      const response = await api.get(`/users/${this.state.userId}`);
 
       // Get the returned users and update the state.
-      this.setState({ user: response.data[0] });
+      this.setState({ user: new User(response.data) });
+      console.log(this.state.user.username);
 
       this.getGames();
-      // this.timer = setInterval(() => this.getGames(), 5000);
-
+      //decreas timer
+      this.timer = setInterval(() => this.getGames(), 10000);
     } catch (error) {
-      alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while fetching the users: \n${handleError(error)}`
+      );
     }
   }
 
-  async getGames(){
+  async getGames() {
     try {
-      
+      console.log("getting the games");
       const response = await api.get(`/games`);
 
       // Get the returned users and update the state.
-      this.setState({games: response});
-     
-
+      this.setState({ games: response.data });
+      console.log(this.state.games);
     } catch (error) {
-      alert(`Something went wrong while fetching the data: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while fetching the data: \n${handleError(error)}`
+      );
     }
-
   }
 
   handleInputChange(key, value) {
@@ -74,17 +76,27 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   async creatLobby() {
     try {
       const requestBody = JSON.stringify({
-        token: localStorage.getItem("token"),
-        Game: this.state.newGame,
+        name: this.state.newGame,
       });
-      const response = await api.post("/games");
+      console.log(this.state.newGame);
+      const response = await api.post("/games", requestBody);
 
-      const game = new Game(response.Data);
+      const game = new Game(response.data);
+      console.log(game.gameId);
 
       //add put to add player to the lobby that we got back
 
-      //TODO: get this to work
-      this.props.history.push(`/lobby/host/${game.id}`);
+      //TODO: get this to work this.props.history.push(`/lobby/host/${game.id}`);
+      const requestBody2 = JSON.stringify({
+        name: this.state.user.username,
+      });
+      console.log(requestBody2);
+
+      const response2 = await api.post(
+        `/games/${game.gameId}/players/${this.state.userId}`,
+        requestBody2
+      );
+      const game2 = new Game(response2.data);
     } catch (error) {
       alert(`Couldnt creat the lobby: \n${handleError(error)}`);
     }
@@ -113,26 +125,28 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     }
   }
 
-  selectLobby(event){
-        this.setState({selectLobby: event.target.value})
+  selectLobby(event) {
+    this.setState({ selectLobby: event.target.value });
   }
 
-  async joinLobby(){
+  async joinLobby() {
     try {
-      
       const requestBody = JSON.stringify({
-        name: this.state.user.username
+        name: this.state.user.username,
       });
 
-      const response = await api.post(`/games/${this.state.selectLobby}/player/${this.state.userId}`, requestBody);
+      const response = await api.post(
+        `/games/${this.state.selectLobby}/players/${this.state.userId}`,
+        requestBody
+      );
       const game = new Game(response.data);
 
       //TODO: get this to work
       this.props.history.push(`/lobby/member/${game.id}`);
-
     } catch (error) {
-      alert(`Something went wrong while joining the lobby: \n${handleError(error)}`);
-      
+      alert(
+        `Something went wrong while joining the lobby: \n${handleError(error)}`
+      );
     }
   }
 
@@ -215,8 +229,14 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
             <Form.Row class="row align-items-end">
               <Form.Group as={Col} controlId="Lobbys">
-                <Form.Label style= {{fontSize: "calc(0.9em + 0.45vw)"}}>Select a Lobby</Form.Label>
-                <Form.Control as="select" value={this.state.selectLobby} onChange={this.selectLobby}>
+                <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
+                  Select a Lobby
+                </Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.selectLobby}
+                  onChange={this.selectLobby}
+                >
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -224,16 +244,20 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               </Form.Group>
 
               <Form.Group as={Col} controlId="Lobbys">
-                <Button variant="outline-light" className="outlineWhite-Form" onClick={() => {this.joinLobby();}}>
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Form"
+                  onClick={() => {
+                    this.joinLobby();
+                  }}
+                >
                   Join Lobby
                 </Button>
               </Form.Group>
             </Form.Row>
           </Form>
         </Row>
-        <p>
-          {this.state.selectLobby}
-        </p>
+        <p>{this.state.selectLobby}</p>
       </Container>
     );
   }
