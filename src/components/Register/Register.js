@@ -100,7 +100,6 @@ class Register extends React.Component {
         const requestBody = JSON.stringify({
           username: this.state.username,
           password: this.state.password,
-          confirmedPassword: this.state.confirmedPassword,
         });
         const response = await api.post("/users", requestBody);
 
@@ -116,7 +115,7 @@ class Register extends React.Component {
       }
     } catch (error) {
       alert(
-        `Something went wrong during the login, probably:  \n${handleError(
+        `Something went wrong during the registration, probably:  \n${handleError(
           error
         )}`
       );
@@ -185,7 +184,7 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={ButtonSize}
+                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -197,7 +196,7 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={ButtonSize}
+                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -209,7 +208,7 @@ class Register extends React.Component {
             <ButtonContainer>
               <Button
                 variant="outline-info"
-                style={ButtonSize}
+                style={{ paddingLeft: "25px", paddingRight: "25px" }}
                 disabled={
                   !this.state.username ||
                   !this.state.password ||

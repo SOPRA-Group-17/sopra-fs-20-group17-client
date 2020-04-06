@@ -81,7 +81,8 @@ class Login extends React.Component {
     super();
     this.state = {
       password: null,
-      username: null
+      username: null,
+      passwordHidden: true,
     };
   }
   /**
@@ -93,7 +94,7 @@ class Login extends React.Component {
     try {
       const requestBody = JSON.stringify({
         username: this.state.username,
-        password: this.state.password
+        password: this.state.password,
       });
       const response = await api.put("/login", requestBody);
 
@@ -104,9 +105,17 @@ class Login extends React.Component {
       localStorage.setItem("token", user.token);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      this.props.history.push(`/game`);
+      this.props.history.push(`/dashboard/${user.id}`); //TODO: funktioniert das richtig? oder wird /dashboard/null angezeigt?
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
+    }
+  }
+
+  showOrHidePassword(key) {
+    if (this.state.passwordHidden) {
+      this.setState({ [key]: false });
+    } else {
+      this.setState({ [key]: true });
     }
   }
 
@@ -139,18 +148,43 @@ class Login extends React.Component {
             <Label>Username</Label>
             <InputField
               placeholder="Enter here.."
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
             <Label>Password</Label>
             <InputField
-              type="password"
+              type={this.state.passwordHidden ? "password" : "text"}
               placeholder="Enter here.."
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange("password", e.target.value);
               }}
             />
+            {this.state.passwordHidden ? (
+              <ButtonContainer>
+                <Button
+                  variant="outline-info"
+                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  onClick={() => {
+                    this.showOrHidePassword("passwordHidden");
+                  }}
+                >
+                  Show Password
+                </Button>
+              </ButtonContainer>
+            ) : (
+              <ButtonContainer>
+                <Button
+                  variant="outline-info"
+                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  onClick={() => {
+                    this.showOrHidePassword("passwordHidden");
+                  }}
+                >
+                  Hide Password
+                </Button>
+              </ButtonContainer>
+            )}
             <ButtonContainer>
               <Button
                 variant="outline-info"
