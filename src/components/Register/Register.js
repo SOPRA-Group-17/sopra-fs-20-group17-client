@@ -16,6 +16,8 @@ const FormContainer = styled.div`
   justify-content: center;
 `;
 
+const ButtonSize = { width: "8neptvw", height: "2vw" };
+
 const Form = styled.div`
   display: flex;
   flex-direction: column;
@@ -79,7 +81,7 @@ class Register extends React.Component {
       username: null,
       password: null,
       confirmedPassword: null,
-      passwordHidden: true
+      passwordHidden: true,
     };
   }
   /**
@@ -98,7 +100,7 @@ class Register extends React.Component {
         const requestBody = JSON.stringify({
           username: this.state.username,
           password: this.state.password,
-          confirmedPassword: this.state.confirmedPassword
+          confirmedPassword: this.state.confirmedPassword,
         });
         const response = await api.post("/users", requestBody);
 
@@ -159,7 +161,7 @@ class Register extends React.Component {
             <Label>Username</Label>
             <InputField
               placeholder="Enter here... "
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
@@ -167,7 +169,7 @@ class Register extends React.Component {
             <InputField
               placeholder="Enter here..."
               type={this.state.passwordHidden ? "password" : "text"}
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange("password", e.target.value);
               }}
             />
@@ -175,7 +177,7 @@ class Register extends React.Component {
             <InputField
               placeholder="Enter here..."
               type={this.state.passwordHidden ? "password" : "text"}
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange("confirmedPassword", e.target.value);
               }}
             />
@@ -183,7 +185,7 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  style={ButtonSize}
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -195,7 +197,7 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  style={ButtonSize}
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -207,7 +209,7 @@ class Register extends React.Component {
             <ButtonContainer>
               <Button
                 variant="outline-info"
-                style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                style={ButtonSize}
                 disabled={
                   !this.state.username ||
                   !this.state.password ||

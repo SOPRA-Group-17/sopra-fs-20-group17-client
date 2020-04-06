@@ -22,8 +22,14 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 */
   async componentDidMount() {
     try {
+      // get request hineinbasteln
+      // das gleiche für eine methode machen, die periodisch aufgerufen wird
+      // get all games
     } catch (error) {}
   }
+
+  // funktion implementieren, die periodisch das backend konsultiert
+
   handleInputChange(key, value) {
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
