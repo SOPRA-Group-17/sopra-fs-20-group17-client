@@ -53,11 +53,11 @@ class Lobby extends React.Component {
     game1.name = "testname";
 
     this.state = {
-      game: game1,
+      game: new game(),
       player: new Player(),
-      players: [player1, player2, player3, player4],
+      players: [player1, player3],
       ID_game: null,
-      ID_player: "1",
+      ID_player: null,
       status: false,
     };
 
@@ -69,12 +69,20 @@ class Lobby extends React.Component {
   async componentDidMount() {
     try {
       //id aus url
-      this.state.ID_game = this.props.match.params.gameID;
+      this.state.ID_game = this.props.match.params.gameId;
+      this.state.ID_player = this.props.match.params.userId;
+      console.log(this.state.ID_game);
+      console.log(this.state.ID_player);
+
       //TODO was bekommen wir genau zurück, Annahme: Players liste
+      /*
       const response = await api.get(`/games/${this.state.ID_game}/players`);
-      this.setState({ players: response.data });
+      console.log(response);
+      this.setState({ players: response.data });*/
 
       const response1 = await api.get(`/games/${this.state.ID_game}`);
+      console.log("komme ich bis hier?")
+      console.log(response1);
       this.setState({ game: response1.data });
 
       //TODO: player_id has to get the correct id
@@ -131,7 +139,7 @@ class Lobby extends React.Component {
       );
 
       // Get the returned Player and update a new object.
-      const player = new Player(response.data);
+      new Player(response.data);
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -150,7 +158,7 @@ class Lobby extends React.Component {
       //Inner loop to create children
       for (let j = 0; j < 3; j++) {
         if (j === 0) {
-          children.push(<td>{this.state.players[i].id}</td>);
+          children.push(<td>{i+1}</td>);
         }
         if (j === 1) {
           children.push(<td>{this.state.players[i].username}</td>);

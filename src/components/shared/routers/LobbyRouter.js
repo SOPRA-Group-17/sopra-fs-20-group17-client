@@ -20,7 +20,7 @@ class LobbyRouter extends React.Component {
       <Container>
         <Route
           exact
-          path={`${this.props.base}/:gameId/host/:userID`}
+          path={`${this.props.base}/:gameId/host/:userId`}
           render={() => (
                 <Lobby />
         )}
@@ -28,7 +28,7 @@ class LobbyRouter extends React.Component {
 
         <Route
           exact
-          path={`${this.props.base}/:gameId/guest/:userID`}
+          path={`${this.props.base}/:gameId/guest/:userId`}
           render={() => <Lobby />}
         />
 

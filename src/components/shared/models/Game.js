@@ -6,11 +6,11 @@
 //TODO add fields
 class Game {
     constructor(data = {}) {
-      this.id = null;
+      this.gameID = null;
       this.name = null;
-      this.players = null;
-      this.usernames = null;
       this.status = null;
+      this.correctCards = null;
+      this.playerList = [];
       Object.assign(this, data);
     }
   }
