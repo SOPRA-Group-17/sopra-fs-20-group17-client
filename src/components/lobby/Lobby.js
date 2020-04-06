@@ -59,7 +59,7 @@ class Lobby extends React.Component {
       ID_player: "1",
       status: false,
     };
-    
+
     this.changeStatusState = this.changeStatusState.bind(this);
   }
 
@@ -185,7 +185,7 @@ class Lobby extends React.Component {
             </Col>
             <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 3 }}>
               <Row>
-    <p style={lobbyname}>{this.state.game.name}</p>
+                <p style={lobbyname}>{this.state.game.name}</p>
               </Row>
             </Col>
             <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>
