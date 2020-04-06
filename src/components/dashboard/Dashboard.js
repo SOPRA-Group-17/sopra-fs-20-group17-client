@@ -6,6 +6,7 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import Lobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
+import { Spinner } from "../../views/design/Spinner";
 
 class Dashboard extends React.Component {
   constructor() {
@@ -36,6 +37,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       console.log(this.state.user.username);
 
       this.getGames();
+
       //decreas timer
       this.timer = setInterval(() => this.getGames(), 10000);
     } catch (error) {
@@ -227,34 +229,38 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               </Form.Group>
             </Form.Row>
 
-            <Form.Row class="row align-items-end">
-              <Form.Group as={Col} controlId="Lobbys">
-                <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
-                  Select a Lobby
-                </Form.Label>
-                <Form.Control
-                  as="select"
-                  value={this.state.selectLobby}
-                  onChange={this.selectLobby}
-                >
-                  <option value="1">Lobbyname</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                </Form.Control>
-              </Form.Group>
+            {!this.state.games ? (
+              <Spinner />
+            ) : (
+              <Form.Row class="row align-items-end">
+                <Form.Group as={Col} controlId="Lobbys">
+                  <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
+                    Select a Lobby
+                  </Form.Label>
+                  <Form.Control
+                    as="select"
+                    value={this.state.selectLobby}
+                    onChange={this.selectLobby}
+                  >
+                    <option value="1">Lobbyname</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </Form.Control>
+                </Form.Group>
 
-              <Form.Group as={Col} controlId="Lobbys">
-                <Button
-                  variant="outline-light"
-                  className="outlineWhite-Form"
-                  onClick={() => {
-                    this.joinLobby();
-                  }}
-                >
-                  Join Lobby
-                </Button>
-              </Form.Group>
-            </Form.Row>
+                <Form.Group as={Col} controlId="Lobbys">
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Form"
+                    onClick={() => {
+                      this.joinLobby();
+                    }}
+                  >
+                    Join Lobby
+                  </Button>
+                </Form.Group>
+              </Form.Row>
+            )}
           </Form>
         </Row>
         <p>{this.state.selectLobby}</p>
