@@ -13,8 +13,9 @@ const lobbyname = {
 };
 
 const bigbutton = {
-  width: "22vw",
-  height: "8vw",
+  padding: "2vw 3vw 2vw 3vw" 
+  //top right bottom left
+
 };
 
 class Lobby extends React.Component {
@@ -68,7 +69,7 @@ class Lobby extends React.Component {
   async componentDidMount() {
     try {
       //id aus url
-      this.state.ID_game = this.props.match.params.id;
+      this.state.ID_game = this.props.match.params.gameID;
       //TODO was bekommen wir genau zurück, Annahme: Players liste
       const response = await api.get(`/games/${this.state.ID_game}/players`);
       this.setState({ players: response.data });
@@ -211,7 +212,7 @@ class Lobby extends React.Component {
           <Row style={{ marginTop: "4vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 0 }}></Col>
             <Col xs="7" md="3">
-              <Table striped bordered hover size="sm">
+              <Table striped bordered hover size="sm" >
                 <thead class="text-white">
                   <tr>
                     <th>#</th>
@@ -222,7 +223,7 @@ class Lobby extends React.Component {
                 <tbody class="text-white">{this.createTable()}</tbody>
               </Table>
             </Col>
-            <Col xs={{ span: 2, offset: 3 }} md={{ span: 2, offset: 2 }}>
+            <Col xs={{ span: 3, offset: 2 }} md={{ span: 3, offset: 1 }}>
               {console.log(this.state.status)}
               {this.state.status ? (
                 <div>
