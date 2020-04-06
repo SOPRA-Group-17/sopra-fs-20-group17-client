@@ -3,13 +3,17 @@
  *
  */
 
-//TODO add fields
+//TODO remove unnecessary fields
 class User {
   constructor(data = {}) {
     this.id = null;
     this.username = null;
     this.token = null;
     this.status = null;
+    this.password = null;
+    this.creationDate = null;
+    this.birthDate = null;
+    this.name = null;
     Object.assign(this, data);
   }
 }

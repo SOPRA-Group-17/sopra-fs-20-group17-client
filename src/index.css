@@ -7,7 +7,7 @@ This file contains the general and shared style of your application.
 body {
   
   font-family: 'Oxanium', cursive;
-  font-size: large;
+  font-size: large; /**calc(1em + 1vw)**/
   background: #1e122b;
   color: white;
 }
