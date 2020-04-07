@@ -161,11 +161,11 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         `/games/${this.state.selectLobby}/players/${this.state.userId}`,
         requestBody
       );
-      const game = new Game(response.data);
-      console.log(game.id);
+      //const game = new Game(response.data);
+      
 
       //TODO: get this to work
-      //this.props.history.push(`/lobby/${game.id}/guest/${this.state.userId}`);
+      this.props.history.push(`/lobby/${this.state.selectLobby}/guest/${this.state.userId}`);
     } catch (error) {
       alert(
         `Something went wrong while joining the lobby: \n${handleError(error)}`
