@@ -177,14 +177,23 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   createSelectionList = () => {
     let selectionList = [];
 
-    console.log(this.state.games);
+    if (this.state.games === []) {
+      return selectionList;
+    } else {
+      console.log(this.state.games);
 
-    for (let i = 0; i < this.state.games.length; i++) {
-      selectionList.push(
-        <option value={this.state.games[i].gameId}>
-          {this.state.games[i].name}
-        </option>
-      );
+      // set default state
+
+      //this.setState({ selectLobby: this.state.games[0].gameId });
+      //this.setState({ selectLobby: this.state.games[0].gameId });
+
+      for (let i = 0; i < this.state.games.length; i++) {
+        selectionList.push(
+          <option value={this.state.games[i].gameId}>
+            {this.state.games[i].name}
+          </option>
+        );
+      }
     }
 
     return selectionList;
@@ -283,6 +292,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
               <Form.Group as={Col} controlId="Lobbys">
                 <Button
+                  disabled={this.state.games === []}
                   variant="outline-light"
                   className="outlineWhite-Form"
                   onClick={() => {
