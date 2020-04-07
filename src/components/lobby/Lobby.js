@@ -143,7 +143,7 @@ class Lobby extends React.Component {
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
-          error
+          error 
         )}`
       );
     }
