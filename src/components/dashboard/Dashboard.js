@@ -11,6 +11,7 @@ import { Spinner } from "../../views/design/Spinner";
 class Dashboard extends React.Component {
   constructor() {
     super();
+    /*
     var game1 = new Game();
     game1.gameId = 1;
     game1.name = "Lobby1";
@@ -24,14 +25,15 @@ class Dashboard extends React.Component {
     game2.status = "LOBBY";
     game2.playerList = [];
     game2.correctCards = 0;
+    */
 
     this.state = {
       // games stores only the games with status
-      games: [game1, game2],
-      //games: null,
+      //games: [game1, game2],
+      games: [],
       newGame: null,
       toLong: null,
-      selectLobby: "1",
+      selectLobby: null,
       userId: null,
       user: null,
       timer: null,
@@ -69,7 +71,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       const response = await api.get(`/games`);
 
       // Get the returned users and update the state.
-      // this.setState({ games: response.data });
+      this.setState({ games: response.data });
       console.log(this.state.games);
     } catch (error) {
       alert(
@@ -115,6 +117,8 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody2
       );
       const game2 = new Game(response2.data);
+
+      this.props.history.push(`/lobby/${game2.id}/host/${this.state.userId}`);
     } catch (error) {
       alert(`Couldnt creat the lobby: \n${handleError(error)}`);
     }
@@ -157,10 +161,12 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         `/games/${this.state.selectLobby}/players/${this.state.userId}`,
         requestBody
       );
-      const game = new Game(response.data);
+      //const game = new Game(response.data);
 
       //TODO: get this to work
-      this.props.history.push(`/lobby/member/${game.id}`);
+      this.props.history.push(
+        `/lobby/${this.state.selectLobby}/guest/${this.state.userId}`
+      );
     } catch (error) {
       alert(
         `Something went wrong while joining the lobby: \n${handleError(error)}`
@@ -261,38 +267,35 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               </Form.Group>
             </Form.Row>
 
-            {!this.state.games ? (
-              <Spinner />
-            ) : (
-              <Form.Row class="row align-items-end">
-                <Form.Group as={Col} controlId="Lobbys">
-                  <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
-                    Select a Lobby
-                  </Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={this.state.selectLobby}
-                    onChange={this.selectLobby}
-                  >
-                    {this.createSelectionList()}
-                  </Form.Control>
-                </Form.Group>
+            <Form.Row class="row align-items-end">
+              <Form.Group as={Col} controlId="Lobbys">
+                <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
+                  Select a Lobby
+                </Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.selectLobby}
+                  onChange={this.selectLobby}
+                >
+                  {this.createSelectionList()}
+                </Form.Control>
+              </Form.Group>
 
-                <Form.Group as={Col} controlId="Lobbys">
-                  <Button
-                    variant="outline-light"
-                    className="outlineWhite-Form"
-                    onClick={() => {
-                      this.joinLobby();
-                    }}
-                  >
-                    Join Lobby
-                  </Button>
-                </Form.Group>
-              </Form.Row>
-            )}
+              <Form.Group as={Col} controlId="Lobbys">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Form"
+                  onClick={() => {
+                    this.joinLobby();
+                  }}
+                >
+                  Join Lobby
+                </Button>
+              </Form.Group>
+            </Form.Row>
           </Form>
         </Row>
+        <p>{this.state.selectLobby}</p>
       </Container>
     );
   }
