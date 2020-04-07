@@ -12,9 +12,6 @@ import { Redirect } from "react-router-dom";
  * @Guard
  * @param props
  * 
- * add this 
- * 
- * 
  * 
  */
 export const LobbyGuard = props => {
