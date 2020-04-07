@@ -293,7 +293,6 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
             )}
           </Form>
         </Row>
-      
       </Container>
     );
   }
