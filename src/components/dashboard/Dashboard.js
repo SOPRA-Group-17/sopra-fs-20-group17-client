@@ -37,6 +37,7 @@ class Dashboard extends React.Component {
       userId: null,
       user: null,
       timer: null,
+      noLobby: null,
     };
     this.selectLobby = this.selectLobby.bind(this);
   }
@@ -72,6 +73,9 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
       // Get the returned users and update the state.
       this.setState({ games: response.data });
+      if (this.state.games.length != 0) {
+        this.setState({ selectLobby: this.state.games[0].gameId });
+      }
       console.log(this.state.games);
     } catch (error) {
       alert(
@@ -164,8 +168,6 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody
       );
       //const game = new Game(response.data);
-
-      //TODO: get this to work
       this.props.history.push(
         `/lobby/${this.state.selectLobby}/guest/${this.state.userId}`
       );
@@ -178,27 +180,23 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
   createSelectionList = () => {
     let selectionList = [];
-
     console.log(this.state.games);
 
-    for (let i = 0; i < this.state.games.length; i++) {
-      selectionList.push(
-        <option value={this.state.games[i].gameId}>
-          {this.state.games[i].name}
-        </option>
-      );
-    }
+    if (this.state.games === undefined || this.state.games.length == 0) {
+      return selectionList;
+    } else {
+      console.log(this.state.games);
 
+      for (let i = 0; i < this.state.games.length; i++) {
+        selectionList.push(
+          <option value={this.state.games[i].gameId}>
+            {this.state.games[i].name}
+          </option>
+        );
+      }
+    }
     return selectionList;
   };
-
-  /*{this.state.games.map(game => {
-                    return (
-                        
-                        <Lobby game = {game}/>
-                       
-                    );
-                    })} */
 
   render() {
     return (
@@ -285,6 +283,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
               <Form.Group as={Col} controlId="Lobbys">
                 <Button
+                  disabled={this.state.games.length == 0}
                   variant="outline-light"
                   className="outlineWhite-Form"
                   onClick={() => {
@@ -297,7 +296,6 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
             </Form.Row>
           </Form>
         </Row>
-        <p>{this.state.selectLobby}</p>
       </Container>
     );
   }
