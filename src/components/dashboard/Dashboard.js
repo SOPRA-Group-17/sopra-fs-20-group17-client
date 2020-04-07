@@ -11,6 +11,7 @@ import { Spinner } from "../../views/design/Spinner";
 class Dashboard extends React.Component {
   constructor() {
     super();
+    /*
     var game1 = new Game();
     game1.gameId = 1;
     game1.name = "Lobby1";
@@ -24,14 +25,15 @@ class Dashboard extends React.Component {
     game2.status = "LOBBY";
     game2.playerList = [];
     game2.correctCards = 0;
+    */
 
     this.state = {
       // games stores only the games with status
-      games: [game1, game2],
-      //games: null,
+      //games: [game1, game2],
+      games: [],
       newGame: null,
       toLong: null,
-      selectLobby: "1",
+      selectLobby: null,
       userId: null,
       user: null,
       timer: null,
@@ -69,7 +71,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       const response = await api.get(`/games`);
 
       // Get the returned users and update the state.
-      // this.setState({ games: response.data });
+      this.setState({ games: response.data });
       console.log(this.state.games);
     } catch (error) {
       alert(
@@ -115,6 +117,8 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody2
       );
       const game2 = new Game(response2.data);
+
+      this.props.history.push(`/lobby/${game2.id}/host/${this.state.userId}`);
     } catch (error) {
       alert(`Couldnt creat the lobby: \n${handleError(error)}`);
     }
@@ -158,9 +162,10 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody
       );
       const game = new Game(response.data);
+      console.log(game.id);
 
       //TODO: get this to work
-      this.props.history.push(`/lobby/member/${game.id}`);
+      //this.props.history.push(`/lobby/${game.id}/guest/${this.state.userId}`);
     } catch (error) {
       alert(
         `Something went wrong while joining the lobby: \n${handleError(error)}`
@@ -172,7 +177,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     let selectionList = [];
 
     console.log(this.state.games);
-
+    
     for (let i = 0; i < this.state.games.length; i++) {
       selectionList.push(
         <option value={this.state.games[i].gameId}>
@@ -261,9 +266,6 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               </Form.Group>
             </Form.Row>
 
-            {!this.state.games ? (
-              <Spinner />
-            ) : (
               <Form.Row class="row align-items-end">
                 <Form.Group as={Col} controlId="Lobbys">
                   <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
@@ -290,9 +292,12 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
                   </Button>
                 </Form.Group>
               </Form.Row>
-            )}
+            
           </Form>
         </Row>
+        <p>
+          {this.state.selectLobby}
+        </p>
       
       </Container>
     );

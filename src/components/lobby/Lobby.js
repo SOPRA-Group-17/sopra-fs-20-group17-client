@@ -79,6 +79,7 @@ class Lobby extends React.Component {
       const response = await api.get(`/games/${this.state.ID_game}/players`);
       console.log(response);
       this.setState({ players: response.data });*/
+      //await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const response1 = await api.get(`/games/${this.state.ID_game}`);
       console.log("komme ich bis hier?")
@@ -90,13 +91,15 @@ class Lobby extends React.Component {
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
       // feel free to remove it :)
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
 
       // Get the returned game and update the state.
       // TODO in game there has to be the same fields as in the backend game class
-      console.log(this.players);
-      console.log(this.players[0].status);
-      console.log(this.response.data);
+      console.log(this.state.players);
+      console.log(this.state.players[0].status);
+      //console.log(this.response.data);
+      console.log(this.state.players[0].username);
+      //console.log(this.response.data);
       //unklar ob noch benötigt
       /*
       for (var i=0; i<response.length; i++){
