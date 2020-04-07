@@ -103,6 +103,7 @@ class Login extends React.Component {
 
       // Store the token into the local storage.
       localStorage.setItem("token", user.token);
+      localStorage.setItem("Id", user.id);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       this.props.history.push(`/dashboard/${user.id}`); //TODO: funktioniert das richtig? oder wird /dashboard/null angezeigt?

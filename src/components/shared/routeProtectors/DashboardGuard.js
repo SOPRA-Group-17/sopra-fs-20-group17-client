@@ -10,14 +10,12 @@ import { Redirect } from "react-router-dom";
  * @Guard
  * @param props
  * 
- * add this 
- * 
- * if (localStorage.getItem("token")) {
-    return props.children;
-  }
-  return <Redirect to={"/login"} />;
+ 
  * 
  */
 export const DashboardGuard = props => {
+  if (localStorage.getItem("token")) {
     return props.children;
+  }
+  return <Redirect to={"/login"} />;
 };

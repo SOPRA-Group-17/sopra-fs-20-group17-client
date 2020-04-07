@@ -14,12 +14,13 @@ import { Redirect } from "react-router-dom";
  * 
  * add this 
  * 
- * if (localStorage.getItem("token")) {
-    return props.children;
-  }
-  return <Redirect to={"/login"} />;
+ * 
  * 
  */
 export const LobbyGuard = props => {
+  if (localStorage.getItem("token")) {
     return props.children;
+  }
+  return <Redirect to={"/login"} />;
+  
 };
