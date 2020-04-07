@@ -11,8 +11,24 @@ import { Spinner } from "../../views/design/Spinner";
 class Dashboard extends React.Component {
   constructor() {
     super();
+    var game1 = new Game();
+    game1.gameId = 1;
+    game1.name = "Lobby1";
+    game1.status = "LOBBY";
+    game1.playerList = [];
+    game1.correctCards = 0;
+
+    var game2 = new Game();
+    game2.gameId = 23;
+    game2.name = "Lobby2";
+    game2.status = "LOBBY";
+    game2.playerList = [];
+    game2.correctCards = 0;
+
     this.state = {
-      games: null,
+      // games stores only the games with status
+      games: [game1, game2],
+      //games: null,
       newGame: null,
       toLong: null,
       selectLobby: "1",
@@ -53,7 +69,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       const response = await api.get(`/games`);
 
       // Get the returned users and update the state.
-      this.setState({ games: response.data });
+      // this.setState({ games: response.data });
       console.log(this.state.games);
     } catch (error) {
       alert(
@@ -152,6 +168,22 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     }
   }
 
+  createSelectionList = () => {
+    let selectionList = [];
+
+    console.log(this.state.games);
+
+    for (let i = 0; i < this.state.games.length; i++) {
+      selectionList.push(
+        <option value={this.state.games[i].gameId}>
+          {this.state.games[i].name}
+        </option>
+      );
+    }
+
+    return selectionList;
+  };
+
   /*{this.state.games.map(game => {
                     return (
                         
@@ -242,9 +274,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
                     value={this.state.selectLobby}
                     onChange={this.selectLobby}
                   >
-                    <option value="1">Lobbyname</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
+                    {this.createSelectionList()}
                   </Form.Control>
                 </Form.Group>
 
