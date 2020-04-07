@@ -13,9 +13,8 @@ const lobbyname = {
 };
 
 const bigbutton = {
-  padding: "2vw 3vw 2vw 3vw" 
+  padding: "2vw 3vw 2vw 3vw",
   //top right bottom left
-
 };
 
 class Lobby extends React.Component {
@@ -82,7 +81,7 @@ class Lobby extends React.Component {
       //await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const response1 = await api.get(`/games/${this.state.ID_game}`);
-      console.log("komme ich bis hier?")
+      console.log("komme ich bis hier?");
       console.log(response1);
       this.setState({ game: response1.data });
 
@@ -91,7 +90,6 @@ class Lobby extends React.Component {
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
       // feel free to remove it :)
-      
 
       // Get the returned game and update the state.
       // TODO in game there has to be the same fields as in the backend game class
@@ -146,7 +144,7 @@ class Lobby extends React.Component {
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
-          error 
+          error
         )}`
       );
     }
@@ -161,7 +159,7 @@ class Lobby extends React.Component {
       //Inner loop to create children
       for (let j = 0; j < 3; j++) {
         if (j === 0) {
-          children.push(<td>{i+1}</td>);
+          children.push(<td>{i + 1}</td>);
         }
         if (j === 1) {
           children.push(<td>{this.state.players[i].username}</td>);
@@ -223,7 +221,7 @@ class Lobby extends React.Component {
           <Row style={{ marginTop: "4vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 0 }}></Col>
             <Col xs="7" md="3">
-              <Table striped bordered hover size="sm" >
+              <Table striped bordered hover size="sm">
                 <thead class="text-white">
                   <tr>
                     <th>#</th>

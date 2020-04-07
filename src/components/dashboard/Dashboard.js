@@ -162,10 +162,11 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody
       );
       //const game = new Game(response.data);
-      
 
       //TODO: get this to work
-      this.props.history.push(`/lobby/${this.state.selectLobby}/guest/${this.state.userId}`);
+      this.props.history.push(
+        `/lobby/${this.state.selectLobby}/guest/${this.state.userId}`
+      );
     } catch (error) {
       alert(
         `Something went wrong while joining the lobby: \n${handleError(error)}`
@@ -177,7 +178,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     let selectionList = [];
 
     console.log(this.state.games);
-    
+
     for (let i = 0; i < this.state.games.length; i++) {
       selectionList.push(
         <option value={this.state.games[i].gameId}>
@@ -266,39 +267,35 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               </Form.Group>
             </Form.Row>
 
-              <Form.Row class="row align-items-end">
-                <Form.Group as={Col} controlId="Lobbys">
-                  <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
-                    Select a Lobby
-                  </Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={this.state.selectLobby}
-                    onChange={this.selectLobby}
-                  >
-                    {this.createSelectionList()}
-                  </Form.Control>
-                </Form.Group>
+            <Form.Row class="row align-items-end">
+              <Form.Group as={Col} controlId="Lobbys">
+                <Form.Label style={{ fontSize: "calc(0.9em + 0.45vw)" }}>
+                  Select a Lobby
+                </Form.Label>
+                <Form.Control
+                  as="select"
+                  value={this.state.selectLobby}
+                  onChange={this.selectLobby}
+                >
+                  {this.createSelectionList()}
+                </Form.Control>
+              </Form.Group>
 
-                <Form.Group as={Col} controlId="Lobbys">
-                  <Button
-                    variant="outline-light"
-                    className="outlineWhite-Form"
-                    onClick={() => {
-                      this.joinLobby();
-                    }}
-                  >
-                    Join Lobby
-                  </Button>
-                </Form.Group>
-              </Form.Row>
-            
+              <Form.Group as={Col} controlId="Lobbys">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Form"
+                  onClick={() => {
+                    this.joinLobby();
+                  }}
+                >
+                  Join Lobby
+                </Button>
+              </Form.Group>
+            </Form.Row>
           </Form>
         </Row>
-        <p>
-          {this.state.selectLobby}
-        </p>
-      
+        <p>{this.state.selectLobby}</p>
       </Container>
     );
   }
