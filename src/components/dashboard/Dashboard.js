@@ -116,9 +116,11 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         `/games/${game.gameId}/players/${this.state.userId}`,
         requestBody2
       );
-      const game2 = new Game(response2.data);
+      //const game2 = new Game(response2.data);
 
-      this.props.history.push(`/lobby/${game2.id}/host/${this.state.userId}`);
+      this.props.history.push(
+        `/lobby/${game.gameId}/host/${this.state.userId}`
+      );
     } catch (error) {
       alert(`Couldnt creat the lobby: \n${handleError(error)}`);
     }
