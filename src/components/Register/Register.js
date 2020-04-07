@@ -12,7 +12,7 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 200px;
+  min-height: 250px;
   justify-content: center;
 `;
 
@@ -23,7 +23,7 @@ const Form = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 60%;
-  height: 375px;
+  height: 420px;
   font-size: 16px;
   font-weight: 300;
   padding-left: 37px;
