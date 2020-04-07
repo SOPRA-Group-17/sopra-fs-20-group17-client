@@ -11,6 +11,8 @@ class Game {
       this.playerList = null;
       this.correctCards = null;
       this.status = null;
+      this.correctCards = null;
+      this.playerList = [];
       Object.assign(this, data);
     }
   }

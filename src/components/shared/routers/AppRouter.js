@@ -2,10 +2,13 @@ import React from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
+import LobbyRouter from "./LobbyRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../login/Login";
 import Register from "../../Register/Register";
+import Lobbyboard from "../../lobby/Lobby";
+import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
 import Dashboard from "../../dashboard/Dashboard";
 
@@ -32,6 +35,15 @@ class AppRouter extends React.Component {
                 <GameGuard>
                   <GameRouter base={"/game"} />
                 </GameGuard>
+              )}
+            />
+
+            <Route
+              path="/lobby"
+              render={() => (
+                <LobbyGuard>
+                  <LobbyRouter base={"/lobby"} />
+                </LobbyGuard>
               )}
             />
             <Route
