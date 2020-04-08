@@ -41,6 +41,7 @@ class Dashboard extends React.Component {
     };
     this.selectLobby = this.selectLobby.bind(this);
   }
+
   /*
 ({data:{id: 2, name: "Jonas", usernames: null, status: "not ready"}}),
 this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "not ready"}}.data });
