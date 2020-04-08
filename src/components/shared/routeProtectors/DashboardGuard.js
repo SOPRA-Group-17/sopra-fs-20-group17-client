@@ -13,7 +13,7 @@ import { Redirect } from "react-router-dom";
  
  * 
  */
-export const DashboardGuard = props => {
+export const DashboardGuard = (props) => {
   if (localStorage.getItem("token")) {
     return props.children;
   }

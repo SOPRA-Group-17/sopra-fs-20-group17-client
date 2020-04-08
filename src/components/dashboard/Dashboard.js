@@ -47,7 +47,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 */
   async componentDidMount() {
     try {
-      this.state.userId = localStorage.getItem('Id');
+      this.state.userId = localStorage.getItem("Id");
 
       const response = await api.get(`/users/${this.state.userId}`);
 
@@ -122,9 +122,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       );
       //const game2 = new Game(response2.data);
 
-      this.props.history.push(
-        `/lobby/${game.gameId}/host`
-      );
+      this.props.history.push(`/lobby/${game.gameId}/host`);
     } catch (error) {
       alert(`Couldnt creat the lobby: \n${handleError(error)}`);
     }
@@ -168,9 +166,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody
       );
       //const game = new Game(response.data);
-      this.props.history.push(
-        `/lobby/${this.state.selectLobby}/guest`
-      );
+      this.props.history.push(`/lobby/${this.state.selectLobby}/guest`);
     } catch (error) {
       alert(
         `Something went wrong while joining the lobby: \n${handleError(error)}`
