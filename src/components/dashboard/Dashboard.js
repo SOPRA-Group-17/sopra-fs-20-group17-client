@@ -231,7 +231,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
             </Row>
           </Col>
         </Row>
-        <Row></Row>
+      
 
         <Row>
           <Form className="DashboardForm">
