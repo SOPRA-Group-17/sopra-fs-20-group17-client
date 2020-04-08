@@ -1,6 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css?family=Oxanium:400,500,600,700,800&display=swap');
 
+
 /**
 This file contains the general and shared style of your application.
  */
@@ -62,5 +63,26 @@ button{
 
 * {
   -webkit-font-smoothing: antialiased;
+
+}
+
+
+
+
+/* Medium devices (tablets, 573px and up) */
+@media (min-width: 576px)  {
+    
+  .outlineWhite-Dashboard{
+   
+    margin-top: 1vw;
+    
+  }
+
+}
+
+
+
+/*phone portrait*/
+@media (max-width: 575.98px) { 
 
 }
