@@ -67,7 +67,7 @@ class AppRouter extends React.Component {
             />
 
             <Route
-              path="/dashboard/:id"
+              path="/dashboard"
               exact
               render={() => (
                 <DashboardGuard>

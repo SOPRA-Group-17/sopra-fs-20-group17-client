@@ -69,7 +69,7 @@ class Lobby extends React.Component {
     try {
       //id aus url
       this.state.ID_game = this.props.match.params.gameId;
-      this.state.ID_player = this.props.match.params.userId;
+      this.state.ID_player = localStorage.getItem('Id');
       console.log(this.state.ID_game);
       console.log(this.state.ID_player);
 

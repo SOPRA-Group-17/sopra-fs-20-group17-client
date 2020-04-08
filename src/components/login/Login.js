@@ -106,7 +106,7 @@ class Login extends React.Component {
       localStorage.setItem("Id", user.id);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      this.props.history.push(`/dashboard/${user.id}`); //TODO: funktioniert das richtig? oder wird /dashboard/null angezeigt?
+      this.props.history.push(`/dashboard`); //TODO: funktioniert das richtig? oder wird /dashboard/null angezeigt?
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
     }
