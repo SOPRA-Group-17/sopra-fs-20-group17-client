@@ -234,7 +234,7 @@ class Lobby extends React.Component {
                 <tbody class="text-white">{this.createTable()}</tbody>
               </Table>
             </Col>
-            <div className="d-flex flex-lg-column flex-row">
+            <div className="d-flex flex-md-column flex-row">
               {console.log(this.state.status)}
               {this.state.status ? (
                 <div>

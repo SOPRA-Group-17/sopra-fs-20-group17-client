@@ -124,6 +124,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody2
       );
       //const game2 = new Game(response2.data);
+      localStorage.setItem("gameId", this.state.token);
 
       this.props.history.push(`/lobby/${game.gameId}/host`);
     } catch (error) {
@@ -170,6 +171,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
         requestBody
       );
       //const game = new Game(response.data);
+      localStorage.setItem("gameId", this.state.token);
       this.props.history.push(`/lobby/${this.state.selectLobby}/guest`);
     } catch (error) {
       alert(
