@@ -134,7 +134,7 @@ class Number extends React.Component {
               }}
             >
               4
-            </p>
+            </p> 
           </Col>
           <Col xs="4" md="2">
             <p
