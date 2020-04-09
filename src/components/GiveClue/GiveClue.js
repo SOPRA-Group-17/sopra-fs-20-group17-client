@@ -15,11 +15,14 @@ class GiveClue extends React.Component {
     this.state = {
       word: "Example",
       clue: null,
+      gameId:null,
     };
   }
 
   async componentDidMount() {
     try {
+      this.state.gameId = this.props.match.params.gameId;
+      console.log(this.props);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -43,6 +46,7 @@ class GiveClue extends React.Component {
   render() {
     return (
       <Container fluid>
+        
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>

@@ -67,6 +67,11 @@ button{
 
 }
 
+.large-Font{
+  font-size: calc(0.8em + 3.5vw);
+ 
+
+}
 
 
 

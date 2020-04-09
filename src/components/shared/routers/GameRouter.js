@@ -5,6 +5,7 @@ import Game from "../../game/Game";
 import Profile from "../../Profile/Profile";
 import EditProfile from "../../Profile/EditProfile";
 import GiveClue from "../../GiveClue/GiveClue";
+import Evalution from "../../Evalution/Evalution";
 
 const Container = styled.div`
   display: flex;
@@ -14,25 +15,28 @@ const Container = styled.div`
 class GameRouter extends React.Component {
   render() {
     /**
-     * "this.props.base" is "/app" because as been passed as a prop in the parent of GameRouter, i.e., App.js
+     * "this.props.base" is "/game/:id" because as been passed as a prop in the parent of GameRouter,
      *
-     *  left away exact with profile, so that no matter of the id at the end of the url the routing works
      */
+
     return (
       <Container>
         <Route
           exact
-          path={`${this.props.base}/:gameID/giveClue`}
+          path={`${this.props.base}/giveClue`}
           render={() => <GiveClue />}
         />
-
-
+        <Route
+          exact
+          path={`${this.props.base}/evalution`}
+          render={() => <Evalution />}
+        />
 
       </Container>
     );
   }
 }
 /*
-* Don't forget to export your component!
+ * Don't forget to export your component!
  */
 export default GameRouter;

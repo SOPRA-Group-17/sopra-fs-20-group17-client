@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect} from "react-router-dom";
 
 /**
  * routeProtectors interfaces can tell the router whether or not it should allow navigation to a requested route.
@@ -9,11 +9,16 @@ import { Redirect } from "react-router-dom";
  * If the user isn't authenticated, the components redirects to the /login screen
  * @Guard
  * @param props
- * if (localStorage.getItem("token")) {
-    return props.children;
-  }
-  return <Redirect to={"/login"} />;
+ * localStorage.getItem("gameId") == props.match.params.gameId
  */
 export const GameGuard = props => {
-  return props.children;
+  
+  if (localStorage.getItem("token") ) {
+    return props.children;
+  }
+  else if(localStorage.getItem("token")){
+    return <Redirect to={"/dashboard"} />;
+
+  }
+  return <Redirect to={"/login"} />;
 };
