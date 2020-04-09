@@ -20,41 +20,10 @@ const bigbutton = {
 class Lobby extends React.Component {
   constructor() {
     super();
-    var player1 = new Player();
-    player1.id = "1";
-    player1.username = "test1";
-    player1.token = null;
-    player1.status = false;
-    player1.game = null;
-
-    var player2 = new Player();
-    player2.id = "2";
-    player2.username = "test2";
-    player2.token = null;
-    player2.status = false;
-    player2.game = null;
-
-    var player3 = new Player();
-    player3.id = "3";
-    player3.username = "test3";
-    player3.token = null;
-    player3.status = true;
-    player3.game = null;
-
-    var player4 = new Player();
-    player4.id = "4";
-    player4.username = "test4";
-    player4.token = null;
-    player4.status = true;
-    player4.game = null;
-
-    var game1 = new game();
-    game1.name = "testname";
-
     this.state = {
       game: new game(),
       player: new Player(),
-      players: [player1, player3],
+      players: [],
       ID_game: null,
       ID_player: null,
       status: false,
@@ -74,18 +43,16 @@ class Lobby extends React.Component {
       console.log(this.state.ID_player);
 
       //TODO was bekommen wir genau zurück, Annahme: Players liste
-      /*
+      
       const response = await api.get(`/games/${this.state.ID_game}/players`);
       console.log(response);
-      this.setState({ players: response.data });*/
+      this.setState({ players: response.data });
       //await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const response1 = await api.get(`/games/${this.state.ID_game}`);
       console.log("komme ich bis hier?");
       console.log(response1);
       this.setState({ game: response1.data });
-
-      //TODO: player_id has to get the correct id
 
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
@@ -96,14 +63,13 @@ class Lobby extends React.Component {
       console.log(this.state.players);
       console.log(this.state.players[0].status);
       //console.log(this.response.data);
-      console.log(this.state.players[0].username);
-      //console.log(this.response.data);
+      console.log(this.state.players[0].name);
       //unklar ob noch benötigt
-      /*
+      
       for (var i=0; i<response.length; i++){
         this.setState({ Player: response.data[i]});
         console.log(this.state.ID);
-      } */
+      } 
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -133,14 +99,13 @@ class Lobby extends React.Component {
         status: this.state.status,
       });
 
-      console.log(requestBody);
+      console.log(requestBody);/*
       const response = await api.put(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
       );
-
       // Get the returned Player and update a new object.
-      new Player(response.data);
+      new Player(response.data);*/
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -162,13 +127,13 @@ class Lobby extends React.Component {
           children.push(<td>{i + 1}</td>);
         }
         if (j === 1) {
-          children.push(<td>{this.state.players[i].username}</td>);
+          children.push(<td>{this.state.players[i].name}</td>);
         }
 
         if (j === 2) {
-          if (this.state.players[i].status) {
+          if (this.state.players[i].status === 'READY') {
             children.push(<td class="text-success">{`ready`}</td>);
-          } else {
+          } else if (this.state.players[i].status === 'WAITING') {
             children.push(<td class="text-danger">{`not ready`}</td>);
           }
         }
@@ -183,7 +148,7 @@ class Lobby extends React.Component {
   render() {
     return (
       <div>
-        {console.log(this.state.players[0].username)}
+
         <Container fluid>
           <Row>
             <Col xs="5" md="3">
@@ -225,7 +190,7 @@ class Lobby extends React.Component {
                 <thead class="text-white">
                   <tr>
                     <th>#</th>
-                    <th>username</th>
+                    <th>name</th>
                     <th>status</th>
                   </tr>
                 </thead>
