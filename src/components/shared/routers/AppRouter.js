@@ -7,10 +7,12 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../login/Login";
 import Register from "../../Register/Register";
-import Lobbyboard from "../../lobby/Lobby";
 import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
 import Dashboard from "../../dashboard/Dashboard";
+import { NumberGuard } from "../routeProtectors/NumberGuard";
+import Number from "../../number/Number";
+
 
 /**
  * Main router of your application.
@@ -73,6 +75,16 @@ class AppRouter extends React.Component {
                 <DashboardGuard>
                   <Dashboard />
                 </DashboardGuard>
+              )}
+            />
+
+<Route
+              path="/number"
+              exact
+              render={() => (
+                <NumberGuard>
+                  <Number />
+                </NumberGuard>
               )}
             />
 
