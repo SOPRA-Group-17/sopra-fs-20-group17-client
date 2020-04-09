@@ -38,6 +38,7 @@ class Dashboard extends React.Component {
       user: null,
       timer: null,
       noLobby: null,
+      token: null,
     };
     this.selectLobby = this.selectLobby.bind(this);
   }
@@ -48,6 +49,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   async componentDidMount() {
     try {
       this.state.userId = localStorage.getItem("Id");
+      this.state.token = localStorage.getItem("token");
 
       const response = await api.get(`/users/${this.state.userId}`);
 
@@ -113,11 +115,12 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       //TODO: get this to work this.props.history.push(`/lobby/host/${game.id}`);
       const requestBody2 = JSON.stringify({
         name: this.state.user.username,
+        userToken: this.state.token,
       });
       console.log(requestBody2);
 
       const response2 = await api.post(
-        `/games/${game.gameId}/players/${this.state.userId}`,
+        `/games/${game.gameId}/players`,
         requestBody2
       );
       //const game2 = new Game(response2.data);
@@ -159,10 +162,11 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     try {
       const requestBody = JSON.stringify({
         name: this.state.user.username,
+        userToken: this.state.token,
       });
 
       const response = await api.post(
-        `/games/${this.state.selectLobby}/players/${this.state.userId}`,
+        `/games/${this.state.selectLobby}/players`,
         requestBody
       );
       //const game = new Game(response.data);
@@ -231,7 +235,6 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
             </Row>
           </Col>
         </Row>
-      
 
         <Row>
           <Form className="DashboardForm">
