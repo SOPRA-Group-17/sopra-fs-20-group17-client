@@ -42,24 +42,32 @@ class Lobby extends React.Component {
       console.log(this.state.ID_game);
       console.log(this.state.ID_player);
 
-      //TODO was bekommen wir genau zurück, Annahme: Players liste
-
-      const response = await api.get(`/games/${this.state.ID_game}/players`);
-      console.log(response);
-      this.setState({ players: response.data });
+      // delays continuous execution of an async operation for 1 second.
+      // This is just a fake async call, so that the spinner can be displayed
+      // feel free to remove it :)
       //await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      //getting the game name
       const response1 = await api.get(`/games/${this.state.ID_game}`);
       console.log("komme ich bis hier?");
       console.log(response1);
       this.setState({ game: response1.data });
 
-      // delays continuous execution of an async operation for 1 second.
-      // This is just a fake async call, so that the spinner can be displayed
-      // feel free to remove it :)
+      //poll every 2 seconds all players
+      this.timer = setInterval(() => this.getPlayers(), 2000);
+    } catch (error) {
+      alert(
+        `Something went wrong while fetching the users: \n${handleError(error)}`
+      );
+    }
+  }
 
-      // Get the returned game and update the state.
-      // TODO in game there has to be the same fields as in the backend game class
+  async getPlayers() {
+    try {
+      const response = await api.get(`/games/${this.state.ID_game}/players`);
+      console.log(response);
+      this.setState({ players: response.data });
+
       console.log(this.state.players);
       console.log(this.state.players[0].status);
       console.log(this.state.players[0].name);
@@ -70,7 +78,7 @@ class Lobby extends React.Component {
       }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while fetching the data: \n${handleError(error)}`
       );
     }
   }
@@ -79,10 +87,10 @@ class Lobby extends React.Component {
     this.setState(state => ({
       status: !this.state.status
     }));
-    this.saveChange();
+    this.saveChangePlayerStatus();
   }
 
-  async saveChange() {
+  async saveChangePlayerStatus() {
     try {
       var arraynumber = null;
       for (var i = 0; i < this.state.players.length; i++) {
@@ -150,6 +158,55 @@ class Lobby extends React.Component {
 
     return table;
   };
+
+  startGame() {
+    //gehe durch alle player, wenn mehr als 2 und weniger als 8
+    // und alle ready,
+    // dann ändere Game status und rendere neue seite
+    if (this.state.players.length >= 3 && this.state.players.length <= 7) {
+      for (var i = 0; i < this.state.players.length; i++) {
+        if (this.state.players[i].status !== "READY") {
+          return null;
+        }
+      }
+      //alle Spieler ready und richtige Anzahl, dann game status ready
+      this.setState({
+        game: {
+          status: "READY"
+        }
+      });
+      console.log(this.state.game.status);
+      this.saveChangeGame();
+    }
+  }
+
+  async saveChangeGame() {
+    try {
+      let requestBody;
+
+      requestBody = JSON.stringify({
+        id: this.state.ID_game,
+        //has to be identical name as in backend the game_status
+        GameStatus: this.state.game.status
+      });
+
+      console.log(requestBody); 
+      
+      const response = await api.put(
+        `/games/${this.state.ID_game}`,
+        requestBody
+      );
+      // Get the returned Player and update a new object.
+      new game(response.data);
+
+    } catch (error) {
+      alert(
+        `Something went wrong during updating your data: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
 
   render() {
     return (
@@ -228,6 +285,7 @@ class Lobby extends React.Component {
               {console.log(this.state.status)}
             </Col>
           </Row>
+          {this.startGame()}
         </Container>
       </div>
     );
