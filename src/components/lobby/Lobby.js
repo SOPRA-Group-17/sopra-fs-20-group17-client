@@ -9,11 +9,11 @@ import game from "../shared/models/Game";
 const lobbyname = {
   fontSize: "4vw",
   textAlign: "center",
-  marginTop: "2vw",
+  marginTop: "2vw"
 };
 
 const bigbutton = {
-  padding: "2vw 3vw 2vw 3vw",
+  padding: "2vw 3vw 2vw 3vw"
   //top right bottom left
 };
 
@@ -26,7 +26,7 @@ class Lobby extends React.Component {
       players: [],
       ID_game: null,
       ID_player: null,
-      status: false,
+      status: false
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -43,7 +43,7 @@ class Lobby extends React.Component {
       console.log(this.state.ID_player);
 
       //TODO was bekommen wir genau zurück, Annahme: Players liste
-      
+
       const response = await api.get(`/games/${this.state.ID_game}/players`);
       console.log(response);
       this.setState({ players: response.data });
@@ -62,14 +62,12 @@ class Lobby extends React.Component {
       // TODO in game there has to be the same fields as in the backend game class
       console.log(this.state.players);
       console.log(this.state.players[0].status);
-      //console.log(this.response.data);
       console.log(this.state.players[0].name);
-      //unklar ob noch benötigt
-      
-      for (var i=0; i<response.length; i++){
-        this.setState({ Player: response.data[i]});
+
+      for (var i = 0; i < response.length; i++) {
+        this.setState({ Player: response.data[i] });
         console.log(this.state.ID);
-      } 
+      }
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -78,8 +76,8 @@ class Lobby extends React.Component {
   }
 
   changeStatusState() {
-    this.setState((state) => ({
-      status: !this.state.status,
+    this.setState(state => ({
+      status: !this.state.status
     }));
     this.saveChange();
   }
@@ -96,10 +94,12 @@ class Lobby extends React.Component {
 
       requestBody = JSON.stringify({
         id: this.state.ID_player,
-        status: this.state.status,
+        status: this.state.status
       });
 
-      console.log(requestBody);/*
+      console.log(
+        requestBody
+      ); /*
       const response = await api.put(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
@@ -131,10 +131,16 @@ class Lobby extends React.Component {
         }
 
         if (j === 2) {
-          if (this.state.players[i].status === 'READY') {
+          if (this.state.players[i].status === "READY") {
             children.push(<td class="text-success">{`ready`}</td>);
-          } else if (this.state.players[i].status === 'WAITING') {
+          } else if (this.state.players[i].status === "NOT READY") {
             children.push(<td class="text-danger">{`not ready`}</td>);
+          } else {
+            children.push(
+              <td class="text-white">
+                {this.state.players[i].status.toString()}
+              </td>
+            );
           }
         }
       }
@@ -148,7 +154,6 @@ class Lobby extends React.Component {
   render() {
     return (
       <div>
-
         <Container fluid>
           <Row>
             <Col xs="5" md="3">
