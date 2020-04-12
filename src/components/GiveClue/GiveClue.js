@@ -1,6 +1,6 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
-import { withRouter } from "react-router-dom";
+import { withRouter, useParams} from "react-router-dom";
 import User from "../shared/models/User";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
@@ -23,6 +23,7 @@ class GiveClue extends React.Component {
     try {
       this.state.gameId = this.props.match.params.gameId;
       console.log(this.props);
+      
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -41,11 +42,13 @@ class GiveClue extends React.Component {
 
   handleInputChange(key, value) {
     this.setState({ [key]: value });
+    
   }
 
   render() {
     return (
       <Container fluid>
+        
         
         <Row>
           <Col xs="5" md="3">

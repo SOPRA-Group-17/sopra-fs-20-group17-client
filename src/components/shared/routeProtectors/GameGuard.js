@@ -1,5 +1,6 @@
 import React from "react";
-import { Redirect} from "react-router-dom";
+import { Redirect, useParams} from "react-router-dom";
+
 
 /**
  * routeProtectors interfaces can tell the router whether or not it should allow navigation to a requested route.
@@ -10,10 +11,12 @@ import { Redirect} from "react-router-dom";
  * @Guard
  * @param props
  * localStorage.getItem("gameId") == props.match.params.gameId
+ * 
+ * checks wheter user is allowed to view site of certain game
  */
 export const GameGuard = props => {
   
-  if (localStorage.getItem("token") ) {
+  if (localStorage.getItem("token") && localStorage.getItem("gameId") === useParams().gameId  ) {
     return props.children;
   }
   else if(localStorage.getItem("token")){
@@ -21,4 +24,5 @@ export const GameGuard = props => {
 
   }
   return <Redirect to={"/login"} />;
+  
 };
