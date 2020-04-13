@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
 import Game from "../../game/Game";
+import EnterGuess from "../../game/Game";
 import Profile from "../../Profile/Profile";
 import EditProfile from "../../Profile/EditProfile";
 
@@ -25,30 +26,26 @@ class GameRouter extends React.Component {
           render={() => <Game />}
         />
 
-       <Route
-           exact
-          path= {`${this.props.base}/profile/:id`}
+        <Route
+          exact
+          path={`${this.props.base}/profile/:id`}
           render={() => <Profile />}
-       />
-
-          <Route
-              exact
-              path= {`${this.props.base}/EditProfile/:id`}
-              render={() => <EditProfile />}
-          />
-
+        />
+        <Route
+          exact
+          path={`${this.props.base}/EditProfile/:id`}
+          render={() => <EditProfile />}
+        />
         <Route
           exact
           path={`${this.props.base}`}
           render={() => <Redirect to={`${this.props.base}/dashboard`} />}
         />
-
-
       </Container>
     );
   }
 }
 /*
-* Don't forget to export your component!
+ * Don't forget to export your component!
  */
 export default GameRouter;
