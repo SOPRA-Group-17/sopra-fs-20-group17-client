@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
       userId: null,
       user: null,
       timer: null,
-      noLobby: null,
+      noLobby: null
     };
     this.selectLobby = this.selectLobby.bind(this);
   }
@@ -101,7 +101,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   async creatLobby() {
     try {
       const requestBody = JSON.stringify({
-        name: this.state.newGame,
+        name: this.state.newGame
       });
       console.log(this.state.newGame);
       const response = await api.post("/games", requestBody);
@@ -113,7 +113,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
 
       //TODO: get this to work this.props.history.push(`/lobby/host/${game.id}`);
       const requestBody2 = JSON.stringify({
-        name: this.state.user.username,
+        name: this.state.user.username
       });
       console.log(requestBody2);
 
@@ -132,7 +132,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   async logout() {
     try {
       const requestBody = JSON.stringify({
-        token: localStorage.getItem("token"),
+        token: localStorage.getItem("token")
       });
       // Get the returned user and update a new object.
 
@@ -159,7 +159,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
   async joinLobby() {
     try {
       const requestBody = JSON.stringify({
-        name: this.state.user.username,
+        name: this.state.user.username
       });
 
       const response = await api.post(
@@ -245,7 +245,7 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
               <Form.Group as={Col} controlId="Lobbys">
                 <Form.Control
                   placeholder="Enter a Lobbyname"
-                  onChange={(e) => {
+                  onChange={e => {
                     this.handleInputChange("newGame", e.target.value);
                   }}
                 />

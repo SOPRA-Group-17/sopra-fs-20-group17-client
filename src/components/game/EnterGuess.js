@@ -167,9 +167,8 @@ class EnterGuess extends React.Component {
             </Col>
           </Row>
 
-          <Row style={{ marginTop: "8vw" }}>
-            <Col xs={{ span: 0, offset: 0 }} md={{ span: 3, offset: 0 }}></Col>
-            <Col xs="7" md="3">
+          <Row style={{ marginTop: "4vw", marginBottom: "4vw" }}>
+            <Col xs={{ span: 4, offset: 4 }} md={{ span: 4, offset: 4 }}>
               <Table striped bordered hover size="sm">
                 <thead class="text-white">
                   <tr>
@@ -179,43 +178,46 @@ class EnterGuess extends React.Component {
                 <tbody class="text-white">{this.createTable()}</tbody>
               </Table>
             </Col>
-            <Col
-              xs={{ span: 0.5, offset: 0 }}
-              md={{ span: 1, offset: 0 }}
-            ></Col>
-            <Col xs="7" md="3">
-              <Row style={{ marginTop: "2vw" }}>
-                <InputField
-                  placeholder="Enter your guess here... "
-                  onChange={e => {
-                    this.handleInputChange("guess", e.target.value);
+          </Row>
+
+          <Row className="d-flex justify-content-center">
+            <InputField
+              placeholder="Enter your guess here... "
+              onChange={e => {
+                this.handleInputChange("guess", e.target.value);
+              }}
+            />
+          </Row>
+
+          <Row>
+            <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 5 }}>
+              <Row className="d-flex justify-content-center">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                  disabled={!this.state.guess}
+                  onClick={() => {
+                    this.submit();
                   }}
-                />
+                >
+                  Submit
+                </Button>
               </Row>
-              <Row>
-                <Col xs={{ span: 0.5, offset: 0 }} md={{ span: 1, offset: 0 }}>
-                  <Button
-                    variant="outline-light"
-                    className="outlineWhite-Dashboard"
-                    disabled={!this.state.guess}
-                    onClick={() => {
-                      this.submit();
-                    }}
-                  >
-                    Submit
-                  </Button>
-                </Col>
-                <Col xs={{ span: 0.5, offset: 1 }} md={{ span: 1, offset: 2 }}>
-                  <Button
-                    variant="outline-light"
-                    className="outlineWhite-Dashboard"
-                    onClick={() => {
-                      this.skip();
-                    }}
-                  >
-                    Skip
-                  </Button>
-                </Col>
+            </Col>
+          </Row>
+
+          <Row class="row justify-content-center">
+            <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 5 }}>
+              <Row className="d-flex justify-content-center">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => {
+                    this.skip();
+                  }}
+                >
+                  Skip
+                </Button>
               </Row>
             </Col>
           </Row>
