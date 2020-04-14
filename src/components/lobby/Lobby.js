@@ -79,7 +79,6 @@ class Lobby extends React.Component {
       const response = await api.get(`/games/${this.state.ID_game}/players`);
       console.log(response);
       this.setState({ players: response.data });
-      console.log("uiuiuiuiuiuiuiui");
       console.log(this.state.players);
 
       //get the game and its status
@@ -95,9 +94,7 @@ class Lobby extends React.Component {
     }
   }
   changeStatusState() {
-    console.log("bbbbbbbbbbbbbbbb");
-    console.log(this.state.help_status);
-    console.log(this.state.status);
+
     if (this.state.help_status === true) {
       this.setState({ status: "NOT_READY" });
       this.setState({ help_status: false });
@@ -106,8 +103,6 @@ class Lobby extends React.Component {
       this.setState({ help_status: true });
     }
 
-    console.log(this.state.help_status);
-    console.log(this.state.status);
     this.saveChangePlayerStatus();
   }
 
@@ -162,7 +157,6 @@ class Lobby extends React.Component {
         }
 
         if (j === 2) {
-          console.log("aaaaaaaaa");
           console.log(this.state.players[i].status);
           console.log(this.state.players);
           if (this.state.players[i].status === "READY") {
