@@ -28,8 +28,7 @@ class Lobby extends React.Component {
       ID_game: null,
       ID_player: null,
       status: null,
-      help_status: null,
-      button_clicked: false
+      help_status: null
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -48,7 +47,7 @@ class Lobby extends React.Component {
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
       // feel free to remove it :)
-      //await new Promise((resolve) => setTimeout(resolve, 1000));
+      //await new Promise((resolve) => setTimeout(resolve, 15000));
 
       //set player and playerstatus
       const response = await api.get(`/games/players/${this.state.ID_player}`);
@@ -64,7 +63,7 @@ class Lobby extends React.Component {
       console.log(this.state.status);
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(), 1000);
+      this.timer = setInterval(() => this.getStatus(), 2000);
       //this.getStatus();
     } catch (error) {
       alert(
@@ -94,7 +93,6 @@ class Lobby extends React.Component {
     }
   }
   changeStatusState() {
-
     if (this.state.help_status === true) {
       this.setState({ status: "NOT_READY" });
       this.setState({ help_status: false });
@@ -183,53 +181,16 @@ class Lobby extends React.Component {
     //gehe durch alle player, wenn mehr als 2 und weniger als 8
     // und alle ready,
     // dann ändere Game status und rendere neue seite
-    if (this.state.players.length >= 3 && this.state.players.length <= 7) {
-      for (var i = 0; i < this.state.players.length; i++) {
-        if (this.state.players[i].status !== "READY") {
-          return null;
-        }
-      }
-      //alle Spieler ready und richtige Anzahl, dann game status ready
-      this.setState({
-        game: {
-          status: "READY"
-        }
-      });
-      console.log(this.state.game.status);
-      this.saveChangeGame();
-    }
-  }
-
-  async saveChangeGame() {
-    try {
-      let requestBody;
-
-      requestBody = JSON.stringify({
-        id: this.state.ID_game,
-        //has to be identical name as in backend the game_status
-        GameStatus: this.state.game.status
-      });
-
-      console.log(requestBody);
-
-      const response = await api.put(
-        `/games/${this.state.ID_game}`,
-        requestBody
-      );
-      // Get the returned Player and update a new object.
-      new game(response.data);
-    } catch (error) {
-      alert(
-        `Something went wrong during updating your data: \n${handleError(
-          error
-        )}`
-      );
+    console.log(this.state.game.status);
+    if (this.state.game_status === "READY") {
+      this.props.history.push("/number");
     }
   }
 
   render() {
     return (
       <div>
+        {this.startGame}
         <Container fluid>
           <Row>
             <Col xs="5" md="3">
@@ -239,12 +200,12 @@ class Lobby extends React.Component {
                 alt="Just One Logo"
               ></img>
             </Col>
-            <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 3 }}>
+            <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 2}}>
               <Row>
                 <p style={lobbyname}>{this.state.game.name}</p>
               </Row>
             </Col>
-            <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>
+            <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 3 }}>
               <Row className="d-flex justify-content-end">
                 <Button
                   variant="outline-light"
@@ -302,7 +263,7 @@ class Lobby extends React.Component {
               )}
             </Col>
           </Row>
-          {this.startGame()}
+          
         </Container>
       </div>
     );
