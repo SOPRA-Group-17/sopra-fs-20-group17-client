@@ -22,11 +22,14 @@ class Lobby extends React.Component {
     super();
     this.state = {
       game: new game(),
+      game_status: null,
       player: new Player(),
       players: [],
       ID_game: null,
       ID_player: null,
-      status: false
+      status: null,
+      help_status: null,
+      button_clicked: false
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -47,14 +50,22 @@ class Lobby extends React.Component {
       // feel free to remove it :)
       //await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      //getting the game name
-      const response1 = await api.get(`/games/${this.state.ID_game}`);
-      console.log("komme ich bis hier?");
-      console.log(response1);
-      this.setState({ game: response1.data });
+      //set player and playerstatus
+      const response = await api.get(`/games/players/${this.state.ID_player}`);
+      console.log(response);
+      this.setState({ player: response.data });
+      this.setState({ status: this.state.player.status });
+      if (this.state.status === "READY") {
+        this.setState({ help_status: true });
+        console.log(this.state.help_status);
+      } else {
+        this.setState({ help_status: false });
+      }
+      console.log(this.state.status);
 
-      //poll every 2 seconds all players
-      this.timer = setInterval(() => this.getPlayers(), 2000);
+      //poll every 1 seconds all players, search game
+      this.timer = setInterval(() => this.getStatus(), 1000);
+      //this.getStatus();
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -62,58 +73,71 @@ class Lobby extends React.Component {
     }
   }
 
-  async getPlayers() {
+  async getStatus() {
     try {
+      //get Players and set their status
       const response = await api.get(`/games/${this.state.ID_game}/players`);
       console.log(response);
       this.setState({ players: response.data });
-
+      console.log("uiuiuiuiuiuiuiui");
       console.log(this.state.players);
-      console.log(this.state.players[0].status);
-      console.log(this.state.players[0].name);
 
-      for (var i = 0; i < response.length; i++) {
-        this.setState({ Player: response.data[i] });
-        console.log(this.state.ID);
-      }
+      //get the game and its status
+      const response1 = await api.get(`/games/${this.state.ID_game}`);
+      console.log(response1);
+      //console.log(response1.data.status);
+      this.setState({ game: response1.data });
+      this.setState({ game_status: response1.data.status });
     } catch (error) {
       alert(
         `Something went wrong while fetching the data: \n${handleError(error)}`
       );
     }
   }
-
   changeStatusState() {
-    this.setState(state => ({
-      status: !this.state.status
-    }));
+    console.log("bbbbbbbbbbbbbbbb");
+    console.log(this.state.help_status);
+    console.log(this.state.status);
+    if (this.state.help_status === true) {
+      this.setState({ status: "NOT_READY" });
+      this.setState({ help_status: false });
+    } else {
+      this.setState({ status: "READY" });
+      this.setState({ help_status: true });
+    }
+
+    console.log(this.state.help_status);
+    console.log(this.state.status);
     this.saveChangePlayerStatus();
   }
 
   async saveChangePlayerStatus() {
     try {
-      var arraynumber = null;
-      for (var i = 0; i < this.state.players.length; i++) {
-        if (this.state.players[i].id === this.state.ID_player) {
-          arraynumber = i;
-        }
-      }
       let requestBody;
-
+      /*
+        send this needed because:
+        status change is made after new rendering, but the function is called before rerendering
+        this is why we have to send the opposite (the state is not updated yet)
+      */
+      var send_this;
+      if (this.state.status === "READY") {
+        send_this = "NOT_READY";
+      } else {
+        send_this = "READY";
+      }
       requestBody = JSON.stringify({
-        id: this.state.ID_player,
-        status: this.state.status
+        status: send_this
       });
 
-      console.log(
-        requestBody
-      ); /*
+      console.log(requestBody);
       const response = await api.put(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
       );
-      // Get the returned Player and update a new object.
-      new Player(response.data);*/
+
+      console.log(response);
+      // Get the returned Player and update a new object. do we need this?
+      new Player(response.data);
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -123,9 +147,8 @@ class Lobby extends React.Component {
     }
   }
 
-  createTable = () => {
+  createTable() {
     let table = [];
-
     // Outer loop to create parent
     for (let i = 0; i < this.state.players.length; i++) {
       let children = [];
@@ -139,9 +162,12 @@ class Lobby extends React.Component {
         }
 
         if (j === 2) {
+          console.log("aaaaaaaaa");
+          console.log(this.state.players[i].status);
+          console.log(this.state.players);
           if (this.state.players[i].status === "READY") {
             children.push(<td class="text-success">{`ready`}</td>);
-          } else if (this.state.players[i].status === "NOT READY") {
+          } else if (this.state.players[i].status === "NOT_READY") {
             children.push(<td class="text-danger">{`not ready`}</td>);
           } else {
             children.push(
@@ -157,7 +183,7 @@ class Lobby extends React.Component {
     //Create the parent and add the children
 
     return table;
-  };
+  }
 
   startGame() {
     //gehe durch alle player, wenn mehr als 2 und weniger als 8
@@ -190,15 +216,14 @@ class Lobby extends React.Component {
         GameStatus: this.state.game.status
       });
 
-      console.log(requestBody); 
-      
+      console.log(requestBody);
+
       const response = await api.put(
         `/games/${this.state.ID_game}`,
         requestBody
       );
       // Get the returned Player and update a new object.
       new game(response.data);
-
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -260,8 +285,7 @@ class Lobby extends React.Component {
               </Table>
             </Col>
             <Col xs={{ span: 3, offset: 2 }} md={{ span: 3, offset: 1 }}>
-              {console.log(this.state.status)}
-              {this.state.status ? (
+              {this.state.help_status ? (
                 <div>
                   <button
                     class="btn btn-outline-success"
@@ -274,15 +298,14 @@ class Lobby extends React.Component {
               ) : (
                 <div>
                   <button
-                    onClick={this.changeStatusState}
                     class="btn btn-outline-danger"
                     style={bigbutton}
+                    onClick={this.changeStatusState}
                   >
                     <h1> Not ready</h1>
                   </button>
                 </div>
               )}
-              {console.log(this.state.status)}
             </Col>
           </Row>
           {this.startGame()}
