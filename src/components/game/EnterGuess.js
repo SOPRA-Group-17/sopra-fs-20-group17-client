@@ -52,7 +52,7 @@ class EnterGuess extends React.Component {
       //hint: null,
       hint: hint1,
       hints: [],
-      guess: null,
+      guess: null
     };
   }
 
@@ -87,7 +87,7 @@ class EnterGuess extends React.Component {
         gameId: this.state.gameId,
         roundId: this.state.roundId,
         playerId: this.state.playerId,
-        type: "guess",
+        type: "guess"
       });
       const response = await api.post(
         `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`,
@@ -95,6 +95,8 @@ class EnterGuess extends React.Component {
       );
 
       console.log(response);
+      // TODO: what is the url of the page you are directed to?
+      // this.props.history.push(`/Login`);
     } catch (error) {
       alert(
         `Something went wrong while submitting the guess: \n${handleError(
@@ -110,7 +112,7 @@ class EnterGuess extends React.Component {
         gameId: this.state.gameId,
         roundId: this.state.roundId,
         playerId: this.state.playerId,
-        type: "term",
+        type: "term"
       });
       const response = await api.delete(
         `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`,
@@ -118,6 +120,8 @@ class EnterGuess extends React.Component {
       );
 
       console.log(response);
+      // TODO: what is the url of the page you are directed to?
+      // this.props.history.push(`/Login`);
     } catch (error) {
       alert(`Something went wrong while skipping: \n${handleError(error)}`);
     }
@@ -163,7 +167,7 @@ class EnterGuess extends React.Component {
             </Col>
           </Row>
 
-          <Row style={{ marginTop: "4vw" }}>
+          <Row style={{ marginTop: "8vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 3, offset: 0 }}></Col>
             <Col xs="7" md="3">
               <Table striped bordered hover size="sm">
@@ -180,10 +184,10 @@ class EnterGuess extends React.Component {
               md={{ span: 1, offset: 0 }}
             ></Col>
             <Col xs="7" md="3">
-              <Row>
+              <Row style={{ marginTop: "2vw" }}>
                 <InputField
                   placeholder="Enter your guess here... "
-                  onChange={(e) => {
+                  onChange={e => {
                     this.handleInputChange("guess", e.target.value);
                   }}
                 />
