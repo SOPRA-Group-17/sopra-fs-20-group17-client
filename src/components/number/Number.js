@@ -49,12 +49,13 @@ class Number extends React.Component {
     try {
      
       let requestBody;
+      console.log(this.state.chosen_number)
 
       requestBody = JSON.stringify({
         id: this.state.ID_game,
         status: this.state.chosen_number,
       });
-
+      //TODO: Put request with chosen number
       console.log(requestBody);
     } catch (error) {
       alert(
@@ -97,7 +98,7 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(1);
-                this.props.history.push(`/esel1`);                
+                //this.props.history.push(`/test`);                
               }}
             >
               1
@@ -108,6 +109,7 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(2);
+                
                 this.props.history.push(`/esel2`);
               }}
             >
@@ -149,6 +151,7 @@ class Number extends React.Component {
           </Col>
         </Row>
       </Container>
+      
     );
   }
 }
