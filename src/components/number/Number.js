@@ -42,7 +42,7 @@ class Number extends React.Component {
     this.setState((state) => ({
       chosen_number: number1
     }));
-    this.saveChange();
+    this.saveChange(); 
   }
 
   async saveChange() {
