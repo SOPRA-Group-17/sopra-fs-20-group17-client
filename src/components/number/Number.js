@@ -18,19 +18,21 @@ const sentence = {
 
 class Number extends React.Component {
   // eslint-disable-next-line no-useless-constructor
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       ID_game: null,
-      chosen_number: null
-    }
+      chosen_number: null,
+    };
   }
 
   async componentDidMount() {
     try {
+      // Nik: always use this.setState don't set the state directly
       //id aus url
-      this.state.ID_game = this.props.match.params.gameId;
- 
+      this.setState({
+        ID_game: this.props.match.params.gameId,
+      });
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -38,23 +40,36 @@ class Number extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    // Nik:
+    // gets called every time the component changes (also state changes)
+    // you could also compare the prevState with the current state
+    // and then save it if something changed
+    console.log("------------------------");
+    console.log("[componentDidUpdate]");
+    console.log("previous state: ", prevState);
+    console.log("updated state: ", this.state);
+    console.log("------------------------");
+  }
+
   changeNumberState(number1) {
-    this.setState((state) => ({
-      chosen_number: number1
-    }));
-    this.saveChange(); 
+    this.setState(
+      {
+        chosen_number: number1,
+      },
+      this.saveChange //Nik: pass a function as callback (gets executed AFTER state change)
+    );
   }
 
   async saveChange() {
     try {
-     
       let requestBody;
-      console.log(this.state.chosen_number)
 
       requestBody = JSON.stringify({
         id: this.state.ID_game,
         status: this.state.chosen_number,
       });
+
       //TODO: Put request with chosen number
       console.log(requestBody);
     } catch (error) {
@@ -65,6 +80,54 @@ class Number extends React.Component {
       );
     }
   }
+
+  handleNumberClickAlternative(number1) {
+    this.setState({
+      chosen_number: number1,
+    });
+    this.saveChangeAlternative(number1); //Nik: call the save function with the received number
+  }
+
+  async saveChangeAlternative(number) {
+    try {
+      let requestBody;
+
+      requestBody = JSON.stringify({
+        id: this.state.ID_game,
+        status: number,
+      });
+
+      //TODO: Put request with chosen number
+      console.log(requestBody);
+    } catch (error) {
+      alert(
+        `Something went wrong during updating your data: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
+  async handleNumberClick(number) {
+    // Nik:
+    // number is available here, so use it directly if you want to call the backend
+    const requestBody = JSON.stringify({
+      id: this.state.ID_game,
+      status: number,
+    });
+
+    this.setState({ chosen_number: number });
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate backend call delay of 1second
+      console.log(requestBody);
+      console.log(this.state); // state is has changed
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 
   render() {
     return (
@@ -88,6 +151,7 @@ class Number extends React.Component {
         <Row>
           <Col>
             <p style={sentence}>Pick a number</p>
+            <p>{JSON.stringify(this.state)}</p>
           </Col>
         </Row>
 
@@ -97,8 +161,8 @@ class Number extends React.Component {
             <p
               style={bignumbers}
               onClick={() => {
-                this.changeNumberState(1);
-                //this.props.history.push(`/test`);                
+                this.handleNumberClick(1);
+                //this.props.history.push(`/test`);
               }}
             >
               1
@@ -108,9 +172,9 @@ class Number extends React.Component {
             <p
               style={bignumbers}
               onClick={() => {
-                this.changeNumberState(2);
-                
-                this.props.history.push(`/esel2`);
+                this.handleNumberClickAlternative(2);
+
+                // this.props.history.push(`/esel2`);
               }}
             >
               2
@@ -121,7 +185,7 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(3);
-                this.props.history.push(`/esel3`);
+                // this.props.history.push(`/esel3`);
               }}
             >
               3
@@ -132,18 +196,18 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(4);
-                this.props.history.push(`/esel4`);
+                // this.props.history.push(`/esel4`);
               }}
             >
               4
-            </p> 
+            </p>
           </Col>
           <Col xs="4" md="2">
             <p
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(5);
-                this.props.history.push(`/esel5`);
+                // this.props.history.push(`/esel5`);
               }}
             >
               5
@@ -151,7 +215,6 @@ class Number extends React.Component {
           </Col>
         </Row>
       </Container>
-      
     );
   }
 }
