@@ -27,6 +27,7 @@ const InputField = styled.input`
     color: rgba(255, 255, 255, 1);
   }
   height: 35px;
+  width: 25%;
   padding-left: 15px;
   margin-left: -4px;
   border: none;
@@ -36,22 +37,23 @@ const InputField = styled.input`
   color: white;
 `;
 
+const bigbutton = {
+  padding: "0.5vw 1.5vw 0.5vw 1.5vw"
+  //top right bottom left
+};
+
 class EnterGuess extends React.Component {
   constructor() {
     super();
-    // create a hint object for testing purposes
-    var hint1 = new Hint();
-    hint1.hints = ["yellow", "hot", "shine", "light"];
-
-    // end of testing purposes
 
     this.state = {
+      playerToken: null,
       playerId: null,
       gameId: null,
       roundId: null,
-      //hint: null,
-      hint: hint1,
-      hints: [],
+
+      hints: ["yellow", "hot", "shine", "light"],
+      //hints: [],
       guess: null
     };
   }
@@ -59,18 +61,18 @@ class EnterGuess extends React.Component {
   async componentDidMount() {
     try {
       // set the states
+      this.state.playerToken = localStorage.getItem("Token");
       this.state.playerId = localStorage.getItem("Id");
       this.state.gameId = this.props.match.params.gameId;
       this.state.roundId = this.props.match.params.roundId;
 
       // get all the given hints
-      /*const response = await api.get(
+      // TODO: adapt the url
+      const response = await api.get(
         `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`
       );
       console.log(response);
-      this.setState({ hint: new Hint(response) });*/
-      // assign the hints list of object hint to state variable hints in order to make it easier to work with the hints list
-      this.setState({ hints: this.state.hint.hints });
+      this.setState({ hints: response });
     } catch (error) {
       alert(
         `Something went wrong while loading the player's hints: \n${handleError(
@@ -86,9 +88,9 @@ class EnterGuess extends React.Component {
         guess: this.state.guess,
         gameId: this.state.gameId,
         roundId: this.state.roundId,
-        playerId: this.state.playerId,
-        type: "guess"
+        playerToken: this.state.playerToken
       });
+      // TODO: adapt url and request parameters
       const response = await api.post(
         `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`,
         requestBody
@@ -111,9 +113,9 @@ class EnterGuess extends React.Component {
       const requestBody = JSON.stringify({
         gameId: this.state.gameId,
         roundId: this.state.roundId,
-        playerId: this.state.playerId,
-        type: "term"
+        playerToken: this.state.playerToken
       });
+      // TODO: adapt url and request parameters
       const response = await api.delete(
         `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`,
         requestBody
@@ -195,6 +197,7 @@ class EnterGuess extends React.Component {
                 <Button
                   variant="outline-light"
                   className="outlineWhite-Dashboard"
+                  block="true"
                   disabled={!this.state.guess}
                   onClick={() => {
                     this.submit();
@@ -212,6 +215,7 @@ class EnterGuess extends React.Component {
                 <Button
                   variant="outline-light"
                   className="outlineWhite-Dashboard"
+                  block="true"
                   onClick={() => {
                     this.skip();
                   }}
