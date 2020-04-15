@@ -78,15 +78,6 @@ class AppRouter extends React.Component {
               )}
             />
 
-<Route
-              path="/number"
-              exact
-              render={() => (
-                <NumberGuard>
-                  <Number />
-                </NumberGuard>
-              )}
-            />
 
             <Route path="/" exact render={() => <Redirect to={"/game"} />} />
             <Route

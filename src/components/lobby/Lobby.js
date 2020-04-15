@@ -43,6 +43,7 @@ class Lobby extends React.Component {
       //id aus url
       this.state.ID_game = this.props.match.params.gameId;
       this.state.ID_player = localStorage.getItem('Id');
+      console.log(this.localStorage)
       console.log(this.state.ID_game);
       console.log(this.state.ID_player);
 
@@ -189,7 +190,7 @@ class Lobby extends React.Component {
     // dann ändere Game status und rendere neue seite
     console.log(this.state.game.status);
     if (this.state.game_status === "RECEIVINGTERM") {
-      this.props.history.push("/number");
+      this.props.history.push(`/game/${this.state.ID_game}/number`);
     }
   }
 
