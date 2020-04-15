@@ -13,24 +13,46 @@ class GiveClue extends React.Component {
     super();
 
     this.state = {
-      word: "Example",
+      word: null,
       clue: null,
       gameId: null,
+      token: null
+
     };
   }
 
   async componentDidMount() {
     try {
       this.state.gameId = this.props.match.params.gameId;
+      this.state.id = localStorage.getItem("Id");
+      this.state.token = localStorage.getItem("token");
+
+      const response = await api.get(`/games/${this.state.gameId}/terms`);
+
+      // Get the returned users and update the state.
+      this.setState({ word: response.data });
+
+    
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while getting the term: \n${handleError(error)}`
       );
     }
   }
 
   async submitClue() {
     try {
+      const requestBody = JSON.stringify({
+        userToke: this.state.token,
+        content: this.state.clue
+      });
+      console.log(this.state.newGame);
+      const response = await api.post(`/games/${this.state.gameId}/hints`, requestBody);
+
+      
+      console.log(response);
+
+      this.props.history.push(`/game/${this.state.gameId}/validation`);
     } catch (error) {
       alert(
         `Something went wrong while submiting the clue \n${handleError(error)}`
@@ -44,7 +66,12 @@ class GiveClue extends React.Component {
 
   render() {
     return (
+      
       <Container fluid>
+        {!this.state.users ? (
+          <Spinner />
+        ) : (
+          <div>
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
@@ -98,6 +125,8 @@ class GiveClue extends React.Component {
             Submit
           </Button>
         </div>
+        </div>
+        )}
       </Container>
     );
   }
