@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
-import Game from "../../game/Game";
-import EnterGuess from "../../game/Game";
-import Profile from "../../Profile/Profile";
-import EditProfile from "../../Profile/EditProfile";
+import GiveClue from "../../GiveClue/GiveClue";
+import Evalution from "../../Evalution/Evalution";
+import Validation from "../../validation/Validation";
 
 const Container = styled.div`
   display: flex;
@@ -14,32 +13,27 @@ const Container = styled.div`
 class GameRouter extends React.Component {
   render() {
     /**
-     * "this.props.base" is "/app" because as been passed as a prop in the parent of GameRouter, i.e., App.js
-     *
-     *  left away exact with profile, so that no matter of the id at the end of the url the routing works
+     * "this.props.base" is "/game/:id" because as been passed as a prop in the parent of GameRouter,
+     * add a guard each for active player actions and clue giver actions
      */
+
     return (
       <Container>
         <Route
           exact
-          path={`${this.props.base}/dashboard`}
-          render={() => <Game />}
+          path={`${this.props.base}/giveClue`}
+          render={() => <GiveClue />}
+        />
+        <Route
+          exact
+          path={`${this.props.base}/evalution`}
+          render={() => <Evalution />}
         />
 
         <Route
           exact
-          path={`${this.props.base}/profile/:id`}
-          render={() => <Profile />}
-        />
-        <Route
-          exact
-          path={`${this.props.base}/EditProfile/:id`}
-          render={() => <EditProfile />}
-        />
-        <Route
-          exact
-          path={`${this.props.base}`}
-          render={() => <Redirect to={`${this.props.base}/dashboard`} />}
+          path={`${this.props.base}/validation`}
+          render={() => <Validation />}
         />
       </Container>
     );

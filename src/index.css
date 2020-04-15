@@ -1,27 +1,17 @@
-
-@import url('https://fonts.googleapis.com/css?family=Oxanium:400,500,600,700,800&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Oxanium:400,500,600,700,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merienda:wght@700&display=swap");
 
 /**
 This file contains the general and shared style of your application.
  */
 body {
-  
-  font-family: 'Oxanium', cursive;
+  font-family: "Oxanium", cursive;
   font-size: large; /**calc(1em + 1vw)**/
   background: #1e122b;
   color: white;
 }
 
-button{
-  margin: 10px;
-
-}
-
-.btn{
-  margin: 10px;
-}
-
-.logoImg{
+.logoImg {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -30,31 +20,33 @@ button{
   width: 25%;
 }
 
-.logoImgSmall{
-
+.logoImgSmall {
   margin-bottom: 1vw;
   margin-top: 1vw;
   width: 65%;
-
+}
+.logoImgXS {
+  margin-bottom: 1vw;
+  margin-top: 1vw;
+  width: 50%;
 }
 
-.outlineWhite-Dashboard{
+.outlineWhite-Dashboard {
   margin-left: 1vw;
+  margin-right: 0.8vw;
   margin-top: 0.8vw;
 }
 
-.DashboardForm{
+.DashboardForm {
   margin-left: 10vw;
   margin-top: 8vw;
 }
 
-.outlineWhite-Form{
+.outlineWhite-Form {
   margin-left: 1vw;
   margin-top: 0;
   margin-bottom: 0;
 }
-
-
 
 *:focus {
   outline: none;
@@ -62,5 +54,82 @@ button{
 
 * {
   -webkit-font-smoothing: antialiased;
+}
 
+.large-Font {
+  font-size: calc(0.8em + 3.5vw);
+}
+
+@media (min-width: 992px) {
+  .outlineWhite-Dashboard {
+    margin-top: 1vw;
+    font-size: 1.2vw;
+  }
+  .nr {
+    font-size: 1.8vw;
+    border: 0.03vw solid white;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    margin-top: 0.5vw;
+    margin-block-end: 0;
+  }
+  .card-text {
+    font-size: 1.8vw;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    margin-top: 0.3vw;
+  }
+  .button-card {
+    font-size: 1.2vw;
+  }
+}
+
+/* Medium devices (tablets, 573px and up) */
+@media (max-width: 991.98px) {
+  .outlineWhite-Dashboard {
+    margin-top: 1vw;
+    font-size: 1.5vw;
+  }
+  .nr {
+    font-size: 2vw;
+    border: calc(0.025em + 0.025vw) solid white;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    margin-top: 0.5vw;
+    margin-block-end: 0;
+  }
+  .card-text {
+    font-size: 2vw;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    margin-top: 0.5vw;
+  }
+  .button-card {
+    font-size: 2vw;
+  }
+}
+
+/*phone portrait xs and s*/
+@media (max-width: 767.98px) {
+  .outlineWhite-Dashboard {
+    margin-top: 1vw;
+    font-size: 2.5vw;
+  }
+  .nr {
+    font-size: calc(1em + 0.8vw);
+    border: calc(0.025em + 0.025vw) solid white;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    margin-top: 1.5vw;
+    margin-block-end: 0;
+  }
+  .card-text {
+    font-size: calc(1em + 0.8vw);
+    padding-left: 0.1vw;
+    padding-right: 0.1vw;
+    margin-top: 0.5vw;
+  }
+  .button-card {
+    font-size: 3.5vw;
+  }
 }
