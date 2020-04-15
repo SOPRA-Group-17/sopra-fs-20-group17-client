@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
-import Card from '../../views/Card';
+import Card from "../../views/Card";
 
 class Validation extends React.Component {
   constructor() {
@@ -25,9 +25,9 @@ class Validation extends React.Component {
       hints: ["jonas", "janosch"],
       nr: 2,
       totalNr: 3,
-      similar:null,
-
+      similar: true,
     };
+    this.setSimilar = this.setSimilar.bind(this);
   }
 
   async componentDidMount() {
@@ -52,11 +52,12 @@ class Validation extends React.Component {
   handleInputChange(key, value) {
     this.setState({ [key]: value });
   }
-
-  setState(){
-    this.setState({similar:true})
+  setSimilar(nr){
+    console.log(this.state.similar)
+    this.setState({similar: !this.state.similar})
     console.log(this.state.similar)
   }
+
 
   //d-flex  flex-md-row  flex-column"
 
@@ -131,6 +132,7 @@ class Validation extends React.Component {
           </Col>
           */
 
+  
   render() {
     return (
       <Container fluid>
@@ -166,16 +168,21 @@ class Validation extends React.Component {
             marginRight: "calc(3em + 1vw)",
           }}
         >
-        {this.state.hints.map((hint, index) => {
-                return (
-                  <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }} key={index}>
-                      <Card hint={hint} nr={index} totalNr={this.state.hints.length}/>
-                  </Col>
-                );
-              })}
-         
-          
-          
+          {this.state.hints.map((hint, index) => {
+            return (
+              <Col
+                style={{ border: "calc(0.025em + 0.025vw) solid white" }}
+                key={index}
+              >
+                <Card
+                  hint={hint}
+                  nr={index}
+                  totalNr={this.state.hints.length}
+                  setSimilar={this.setSimilar}
+                />
+              </Col>
+            );
+          })}
         </div>
 
         <div class="row justify-content-center">
