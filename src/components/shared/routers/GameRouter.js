@@ -29,7 +29,6 @@ class GameRouter extends React.Component {
           path={`${this.props.base}/evalution`}
           render={() => <Evalution />}
         />
-        
         <Route
           exact
           path={`${this.props.base}/validation`}

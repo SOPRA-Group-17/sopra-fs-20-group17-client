@@ -1,7 +1,7 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter, useParams } from "react-router-dom";
-import User from "../shared/models/User";
+
 import {
   Container,
   Row,
@@ -11,9 +11,8 @@ import {
   ButtonGroup,
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import aLobby from "../../views/aLobby";
-import Game from "../shared/models/Game";
 import { Spinner } from "../../views/design/Spinner";
+import Card from '../../views/Card';
 
 class Validation extends React.Component {
   constructor() {
@@ -23,6 +22,11 @@ class Validation extends React.Component {
       word: "Example",
       clue: null,
       gameId: null,
+      hints: ["jonas", "janosch"],
+      nr: 2,
+      totalNr: 3,
+      similar:null,
+
     };
   }
 
@@ -49,7 +53,83 @@ class Validation extends React.Component {
     this.setState({ [key]: value });
   }
 
+  setState(){
+    this.setState({similar:true})
+    console.log(this.state.similar)
+  }
+
   //d-flex  flex-md-row  flex-column"
+
+  /*
+   <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
+            <div class="row justify-content-center">
+              <p className="nr">1</p>
+            </div>
+            <div class="row justify-content-center">
+              <p className="card-text">Example</p>
+            </div>
+            <div class="row justify-content-center">
+              <p className="card-text">Clue is to similar to:</p>
+            </div>
+            <div class="row justify-content-center">
+              <ButtonGroup size="md">
+                <Button variant="outline-light">1</Button>
+                <Button variant="outline-light">2</Button>
+                <Button variant="outline-light">3</Button>
+                <Button variant="outline-light">4</Button>
+                <Button variant="outline-light">5</Button>
+                <Button variant="outline-light">6</Button>
+              </ButtonGroup>
+            </div>
+            <div class="row justify-content-center">
+              <p className="card-text">Clue is invalid?</p>
+            </div>
+            <div class="row justify-content-center">
+              <Button
+                size="sm"
+                variant="outline-light"
+                className="button-card"
+                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
+              >
+                Yes
+              </Button>
+            </div>
+          </Col>
+          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
+            <div class="row justify-content-center">
+              <p className="nr">1</p>
+            </div>
+            <div class="row justify-content-center">
+              <p className="card-text">Example</p>
+            </div>
+            <div class="row justify-content-center">
+              <p className="card-text">Clue is to similar to:</p>
+            </div>
+            <div class="row justify-content-center">
+              <ButtonGroup size="md">
+                <Button variant="outline-light">1</Button>
+                <Button variant="outline-light">2</Button>
+                <Button variant="outline-light">3</Button>
+                <Button variant="outline-light">4</Button>
+                <Button variant="outline-light">5</Button>
+                <Button variant="outline-light">6</Button>
+              </ButtonGroup>
+            </div>
+            <div class="row justify-content-center">
+              <p className="card-text">Clue is invalid?</p>
+            </div>
+            <div class="row justify-content-center">
+              <Button
+                size="sm"
+                variant="outline-light"
+                className="button-card"
+                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
+              >
+                Yes
+              </Button>
+            </div>
+          </Col>
+          */
 
   render() {
     return (
@@ -86,210 +166,16 @@ class Validation extends React.Component {
             marginRight: "calc(3em + 1vw)",
           }}
         >
-          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
-          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
-          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
-          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
-          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
-          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
+        {this.state.hints.map((hint, index) => {
+                return (
+                  <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }} key={index}>
+                      <Card hint={hint} nr={index} totalNr={this.state.hints.length}/>
+                  </Col>
+                );
+              })}
+         
+          
+          
         </div>
 
         <div class="row justify-content-center">
