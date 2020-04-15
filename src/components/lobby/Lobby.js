@@ -13,7 +13,9 @@ const lobbyname = {
 };
 
 const bigbutton = {
-  padding: "2vw 3vw 2vw 3vw"
+  padding: "2vw 3vw 2vw 3vw",
+  marginTop: 0,
+  marginLeft: "10vw",
   //top right bottom left
 };
 
@@ -40,7 +42,7 @@ class Lobby extends React.Component {
     try {
       //id aus url
       this.state.ID_game = this.props.match.params.gameId;
-      this.state.ID_player = this.props.match.params.userId;
+      this.state.ID_player = localStorage.getItem('Id');
       console.log(this.state.ID_game);
       console.log(this.state.ID_player);
 
@@ -242,7 +244,10 @@ class Lobby extends React.Component {
                 <tbody class="text-white">{this.createTable()}</tbody>
               </Table>
             </Col>
-            <Col xs={{ span: 3, offset: 2 }} md={{ span: 3, offset: 1 }}>
+           
+              
+            <div className="d-flex flex-md-column flex-row">
+              {console.log(this.state.status)}
               {this.state.help_status ? (
                 <div>
                   <button
@@ -264,7 +269,8 @@ class Lobby extends React.Component {
                   </button>
                 </div>
               )}
-            </Col>
+              {console.log(this.state.status)}
+            </div>
           </Row>
           
         </Container>
