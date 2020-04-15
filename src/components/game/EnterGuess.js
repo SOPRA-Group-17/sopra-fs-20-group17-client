@@ -139,7 +139,11 @@ class EnterGuess extends React.Component {
     let table = [];
 
     for (let i = 0; i < this.state.hints.length; i++) {
-      table.push(<tr class="text-white">{this.state.hints[i]}</tr>);
+      table.push(
+        <tr class="text-white" class="text-center">
+          {this.state.hints[i]}
+        </tr>
+      );
     }
 
     return table;
@@ -171,10 +175,10 @@ class EnterGuess extends React.Component {
 
           <Row style={{ marginTop: "4vw", marginBottom: "4vw" }}>
             <Col xs={{ span: 4, offset: 4 }} md={{ span: 4, offset: 4 }}>
-              <Table striped bordered hover size="sm">
+              <Table bordered size="sm">
                 <thead class="text-white">
                   <tr>
-                    <th>hints</th>
+                    <th class="text-center">hints</th>
                   </tr>
                 </thead>
                 <tbody class="text-white">{this.createTable()}</tbody>
