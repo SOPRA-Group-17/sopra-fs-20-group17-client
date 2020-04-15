@@ -1,11 +1,8 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import User from "../shared/models/User";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import aLobby from "../../views/aLobby";
-import Game from "../shared/models/Game";
 import { Spinner } from "../../views/design/Spinner";
 
 class Evalution extends React.Component {
@@ -13,34 +10,66 @@ class Evalution extends React.Component {
     super();
 
     this.state = {
-      word: "Example",
-      clue: null,
-      gameId:null,
-      word: "example",
-      guess:"example",
-      
+      gameId: null,
+      word: null,
+      guess: "Guesser didn´t give his guess yet",
+      timer:null,
     };
   }
 
   async componentDidMount() {
     try {
       this.state.gameId = this.props.match.params.gameId;
-      
+      this.state.id = localStorage.getItem("Id");
+      this.state.token = localStorage.getItem("token");
+
+      const response = await api.get(`/games/${this.state.gameId}/terms`);
+
+      this.setState({ word: response.data });
+
+      this.getGuess();
+
+      this.timer = setInterval(() => this.getGuess(), 2000);
+
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while getting the term: \n${handleError(error)}`
       );
     }
+  }
+  async getGuess(){
+    try{
+      const response2 = await api.get(`/games/${this.state.gameId}/guesses`);
+
+      if(response2.data.length != 0){
+        this.setState({ guess: response2.data });
+        clearInterval(this.timer);
+        this.timer =null;
+        this.timer = setInterval(() => this.startNewRound(), 10000);
+      }
+
+      
+    }
+    catch (error) {
+      alert(
+        `Something went wrong while getting the guess: \n${handleError(error)}`
+      );
+    }
+   
+
+  }
+
+  startNewRound(){
+    console.log("starting new round");
+    clearInterval(this.timer);
+    this.timer =null;
   }
 
  
 
-  
-
   render() {
     return (
       <Container fluid>
-        
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
@@ -57,20 +86,18 @@ class Evalution extends React.Component {
             </Row>
           </Col>
         </Row>
-        <div  class="row justify-content-center" style={{marginTop:"calc(1.2em + 2vw)"}}  >
-                <p className="large-Font">
-                    Given word: {this.state.word}
-                </p>
-
+        <div
+          class="row justify-content-center"
+          style={{ marginTop: "calc(1.2em + 2vw)" }}
+        >
+          <p className="large-Font">Given word: {this.state.word}</p>
         </div>
-        <div  class="row justify-content-center"  style={{marginTop:"calc(0.5em + 1.5vw)"}}>
-                <p className="large-Font">
-                    Guess: {this.state.guess}
-                </p>
-
+        <div
+          class="row justify-content-center"
+          style={{ marginTop: "calc(0.5em + 1.5vw)" }}
+        >
+          <p className="large-Font">Guess: {this.state.guess}</p>
         </div>
-    
-        
       </Container>
     );
   }
