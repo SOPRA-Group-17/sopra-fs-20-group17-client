@@ -2,7 +2,7 @@ import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import User from "../shared/models/User";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import aLobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
@@ -39,12 +39,18 @@ class Dashboard extends React.Component {
       timer: null,
       noLobby: null,
       token: null,
+      alarm: null,
     };
+   
     this.selectLobby = this.selectLobby.bind(this);
+    
   }
+
+  
   /*
-({data:{id: 2, name: "Jonas", usernames: null, status: "not ready"}}),
-this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "not ready"}}.data });
+toggle(){
+    this.setState({alarm:null})
+  }
 */
   async componentDidMount() {
     try {
@@ -65,6 +71,9 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
       );
+      /*this.setState({alarm: `Something went wrong while fetching the users: \n${handleError(error)}` })
+      console.log(this.state.alarm)
+      */
     }
   }
 
@@ -199,10 +208,15 @@ this.setState({ games: {data:{id: 2, name: "Jonas", usernames: null, status: "no
     }
     return selectionList;
   };
+  
 
+  /*<Alert variant="info" isOpen={!this.state.alarm} toggle={this.toggle.bind(this)}>
+  {this.state.alarm}
+  </Alert> */
   render() {
     return (
       <Container fluid>
+        
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
