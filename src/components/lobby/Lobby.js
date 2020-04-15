@@ -63,7 +63,7 @@ class Lobby extends React.Component {
       console.log(this.state.status);
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(), 2000);
+      this.timer = setInterval(() => this.getStatus(), 4000);
       //this.getStatus();
     } catch (error) {
       alert(
@@ -85,7 +85,11 @@ class Lobby extends React.Component {
       console.log(response1);
       //console.log(response1.data.status);
       this.setState({ game: response1.data });
-      this.setState({ game_status: response1.data.status });
+      this.setState(
+        {
+           game_status: response1.data.status,
+           },
+           this.startGame);
     } catch (error) {
       alert(
         `Something went wrong while fetching the data: \n${handleError(error)}`
@@ -121,7 +125,7 @@ class Lobby extends React.Component {
       requestBody = JSON.stringify({
         status: send_this
       });
-
+      console.log("aaaaaaaaaaaaaaaaaaaaaa");
       console.log(requestBody);
       const response = await api.put(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
@@ -182,7 +186,7 @@ class Lobby extends React.Component {
     // und alle ready,
     // dann ändere Game status und rendere neue seite
     console.log(this.state.game.status);
-    if (this.state.game_status === "READY") {
+    if (this.state.game_status === "RECEIVINGTERM") {
       this.props.history.push("/number");
     }
   }
@@ -190,7 +194,6 @@ class Lobby extends React.Component {
   render() {
     return (
       <div>
-        {this.startGame}
         <Container fluid>
           <Row>
             <Col xs="5" md="3">
