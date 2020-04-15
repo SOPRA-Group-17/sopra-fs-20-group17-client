@@ -1,11 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
-import Game from "../../game/Game";
-import Profile from "../../Profile/Profile";
-import EditProfile from "../../Profile/EditProfile";
 import GiveClue from "../../GiveClue/GiveClue";
 import Evalution from "../../Evalution/Evalution";
+import Validation from "../../validation/Validation"
 
 const Container = styled.div`
   display: flex;
@@ -16,7 +14,7 @@ class GameRouter extends React.Component {
   render() {
     /**
      * "this.props.base" is "/game/:id" because as been passed as a prop in the parent of GameRouter,
-     *
+     * add a guard each for active player actions and clue giver actions
      */
 
     return (
@@ -30,6 +28,12 @@ class GameRouter extends React.Component {
           exact
           path={`${this.props.base}/evalution`}
           render={() => <Evalution />}
+        />
+        
+        <Route
+          exact
+          path={`${this.props.base}/validation`}
+          render={() => <Validation />}
         />
 
       </Container>

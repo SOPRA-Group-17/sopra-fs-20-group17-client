@@ -1,6 +1,6 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
-import { withRouter, useParams} from "react-router-dom";
+import { withRouter, useParams } from "react-router-dom";
 import User from "../shared/models/User";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
@@ -15,15 +15,13 @@ class GiveClue extends React.Component {
     this.state = {
       word: "Example",
       clue: null,
-      gameId:null,
+      gameId: null,
     };
   }
 
   async componentDidMount() {
     try {
       this.state.gameId = this.props.match.params.gameId;
-      console.log(this.props);
-      
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -42,14 +40,11 @@ class GiveClue extends React.Component {
 
   handleInputChange(key, value) {
     this.setState({ [key]: value });
-    
   }
 
   render() {
     return (
       <Container fluid>
-        
-        
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
@@ -70,28 +65,28 @@ class GiveClue extends React.Component {
           style={{ fontSize: "calc(1.2em + 4vw)" }}
           class="row justify-content-center"
         >
-          <p style={{fontFamily: "Merienda, cursive"}}>{this.state.word}</p>
+          <p style={{ fontFamily: "Merienda, cursive" }}>{this.state.word}</p>
         </div>
         <div class="row justify-content-center">
-          
-            <input
-              style={{
-                backgroundColor: "#291f33",
-                border: "0.05vw solid white",
-                padding: "0.5vw 0.5vw 0.5vw  1vw ",
-                color: "white",
-                width: "calc(8em + 23vw)",
-                fontSize: "calc(1em + 1vw)",
-                
-              }}
-              placeholder="Enter here your clue"
-              onChange={(e) => {
-                this.handleInputChange("clue", e.target.value);
-              }}
-            />
-          
+          <input
+            style={{
+              backgroundColor: "#291f33",
+              border: "0.05vw solid white",
+              padding: "0.5vw 0.5vw 0.5vw  1vw ",
+              color: "white",
+              width: "calc(8em + 23vw)",
+              fontSize: "calc(1em + 1vw)",
+            }}
+            placeholder="Enter here your clue"
+            onChange={(e) => {
+              this.handleInputChange("clue", e.target.value);
+            }}
+          />
         </div>
-        <div class="row justify-content-center" style={{marginTop:"calc(1.5em + 1.5vw)"}}>
+        <div
+          class="row justify-content-center"
+          style={{ marginTop: "calc(1.5em + 1.5vw)" }}
+        >
           <Button
             disabled={!this.state.clue}
             variant="outline-light"
