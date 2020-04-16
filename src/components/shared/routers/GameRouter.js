@@ -30,7 +30,7 @@ class GameRouter extends React.Component {
           exact
           path={`${this.props.base}/enterGuess`}
           render={() => <EnterGuess />}
-        />
+        /> 
         <Route
           exact
           path={`${this.props.base}/evalution`}
