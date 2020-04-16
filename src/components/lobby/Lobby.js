@@ -22,44 +22,15 @@ const bigbutton = {
 class Lobby extends React.Component {
   constructor() {
     super();
-    var player1 = new Player();
-    player1.id = "1";
-    player1.username = "test1";
-    player1.token = null;
-    player1.status = false;
-    player1.game = null;
-
-    var player2 = new Player();
-    player2.id = "2";
-    player2.username = "test2";
-    player2.token = null;
-    player2.status = false;
-    player2.game = null;
-
-    var player3 = new Player();
-    player3.id = "3";
-    player3.username = "test3";
-    player3.token = null;
-    player3.status = true;
-    player3.game = null;
-
-    var player4 = new Player();
-    player4.id = "4";
-    player4.username = "test4";
-    player4.token = null;
-    player4.status = true;
-    player4.game = null;
-
-    var game1 = new game();
-    game1.name = "testname";
-
     this.state = {
       game: new game(),
+      game_status: null,
       player: new Player(),
-      players: [player1, player3],
+      players: [],
       ID_game: null,
       ID_player: null,
-      status: false,
+      status: null,
+      help_status: null,
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -72,40 +43,31 @@ class Lobby extends React.Component {
       //id aus url
       this.state.ID_game = this.props.match.params.gameId;
       this.state.ID_player = localStorage.getItem("Id");
+      console.log(this.localStorage);
       console.log(this.state.ID_game);
       console.log(this.state.ID_player);
-
-      //TODO was bekommen wir genau zurück, Annahme: Players liste
-      /*
-      const response = await api.get(`/games/${this.state.ID_game}/players`);
-      console.log(response);
-      this.setState({ players: response.data });*/
-      //await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const response1 = await api.get(`/games/${this.state.ID_game}`);
-      console.log("komme ich bis hier?");
-      console.log(response1);
-      this.setState({ game: response1.data });
-
-      //TODO: player_id has to get the correct id
 
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
       // feel free to remove it :)
+      //await new Promise((resolve) => setTimeout(resolve, 15000));
 
-      // Get the returned game and update the state.
-      // TODO in game there has to be the same fields as in the backend game class
-      console.log(this.state.players);
-      console.log(this.state.players[0].status);
-      //console.log(this.response.data);
-      console.log(this.state.players[0].username);
-      //console.log(this.response.data);
-      //unklar ob noch benötigt
-      /*
-      for (var i=0; i<response.length; i++){
-        this.setState({ Player: response.data[i]});
-        console.log(this.state.ID);
-      } */
+      //set player and playerstatus
+      const response = await api.get(`/games/players/${this.state.ID_player}`);
+      console.log(response);
+      this.setState({ player: response.data });
+      this.setState({ status: this.state.player.status });
+      if (this.state.status === "READY") {
+        this.setState({ help_status: true });
+        console.log(this.state.help_status);
+      } else {
+        this.setState({ help_status: false });
+      }
+      console.log(this.state.status);
+
+      //poll every 1 seconds all players, search game
+      this.timer = setInterval(() => this.getStatus(), 4000);
+      //this.getStatus();
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -113,35 +75,69 @@ class Lobby extends React.Component {
     }
   }
 
+  async getStatus() {
+    try {
+      //get Players and set their status
+      const response = await api.get(`/games/${this.state.ID_game}/players`);
+      console.log(response);
+      this.setState({ players: response.data });
+      console.log(this.state.players);
+
+      //get the game and its status
+      const response1 = await api.get(`/games/${this.state.ID_game}`);
+      console.log(response1);
+      //console.log(response1.data.status);
+      this.setState({ game: response1.data });
+      this.setState(
+        {
+          game_status: response1.data.status,
+        },
+        this.startGame
+      );
+    } catch (error) {
+      alert(
+        `Something went wrong while fetching the data: \n${handleError(error)}`
+      );
+    }
+  }
   changeStatusState() {
-    this.setState((state) => ({
-      status: !this.state.status,
-    }));
-    this.saveChange();
+    if (this.state.help_status === true) {
+      this.setState({ status: "NOT_READY" });
+      this.setState({ help_status: false });
+    } else {
+      this.setState({ status: "READY" });
+      this.setState({ help_status: true });
+    }
+
+    this.saveChangePlayerStatus();
   }
 
-  async saveChange() {
+  async saveChangePlayerStatus() {
     try {
-      var arraynumber = null;
-      for (var i = 0; i < this.state.players.length; i++) {
-        if (this.state.players[i].id === this.state.ID_player) {
-          arraynumber = i;
-        }
-      }
       let requestBody;
-
+      /*
+        send this needed because:
+        status change is made after new rendering, but the function is called before rerendering
+        this is why we have to send the opposite (the state is not updated yet)
+      */
+      var send_this;
+      if (this.state.status === "READY") {
+        send_this = "NOT_READY";
+      } else {
+        send_this = "READY";
+      }
       requestBody = JSON.stringify({
-        id: this.state.ID_player,
-        status: this.state.status,
+        status: send_this,
       });
-
+      console.log("aaaaaaaaaaaaaaaaaaaaaa");
       console.log(requestBody);
       const response = await api.put(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
       );
 
-      // Get the returned Player and update a new object.
+      console.log(response);
+      // Get the returned Player and update a new object. do we need this?
       new Player(response.data);
     } catch (error) {
       alert(
@@ -152,9 +148,8 @@ class Lobby extends React.Component {
     }
   }
 
-  createTable = () => {
+  createTable() {
     let table = [];
-
     // Outer loop to create parent
     for (let i = 0; i < this.state.players.length; i++) {
       let children = [];
@@ -164,14 +159,22 @@ class Lobby extends React.Component {
           children.push(<td>{i + 1}</td>);
         }
         if (j === 1) {
-          children.push(<td>{this.state.players[i].username}</td>);
+          children.push(<td>{this.state.players[i].name}</td>);
         }
 
         if (j === 2) {
-          if (this.state.players[i].status) {
+          console.log(this.state.players[i].status);
+          console.log(this.state.players);
+          if (this.state.players[i].status === "READY") {
             children.push(<td class="text-success">{`ready`}</td>);
-          } else {
+          } else if (this.state.players[i].status === "NOT_READY") {
             children.push(<td class="text-danger">{`not ready`}</td>);
+          } else {
+            children.push(
+              <td class="text-white">
+                {this.state.players[i].status.toString()}
+              </td>
+            );
           }
         }
       }
@@ -180,12 +183,21 @@ class Lobby extends React.Component {
     //Create the parent and add the children
 
     return table;
-  };
+  }
+
+  startGame() {
+    //gehe durch alle player, wenn mehr als 2 und weniger als 8
+    // und alle ready,
+    // dann ändere Game status und rendere neue seite
+    console.log(this.state.game.status);
+    if (this.state.game_status === "RECEIVINGTERM") {
+      this.props.history.push(`/game/${this.state.ID_game}/number`);
+    }
+  }
 
   render() {
     return (
       <div>
-        {console.log(this.state.players[0].username)}
         <Container fluid>
           <Row>
             <Col xs="5" md="3">
@@ -195,12 +207,12 @@ class Lobby extends React.Component {
                 alt="Just One Logo"
               ></img>
             </Col>
-            <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 3 }}>
+            <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 2 }}>
               <Row>
                 <p style={lobbyname}>{this.state.game.name}</p>
               </Row>
             </Col>
-            <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>
+            <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 3 }}>
               <Row className="d-flex justify-content-end">
                 <Button
                   variant="outline-light"
@@ -227,16 +239,17 @@ class Lobby extends React.Component {
                 <thead class="text-white">
                   <tr>
                     <th>#</th>
-                    <th>username</th>
+                    <th>name</th>
                     <th>status</th>
                   </tr>
                 </thead>
                 <tbody class="text-white">{this.createTable()}</tbody>
               </Table>
             </Col>
+
             <div className="d-flex flex-md-column flex-row">
               {console.log(this.state.status)}
-              {this.state.status ? (
+              {this.state.help_status ? (
                 <div>
                   <button
                     class="btn btn-outline-success"
@@ -249,9 +262,9 @@ class Lobby extends React.Component {
               ) : (
                 <div>
                   <button
-                    onClick={this.changeStatusState}
                     class="btn btn-outline-danger"
                     style={bigbutton}
+                    onClick={this.changeStatusState}
                   >
                     <h1> Not ready</h1>
                   </button>
