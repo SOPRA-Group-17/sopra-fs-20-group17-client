@@ -38,7 +38,7 @@ const InputField = styled.input`
 `;
 
 const bigbutton = {
-  padding: "0.5vw 1.5vw 0.5vw 1.5vw"
+  padding: "0.5vw 1.5vw 0.5vw 1.5vw",
   //top right bottom left
 };
 
@@ -54,14 +54,14 @@ class EnterGuess extends React.Component {
 
       hints: ["yellow", "hot", "shine", "light"],
       //hints: [],
-      guess: null
+      guess: null,
     };
   }
 
   async componentDidMount() {
     try {
       // set the states
-      this.state.playerToken = localStorage.getItem("Token");
+      this.state.playerToken = localStorage.getItem("token");
       this.state.playerId = localStorage.getItem("Id");
       this.state.gameId = this.props.match.params.gameId;
       this.state.roundId = this.props.match.params.roundId;
@@ -88,7 +88,7 @@ class EnterGuess extends React.Component {
         guess: this.state.guess,
         gameId: this.state.gameId,
         roundId: this.state.roundId,
-        playerToken: this.state.playerToken
+        playerToken: this.state.playerToken,
       });
       // TODO: adapt url and request parameters
       const response = await api.post(
@@ -113,7 +113,7 @@ class EnterGuess extends React.Component {
       const requestBody = JSON.stringify({
         gameId: this.state.gameId,
         roundId: this.state.roundId,
-        playerToken: this.state.playerToken
+        playerToken: this.state.playerToken,
       });
       // TODO: adapt url and request parameters
       const response = await api.delete(
@@ -189,7 +189,7 @@ class EnterGuess extends React.Component {
           <Row className="d-flex justify-content-center">
             <InputField
               placeholder="Enter your guess here... "
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange("guess", e.target.value);
               }}
             />

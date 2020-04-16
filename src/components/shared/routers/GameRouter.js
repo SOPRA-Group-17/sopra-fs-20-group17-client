@@ -4,6 +4,7 @@ import { Redirect, Route } from "react-router-dom";
 import GiveClue from "../../GiveClue/GiveClue";
 import Evalution from "../../Evalution/Evalution";
 import Validation from "../../validation/Validation";
+import EnterGuess from "../../Game/EnterGuess";
 
 const Container = styled.div`
   display: flex;
@@ -23,6 +24,11 @@ class GameRouter extends React.Component {
           exact
           path={`${this.props.base}/giveClue`}
           render={() => <GiveClue />}
+        />
+        <Route
+          exact
+          path={`${this.props.base}/enterGuess`}
+          render={() => <EnterGuess />}
         />
         <Route
           exact
