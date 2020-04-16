@@ -43,7 +43,7 @@ class GiveClue extends React.Component {
 
       // check if game ready to give hints
       console.log(response.data.status);
-      if (response.data.status === "RECEIVINGHINTS") {
+      if (response.data.status === "RECEIVINGHINT") {
         clearInterval(this.timer);
         this.timer = null;
         this.getTerme();
@@ -59,10 +59,12 @@ class GiveClue extends React.Component {
 
   async getTerme() {
     try {
+      console.log("get Till here");
       const response = await api.get(`/games/${this.state.gameId}/terms`);
 
       // Get the returned users and update the state.
-      this.setState({ word: response.data });
+      this.setState({ word: response.data.content });
+      console.log(this.state.word);
     } catch (error) {
       alert(
         `Something went wrong while getting the term: \n${handleError(error)}`
@@ -99,7 +101,7 @@ class GiveClue extends React.Component {
   render() {
     return (
       <Container fluid>
-        {!this.state.users ? (
+        {!this.state.word ? (
           <div>
             <Spinner />
             <p>Waiting for the word to guess</p>
