@@ -4,7 +4,7 @@ import { Redirect, Route } from "react-router-dom";
 import GiveClue from "../../GiveClue/GiveClue";
 import Evalution from "../../Evalution/Evalution";
 import Validation from "../../validation/Validation";
-import EnterGuess from "../../Game/EnterGuess";
+import EnterGuess from "../../game/EnterGuess";
 import Number from "../../number/Number";
 
 const Container = styled.div`

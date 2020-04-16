@@ -10,6 +10,7 @@ class Player {
       this.name = null;
       this.status = null;
       this.score = null;
+      this.role = null;
       this.game = null;
       Object.assign(this, data);
     }

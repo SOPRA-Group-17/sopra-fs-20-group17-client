@@ -28,6 +28,7 @@ class Number extends React.Component {
 
   async componentDidMount() {
     try {
+      console.log(localStorage)
       // Nik: always use this.setState don't set the state directly
       //id aus url
       this.setState({
