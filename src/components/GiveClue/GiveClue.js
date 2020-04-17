@@ -39,6 +39,7 @@ class GiveClue extends React.Component {
 
   async checkTermAvailible() {
     try {
+
       const response = await api.get(`/games/${this.state.gameId}`);
 
       // check if game ready to give hints

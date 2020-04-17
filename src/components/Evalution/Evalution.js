@@ -14,14 +14,18 @@ class Evalution extends React.Component {
       word: null,
       guess: "Guesser didn´t give his guess yet",
       timer:null,
+      gameStatus:null,
     };
   }
 
   async componentDidMount() {
     try {
+      
+      console.log("comp");
       this.state.gameId = this.props.match.params.gameId;
       this.state.id = localStorage.getItem("Id");
       this.state.token = localStorage.getItem("token");
+      
 
       const response = await api.get(`/games/${this.state.gameId}/terms`);
 
@@ -39,15 +43,19 @@ class Evalution extends React.Component {
   }
   async getGuess(){
     try{
-      const response2 = await api.get(`/games/${this.state.gameId}/guesses`);
-
-      if(response2.data.length != 0){
+      const response = await api.get(`/games/${this.state.gameId}`);
+      this.setState({gameStatus: response.data.status})
+      // check if game ready to give hints
+      console.log(response.data.status);
+      if (response.data.status === "FINISHED" ||response.data.status === "RECEIVINGTERM"  ) {
+        const response2 = await api.get(`/games/${this.state.gameId}/guesses`);
+        //const response2 = await api.get(`/games/${this.state.gameId}/rounds`);
+        //console.log(response2.data[end-1]);
         this.setState({ guess: response2.data });
         clearInterval(this.timer);
         this.timer =null;
         this.timer = setInterval(() => this.startNewRound(), 10000);
       }
-
       
     }
     catch (error) {

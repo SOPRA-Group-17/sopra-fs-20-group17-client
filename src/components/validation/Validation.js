@@ -14,6 +14,36 @@ import {
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
+/*
+[
+  {
+    roundId: 1,
+    content: "someHint",
+    token: "abcdef-1",
+    status: "UNKNOWN",
+    marked: "UNKNOWN",
+    similarity: [],
+    reporters: [],
+  },
+  {
+    roundId: 1,
+    content: "someHint2",
+    token: "abcdef-2",
+    status: "UNKNOWN",
+    marked: "UNKNOWN",
+    similarity: [],
+    reporters: [],
+  },
+  {
+    roundId: 1,
+    content: "someHint3",
+    token: "abcdef-3",
+    status: "UNKNOWN",
+    marked: "UNKNOWN",
+    similarity: [],
+    reporters: [],
+  },
+], */
 
 class Validation extends React.Component {
   constructor() {
@@ -23,35 +53,7 @@ class Validation extends React.Component {
       word: "Example",
       clue: null,
       gameId: null,
-      hints: [
-        {
-          roundId: 1,
-          content: "someHint",
-          token: "abcdef-1",
-          status: "UNKNOWN",
-          marked: "UNKNOWN",
-          similarity: [],
-          reporters: [],
-        },
-        {
-          roundId: 1,
-          content: "someHint2",
-          token: "abcdef-2",
-          status: "UNKNOWN",
-          marked: "UNKNOWN",
-          similarity: [],
-          reporters: [],
-        },
-        {
-          roundId: 1,
-          content: "someHint3",
-          token: "abcdef-3",
-          status: "UNKNOWN",
-          marked: "UNKNOWN",
-          similarity: [],
-          reporters: [],
-        },
-      ],
+      hints: [],
       hintsReport: [],
       nr: 2,
       similar: true,
@@ -67,9 +69,10 @@ class Validation extends React.Component {
   async componentDidMount() {
     try {
       this.state.gameId = this.props.match.params.gameId;
-      console.log(this.state.hints.length);
+      this.getHints()
 
-      this.creatReportHintArray();
+      this.timer = setInterval(() => this.getHints(), 2000);
+      
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -77,7 +80,35 @@ class Validation extends React.Component {
     }
   }
 
+  async getHints() {
+    try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+
+      // check if game ready to give hints
+      console.log(response.data.status);
+      if (response.data.status === "VALIDATION") {
+        const response2 = await api.get(`/games/${this.state.gameId}/hints`);
+        console.log(response2.data);
+        this.setState({hint: response2.data})
+        clearInterval(this.timer);
+        this.timer = null;
+        this.creatReportHintArray();
+
+      }
+      
+
+      
+    } catch (error) {
+      alert(
+        `Something went wrong while fetching the users: \n${handleError(error)}`
+      );
+    }
+  }
+
+  
+
   creatReportHintArray() {
+    console.log(this.state.hints);
     this.state.hints.forEach((hint) => {
       this.state.hintsReport.push({
         content: hint.content,
