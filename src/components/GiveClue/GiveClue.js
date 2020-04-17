@@ -43,7 +43,7 @@ class GiveClue extends React.Component {
 
       // check if game ready to give hints
       console.log(response.data.status);
-      if (response.data.status === "RECEIVINGHINT") {
+      if (response.data.status === "RECEIVINGHINTS") {
         clearInterval(this.timer);
         this.timer = null;
         this.getTerme();

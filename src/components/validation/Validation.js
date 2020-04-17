@@ -15,7 +15,6 @@ import {
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 
-
 class Validation extends React.Component {
   constructor() {
     super();
@@ -59,7 +58,7 @@ class Validation extends React.Component {
       invalid: [],
       readyToRender: null,
     };
-    
+
     this.creatReportHintArray = this.creatReportHintArray.bind(this);
     this.reportSimilar = this.reportSimilar.bind(this);
     this.unReportSimilar = this.unReportSimilar.bind(this);
@@ -104,7 +103,6 @@ class Validation extends React.Component {
   handleInputChange(key, value) {
     this.setState({ [key]: value });
   }
-
 
   //nr is the nr of card = array index +1
   //x is the nr of hints
