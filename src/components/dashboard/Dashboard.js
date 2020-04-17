@@ -108,6 +108,7 @@ toggle(){
 
   async creatLobby() {
     try {
+      console.log("you reached CREATE LOBBY")
       const requestBody = JSON.stringify({
         name: this.state.newGame,
       });
@@ -132,6 +133,7 @@ toggle(){
       );
       //const game2 = new Game(response2.data);
       localStorage.setItem("gameId", game.gameId);
+      localStorage.setItem("role", "HOST");
 
       this.props.history.push(`/lobby/${game.gameId}/host`);
     } catch (error) {
@@ -168,6 +170,7 @@ toggle(){
 
   async joinLobby() {
     try {
+      console.log("you reached JOIN LOBBY")
       const requestBody = JSON.stringify({
         name: this.state.user.username,
         userToken: this.state.token,
@@ -179,6 +182,7 @@ toggle(){
       );
       //const game = new Game(response.data);
       localStorage.setItem("gameId", this.state.selectLobby);
+      localStorage.setItem("role", "GUEST");
       this.props.history.push(`/lobby/${this.state.selectLobby}/guest`);
     } catch (error) {
       alert(

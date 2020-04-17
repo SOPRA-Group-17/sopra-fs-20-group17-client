@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
 import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import Lobby from "../../lobby/Lobby";
+import LobbyHost from "../../lobby/LobbyHost";
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ class LobbyRouter extends React.Component {
         <Route
           exact
           path={`${this.props.base}/host`}
-          render={() => <Lobby />}
+          render={() => <LobbyHost />}
         />
 
         <Route

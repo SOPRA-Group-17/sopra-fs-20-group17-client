@@ -60,27 +60,10 @@ class Number extends React.Component {
       },
       this.saveChange //Nik: pass a function as callback (gets executed AFTER state change)
     );
+    this.saveChangeAlternative(number1)
   }
 
-  async saveChange() {
-    try {
-      let requestBody;
 
-      requestBody = JSON.stringify({
-        id: this.state.ID_game,
-        status: this.state.chosen_number,
-      });
-
-      //TODO: Put request with chosen number
-      console.log(requestBody);
-    } catch (error) {
-      alert(
-        `Something went wrong during updating your data: \n${handleError(
-          error
-        )}`
-      );
-    }
-  }
 
   handleNumberClickAlternative(number1) {
     this.setState({
@@ -94,12 +77,19 @@ class Number extends React.Component {
       let requestBody;
 
       requestBody = JSON.stringify({
-        id: this.state.ID_game,
-        status: number,
+        wordId: number-1,
+        token: localStorage.getItem("token")
       });
-
-      //TODO: Put request with chosen number
+      console.log(number-1)
       console.log(requestBody);
+      console.log(localStorage.getItem("status"))
+
+     const response =  await api.post(
+        `/games/${this.state.ID_game}/terms`,
+        requestBody
+      );
+      console.log(requestBody);
+      console.log(localStorage.getItem("status"))
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -123,6 +113,7 @@ class Number extends React.Component {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate backend call delay of 1second
       console.log(requestBody);
       console.log(this.state); // state is has changed
+      this.saveChangeAlternative(number)
     } catch (error) {
       console.log(error);
     }
@@ -152,7 +143,8 @@ class Number extends React.Component {
         <Row>
           <Col>
             <p style={sentence}>Pick a number</p>
-            <p>{JSON.stringify(this.state)}</p>
+            <p>{//JSON.stringify(this.state)}
+  }</p>
           </Col>
         </Row>
 
@@ -174,8 +166,7 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.handleNumberClickAlternative(2);
-
-                // this.props.history.push(`/esel2`);
+                this.props.history.push(`/enterguess`);
               }}
             >
               2
@@ -186,7 +177,7 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(3);
-                // this.props.history.push(`/esel3`);
+                this.props.history.push(`/enterguess`);
               }}
             >
               3
@@ -197,7 +188,7 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(4);
-                // this.props.history.push(`/esel4`);
+                this.props.history.push(`/enterguess`);
               }}
             >
               4
@@ -208,7 +199,7 @@ class Number extends React.Component {
               style={bignumbers}
               onClick={() => {
                 this.changeNumberState(5);
-                // this.props.history.push(`/esel5`);
+                this.props.history.push(`/enterguess`);
               }}
             >
               5
