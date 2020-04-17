@@ -14,6 +14,8 @@ const lobbyname = {
 
 const bigbutton = {
   padding: "2vw 3vw 2vw 3vw",
+  marginTop: 0,
+  marginLeft: "10vw",
   //top right bottom left
 };
 
@@ -232,7 +234,7 @@ class Lobby extends React.Component {
                 <tbody class="text-white">{this.createTable()}</tbody>
               </Table>
             </Col>
-            <Col xs={{ span: 3, offset: 2 }} md={{ span: 3, offset: 1 }}>
+            <div className="d-flex flex-md-column flex-row">
               {console.log(this.state.status)}
               {this.state.status ? (
                 <div>
@@ -256,7 +258,7 @@ class Lobby extends React.Component {
                 </div>
               )}
               {console.log(this.state.status)}
-            </Col>
+            </div>
           </Row>
         </Container>
       </div>
