@@ -32,7 +32,6 @@ class Lobby extends React.Component {
       ID_player: null,
       status: null,
       help_status: null,
-      redirect: "/dashboard",
       exit: false,
     };
 
@@ -225,8 +224,6 @@ class Lobby extends React.Component {
   
     */
 
-    //TODO: redirect to dashboard funktioniert noch nicht
-
     //change status to not ready
     this.setState(
       {
@@ -252,6 +249,12 @@ class Lobby extends React.Component {
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
       );
+      //change local storage
+      localStorage.removeItem("status");
+      localStorage.removeItem("gameId");
+      localStorage.removeItem("role");
+      localStorage.removeItem("Id");
+
       this.props.history.push("/dashboard");
     } catch (error) {
       alert(

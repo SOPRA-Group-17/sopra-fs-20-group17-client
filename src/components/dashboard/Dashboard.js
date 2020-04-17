@@ -52,6 +52,12 @@ toggle(){
 */
   async componentDidMount() {
     try {
+      //change local storage
+      localStorage.removeItem("status");
+      localStorage.removeItem("gameId");
+      localStorage.removeItem("role");
+      localStorage.removeItem("Id");
+
       this.state.userId = localStorage.getItem("userId");
       this.state.token = localStorage.getItem("token");
 
@@ -108,7 +114,7 @@ toggle(){
 
   async creatLobby() {
     try {
-      console.log("you reached CREATE LOBBY")
+      console.log("you reached CREATE LOBBY");
       const requestBody = JSON.stringify({
         name: this.state.newGame,
       });
@@ -171,12 +177,12 @@ toggle(){
 
   async joinLobby() {
     try {
-      console.log("you reached JOIN LOBBY")
+      console.log("you reached JOIN LOBBY");
       const requestBody = JSON.stringify({
         name: this.state.user.username,
         userToken: this.state.token,
       });
-
+console.log(requestBody)
       const response = await api.post(
         `/games/${this.state.selectLobby}/players`,
         requestBody
@@ -184,8 +190,9 @@ toggle(){
       //const game = new Game(response.data);
       localStorage.setItem("gameId", this.state.selectLobby);
       localStorage.setItem("role", "GUEST");
-      console.log(response)
-      console.log(response.data.id)
+      localStorage.setItem("who", "its me")
+      console.log(response);
+      console.log(response.data.id);
       localStorage.setItem("Id", response.data.id);
       this.props.history.push(`/lobby/${this.state.selectLobby}/guest`);
     } catch (error) {
