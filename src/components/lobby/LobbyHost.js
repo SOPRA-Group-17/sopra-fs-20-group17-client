@@ -19,6 +19,12 @@ const bigbutton = {
   marginLeft: "10vw",
 };
 
+const tablebutton = {
+  //top right bottom left
+margin: "0.33vw 0.2vw 0.33vw 0.33vw"
+};
+
+
 class LobbyHost extends React.Component {
   constructor() {
     super();
@@ -38,8 +44,6 @@ class LobbyHost extends React.Component {
 
   async componentDidMount() {
     try {
-
-
       //id aus url
       this.state.ID_game = this.props.match.params.gameId;
 
@@ -68,7 +72,7 @@ class LobbyHost extends React.Component {
       }
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(), 3000);
+      this.timer = setInterval(() => this.getStatus(), 6000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -78,8 +82,7 @@ class LobbyHost extends React.Component {
 
   async getStatus() {
     try {
-
-      console.log(localStorage)
+      console.log(localStorage);
       //get current player
       const current_player = await api.get(
         `/games/players/${this.state.ID_player}`
@@ -182,7 +185,9 @@ class LobbyHost extends React.Component {
           if (this.state.players[i].status === "READY") {
             children.push(<td class="text-success">{`ready`}</td>);
           } else if (this.state.players[i].status === "NOT_READY") {
-            children.push(<td class="text-danger">{`not ready`}</td>);
+            children.push(<td class="text-danger">{`not ready`}
+</td>
+            );
           } else {
             children.push(
               <td class="text-white">
@@ -192,22 +197,28 @@ class LobbyHost extends React.Component {
           }
         }
         if (j === 3) {
-            children.push(<Button variant="outline-dark"
-            onClick={this.kickPlayer(this.state.players[i].id)}>Kick {this.state.players[i].name}</Button>);
-          }
-        
+          children.push(
+            <td>
+            <Button
+              variant="outline-light"
+              style ={tablebutton}
+              onClick={() => {this.kickPlayer(this.state.players[i].id)}}
+            >
+              Kick
+            </Button></td>
+          );
+        }
       }
       table.push(<tr class="text-white">{children}</tr>);
     }
     //Create the parent and add the children
     return table;
   }
-  kickPlayer(id){
-  
-    for (let i =0; i<this.state.players.length; i++){
-      if (this.state.players[i].id === id){
-        console.log("am i getting here")
-      console.log(this.state.players[i].name)
+  kickPlayer(id) {
+    for (let i = 0; i < this.state.players.length; i++) {
+      if (this.state.players[i].id === id) {
+        console.log("am i getting here");
+        console.log(this.state.players[i].name);
       }
     }
   }
@@ -264,13 +275,14 @@ class LobbyHost extends React.Component {
 
           <Row style={{ marginTop: "4vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 0 }}></Col>
-            <Col xs="7" md="3">
+            <Col xs="7" md="4">
               <Table striped bordered hover size="sm">
                 <thead class="text-white">
                   <tr>
                     <th>#</th>
-                    <th>i am the host</th>
+                    <th>name</th>
                     <th>status</th>
+                    <th>kick player</th>
                   </tr>
                 </thead>
                 <tbody>{this.createTable()}</tbody>

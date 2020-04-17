@@ -52,7 +52,7 @@ toggle(){
 */
   async componentDidMount() {
     try {
-      this.state.userId = localStorage.getItem("Id");
+      this.state.userId = localStorage.getItem("userId");
       this.state.token = localStorage.getItem("token");
 
       const response = await api.get(`/users/${this.state.userId}`);
@@ -117,7 +117,7 @@ toggle(){
 
       const game = new Game(response.data);
       console.log(game.gameId);
-
+      localStorage.setItem("Id");
       //add put to add player to the lobby that we got back
 
       //TODO: get this to work this.props.history.push(`/lobby/host/${game.id}`);
@@ -134,6 +134,7 @@ toggle(){
       //const game2 = new Game(response2.data);
       localStorage.setItem("gameId", game.gameId);
       localStorage.setItem("role", "HOST");
+      localStorage.setItem("Id", response.data.id);
 
       this.props.history.push(`/lobby/${game.gameId}/host`);
     } catch (error) {
@@ -183,6 +184,9 @@ toggle(){
       //const game = new Game(response.data);
       localStorage.setItem("gameId", this.state.selectLobby);
       localStorage.setItem("role", "GUEST");
+      console.log(response)
+      console.log(response.data.id)
+      localStorage.setItem("Id", response.data.id);
       this.props.history.push(`/lobby/${this.state.selectLobby}/guest`);
     } catch (error) {
       alert(

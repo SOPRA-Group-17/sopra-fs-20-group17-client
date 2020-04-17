@@ -32,7 +32,8 @@ class Lobby extends React.Component {
       ID_player: null,
       status: null,
       help_status: null,
-      redirect: "/dashboard"
+      redirect: "/dashboard",
+      exit: false,
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -40,8 +41,6 @@ class Lobby extends React.Component {
 
   async componentDidMount() {
     try {
-
-
       //id aus url
       this.state.ID_game = this.props.match.params.gameId;
 
@@ -70,7 +69,7 @@ class Lobby extends React.Component {
       }
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(), 6000);
+      this.timer = setInterval(() => this.getStatus(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -80,20 +79,23 @@ class Lobby extends React.Component {
 
   async getStatus() {
     try {
+      //variable abhängig exit lobby
+      if (!this.state.exit) {
+        console.log(localStorage);
+        //get current player
+        const current_player = await api.get(
+          `/games/players/${this.state.ID_player}`
+        );
 
-      console.log(localStorage)
-      //get current player
-      const current_player = await api.get(
-        `/games/players/${this.state.ID_player}`
-      );
+        //get all players
+        const all_players = await api.get(
+          `/games/${this.state.ID_game}/players`
+        );
 
-      //get all players
-      const all_players = await api.get(`/games/${this.state.ID_game}/players`);
+        //get the game and its status
+        const get_game = await api.get(`/games/${this.state.ID_game}`);
 
-      //get the game and its status
-      const get_game = await api.get(`/games/${this.state.ID_game}`);
-
-      /*
+        /*
       set and update state of:
       - current player
       - all players
@@ -103,19 +105,20 @@ class Lobby extends React.Component {
       then check if the game is ready to start
       */
 
-      this.setState(
-        {
-          player: current_player.data,
-          status: current_player.data.status,
-          players: all_players.data,
-          game: get_game.data,
-          game_status: get_game.data.status,
-        },
+        this.setState(
+          {
+            player: current_player.data,
+            status: current_player.data.status,
+            players: all_players.data,
+            game: get_game.data,
+            game_status: get_game.data.status,
+          },
 
-        this.startGame
-      );
-      //set local storage item "status"
-      localStorage.setItem("status", this.state.player.status);
+          this.startGame
+        );
+        //set local storage item "status"
+        localStorage.setItem("status", this.state.player.status);
+      }
     } catch (error) {
       alert(
         `Something went wrong while fetching the data: \n${handleError(error)}`
@@ -213,7 +216,7 @@ class Lobby extends React.Component {
     }
   }
 
- async exitLobby(){
+  async exitLobby() {
     /*
     if a user exits the lobby then:
     - change status to not ready
@@ -222,43 +225,42 @@ class Lobby extends React.Component {
   
     */
 
-//TODO: redirect to dashboard funktioniert noch nicht
+    //TODO: redirect to dashboard funktioniert noch nicht
 
     //change status to not ready
- this.setState(
-    {
-      status: "NOT_READY",
-      help_status: false,
-    },
-    this.saveChangePlayerStatus
-  );
-//need time to change player status 
-try {    
-  await new Promise((resolve) => setTimeout(resolve, 1000)); 
-
-    let requestBody;
-
-    //delete player from player list in game
-    requestBody = JSON.stringify({
-      player: this.state.player,
-    });
-    // send request body to the backend
-    console.log(requestBody)
-    await api.delete(
-      `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
-      requestBody
+    this.setState(
+      {
+        status: "NOT_READY",
+        help_status: false,
+        exit: true,
+      },
+      this.saveChangePlayerStatus
     );
-    this.props.history.push('/dashboard');
+    //need time to change player status
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  } catch (error) {
-    alert(
-      `Something went wrong during updating your data: \n${handleError(
-        error
-      )}`
-    );
+      let requestBody;
+
+      //delete player from player list in game
+      requestBody = JSON.stringify({
+        player: this.state.player,
+      });
+      // send request body to the backend
+      console.log(requestBody);
+      await api.delete(
+        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+        requestBody
+      );
+      this.props.history.push("/dashboard");
+    } catch (error) {
+      alert(
+        `Something went wrong during updating your data: \n${handleError(
+          error
+        )}`
+      );
+    }
   }
-}
-
 
   render() {
     return (
@@ -336,7 +338,6 @@ try {
                   </button>
                 </div>
               )}
-              {console.log(this.state.status)}
             </div>
           </Row>
         </Container>
