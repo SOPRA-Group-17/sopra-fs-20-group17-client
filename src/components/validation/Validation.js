@@ -50,8 +50,7 @@ class Validation extends React.Component {
     super();
 
     this.state = {
-      word: "Example",
-      clue: null,
+      word: null,
       gameId: null,
       hints: [],
       hintsReport: [],
@@ -69,10 +68,14 @@ class Validation extends React.Component {
   async componentDidMount() {
     try {
       this.state.gameId = this.props.match.params.gameId;
-      this.getHints()
+      const response = await api.get(`/games/${this.state.gameId}/terms`);
+
+      // Get the returned terme and update the state.
+      this.setState({ word: response.data.content });
+
+      this.getHints();
 
       this.timer = setInterval(() => this.getHints(), 2000);
-      
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -89,23 +92,18 @@ class Validation extends React.Component {
       if (response.data.status === "VALIDATION") {
         const response2 = await api.get(`/games/${this.state.gameId}/hints`);
         console.log(response2.data);
-        this.setState({hint: response2.data})
         clearInterval(this.timer);
         this.timer = null;
-        this.creatReportHintArray();
-
+        this.setState({ hints: response2.data }, () =>
+          this.creatReportHintArray()
+        );
       }
-      
-
-      
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while fetching the hints: \n${handleError(error)}`
       );
     }
   }
-
-  
 
   creatReportHintArray() {
     console.log(this.state.hints);
@@ -126,7 +124,7 @@ class Validation extends React.Component {
     try {
     } catch (error) {
       alert(
-        `Something went wrong while submiting the clue \n${handleError(error)}`
+        `Something went wrong while rendering the clues \n${handleError(error)}`
       );
     }
   }
@@ -304,7 +302,7 @@ class Validation extends React.Component {
         {!this.state.readyToRender ? (
           <div>
             <Spinner />
-            <p>Waiting for the word to guess</p>
+            <p>Waiting for clues to validate</p>
           </div>
         ) : (
           <div>
@@ -317,7 +315,7 @@ class Validation extends React.Component {
                   class="row justify-content-center"
                   style={{ marginTop: "1vw" }}
                 >
-                  <p className="large-Font">Testname</p>
+                  <p className="large-Font">{this.state.word}</p>
                 </div>
               </Col>
               <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>

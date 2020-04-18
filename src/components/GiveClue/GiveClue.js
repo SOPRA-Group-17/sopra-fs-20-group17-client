@@ -63,7 +63,7 @@ class GiveClue extends React.Component {
       console.log("get Till here");
       const response = await api.get(`/games/${this.state.gameId}/terms`);
 
-      // Get the returned users and update the state.
+      // Get the returned terme and update the state.
       this.setState({ word: response.data.content });
       console.log(this.state.word);
     } catch (error) {
