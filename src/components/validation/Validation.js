@@ -58,6 +58,7 @@ class Validation extends React.Component {
       similar: true,
       invalid: [],
       readyToRender: null,
+      successfull: 0,
     };
 
     this.creatReportHintArray = this.creatReportHintArray.bind(this);
@@ -120,8 +121,34 @@ class Validation extends React.Component {
     this.setState({ readyToRender: true });
   }
 
-  async submitClue() {
+  submitReport() {
+    this.state.hintsReport.forEach((hint, index) => {
+      const requestBody = JSON.stringify({
+        token: hint.token,
+        marked: hint.marked,
+        similarity: hint.similarity,
+        reporters: [],
+      });
+      this.submitReportPut(requestBody, index);
+    });
+  }
+
+  async submitReportPut(requestBody, index) {
     try {
+      //what should i add to reporters?,why error 500?
+
+      console.log(index, this.state.hintsReport.length - 1);
+
+      const response = await api.put(
+        `/games/${this.state.gameId}/hints`,
+        requestBody
+      );
+      
+      //does this work
+      if (index === this.state.hintsReport.length - 1) {
+        this.props.history.push(`/game/${this.state.gameId}/evalution`);
+      }
+      
     } catch (error) {
       alert(
         `Something went wrong while rendering the clues \n${handleError(error)}`
@@ -343,13 +370,13 @@ class Validation extends React.Component {
 
             <div class="row justify-content-center">
               <Button
-                disabled={!this.state.clue}
+                disabled={!this.state.readyToRender}
                 variant="outline-danger"
                 size="lg"
                 className="outlineWhite-Dashboard"
                 style={{ fontWeight: "bold" }}
                 onClick={() => {
-                  this.submitClue();
+                  this.submitReport();
                 }}
               >
                 Submit
