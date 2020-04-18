@@ -55,6 +55,7 @@ class Validation extends React.Component {
       hints: [],
       hintsReport: [],
       nr: 2,
+      token: null,
       similar: true,
       invalid: [],
       readyToRender: null,
@@ -68,8 +69,10 @@ class Validation extends React.Component {
 
   async componentDidMount() {
     try {
+      this.state.token = localStorage.getItem("token");
       this.state.gameId = this.props.match.params.gameId;
       const response = await api.get(`/games/${this.state.gameId}/terms`);
+      
 
       // Get the returned terme and update the state.
       this.setState({ word: response.data.content });
@@ -127,7 +130,7 @@ class Validation extends React.Component {
         token: hint.token,
         marked: hint.marked,
         similarity: hint.similarity,
-        reporters: [hint.token],
+        reporters: [this.state.token],
       });
       this.submitReportPut(requestBody, index);
     });
@@ -137,13 +140,14 @@ class Validation extends React.Component {
     try {
       //what should i add to reporters?,why error 500?
 
-      console.log(index, this.state.hintsReport.length - 1);
+      
 
       const response = await api.put(
         `/games/${this.state.gameId}/hints`,
         requestBody
       );
       
+      console.log(index, this.state.hintsReport.length - 1);
       //does this work
       if (index === this.state.hintsReport.length - 1) {
         this.props.history.push(`/game/${this.state.gameId}/evalution`);

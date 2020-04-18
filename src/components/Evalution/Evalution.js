@@ -27,13 +27,9 @@ class Evalution extends React.Component {
       this.state.token = localStorage.getItem("token");
       
 
-      const response = await api.get(`/games/${this.state.gameId}/terms`);
+      this.getGuessAndTerm();
 
-      this.setState({ word: response.data });
-
-      this.getGuess();
-
-      this.timer = setInterval(() => this.getGuess(), 2000);
+      this.timer = setInterval(() => this.getGuessAndTerm(), 2000);
 
     } catch (error) {
       alert(
@@ -41,17 +37,17 @@ class Evalution extends React.Component {
       );
     }
   }
-  async getGuess(){
+  async getGuessAndTerm(){
     try{
       const response = await api.get(`/games/${this.state.gameId}`);
       this.setState({gameStatus: response.data.status})
       // check if game ready to give hints
       console.log(response.data.status);
       if (response.data.status === "FINISHED" ||response.data.status === "RECEIVINGTERM"  ) {
-        const response2 = await api.get(`/games/${this.state.gameId}/guesses`);
-        //const response2 = await api.get(`/games/${this.state.gameId}/rounds`);
-        //console.log(response2.data[end-1]);
-        this.setState({ guess: response2.data });
+        const response2 = await api.get(`/games/${this.state.gameId}/rounds?lastRound=true`);
+        
+        console.log(response2.data);
+        
         clearInterval(this.timer);
         this.timer =null;
         this.timer = setInterval(() => this.startNewRound(), 10000);
