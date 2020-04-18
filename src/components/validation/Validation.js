@@ -127,7 +127,7 @@ class Validation extends React.Component {
         token: hint.token,
         marked: hint.marked,
         similarity: hint.similarity,
-        reporters: [],
+        reporters: [hint.token],
       });
       this.submitReportPut(requestBody, index);
     });
