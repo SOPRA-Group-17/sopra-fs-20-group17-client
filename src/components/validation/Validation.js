@@ -111,11 +111,15 @@ class Validation extends React.Component {
   creatReportHintArray() {
     console.log(this.state.hints);
     this.state.hints.forEach((hint) => {
+      let marked = "VALID"
+      if(hint.status == "INVALID"){
+        marked = "INVALID";
+      }
       this.state.hintsReport.push({
         content: hint.content,
         token: hint.token,
-        marked: "VALID",
-        similarity: [],
+        marked: marked,
+        similarity: hint.similarity,
         reporters: [],
       });
     });
