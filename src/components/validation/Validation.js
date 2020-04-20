@@ -348,7 +348,10 @@ class Validation extends React.Component {
                 </Row>
               </Col>
             </Row>
-            <div class="row justify-content-center" style={{ marginTop: "5vw" }}>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "5vw" }}
+            >
               <Spinner />
             </div>
             <div class="row justify-content-center">

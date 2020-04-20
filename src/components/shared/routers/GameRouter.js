@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Redirect, Route } from "react-router-dom";
 import GiveClue from "../../GiveClue/GiveClue";
 import Evalution from "../../Evalution/Evalution";
-import Validation from "../../validation/Validation"
+import Validation from "../../validation/Validation";
 
 const Container = styled.div`
   display: flex;
@@ -34,7 +34,6 @@ class GameRouter extends React.Component {
           path={`${this.props.base}/validation`}
           render={() => <Validation />}
         />
-
       </Container>
     );
   }
