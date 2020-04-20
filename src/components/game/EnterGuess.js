@@ -68,9 +68,7 @@ class EnterGuess extends React.Component {
 
       // get all the given hints
       // TODO: adapt the url
-      const response = await api.get(
-        `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`
-      );
+      const response = await api.get(`/games/${this.state.gameId}/hints`);
       console.log(response);
       this.setState({ hints: response });
     } catch (error) {
@@ -85,14 +83,13 @@ class EnterGuess extends React.Component {
   async submit() {
     try {
       const requestBody = JSON.stringify({
-        guess: this.state.guess,
-        gameId: this.state.gameId,
-        roundId: this.state.roundId,
-        playerToken: this.state.playerToken,
+        content: this.state.guess,
+
+        userToken: this.state.playerToken,
       });
       // TODO: adapt url and request parameters
       const response = await api.post(
-        `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`,
+        `/games/${this.state.gameId}/guesses`,
         requestBody
       );
 
@@ -111,13 +108,11 @@ class EnterGuess extends React.Component {
   async skip() {
     try {
       const requestBody = JSON.stringify({
-        gameId: this.state.gameId,
-        roundId: this.state.roundId,
-        playerToken: this.state.playerToken,
+        userToken: this.state.playerToken,
       });
       // TODO: adapt url and request parameters
       const response = await api.delete(
-        `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`,
+        `/games/${this.state.gameId}/terms`,
         requestBody
       );
 
@@ -175,24 +170,44 @@ class EnterGuess extends React.Component {
 
           <Row style={{ marginTop: "4vw", marginBottom: "4vw" }}>
             <Col xs={{ span: 4, offset: 4 }} md={{ span: 4, offset: 4 }}>
-              <Table bordered size="sm">
+              <Table bordered size="sm" className="font-medium">
                 <thead class="text-white">
                   <tr>
-                    <th class="text-center">hints</th>
+                    <th
+                      class="text-center"
+                      style={{
+                        fontSize: "calc(0.8em + 0.8vw)",
+                        color: "white",
+                      }}
+                    >
+                      hints
+                    </th>
                   </tr>
                 </thead>
-                <tbody class="text-white">{this.createTable()}</tbody>
+                <tbody class="text-white" className="font-medium">
+                  {this.createTable()}
+                </tbody>
               </Table>
             </Col>
           </Row>
 
           <Row className="d-flex justify-content-center">
-            <InputField
-              placeholder="Enter your guess here... "
-              onChange={(e) => {
-                this.handleInputChange("guess", e.target.value);
-              }}
-            />
+            <div class="row justify-content-center">
+              <input
+                style={{
+                  backgroundColor: "#291f33",
+                  border: "0.05vw solid white",
+                  padding: "0.5vw 0.5vw 0.5vw  1vw ",
+                  color: "white",
+                  width: "calc(8em + 23vw)",
+                  fontSize: "calc(1em + 1vw)",
+                }}
+                placeholder="Enter your guess here... "
+                onChange={(e) => {
+                  this.handleInputChange("guess", e.target.value);
+                }}
+              />
+            </div>
           </Row>
 
           <Row>

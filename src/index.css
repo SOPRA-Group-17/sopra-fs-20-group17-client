@@ -56,6 +56,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.font-medium {
+  font-size: calc(0.8em + 0.8vw);
+  color: white;
+}
+
 .large-Font {
   font-size: calc(0.8em + 3.5vw);
 }

@@ -6,12 +6,19 @@ import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 
-class ReportWord extends React.Component() {
+class ReportWord extends React.Component {
   constructor() {
     super();
 
     this.state = {
       playerToken: null,
+      playerId: null,
+      gameId: null,
+      roundId: null,
+
+      hints: ["yellow", "hot", "shine", "light"],
+      //hints: [],
+      guess: null,
     };
   }
 
@@ -19,9 +26,22 @@ class ReportWord extends React.Component() {
     try {
       // set the states
       this.state.playerToken = localStorage.getItem("token");
+      this.state.playerId = localStorage.getItem("Id");
+      this.state.gameId = this.props.match.params.gameId;
+      this.state.roundId = this.props.match.params.roundId;
+
+      // get all the given hints
+      // TODO: adapt the url
+      const response = await api.get(
+        `/games/${this.state.gameId}/rounds/${this.state.roundId}/actions`
+      );
+      console.log(response);
+      this.setState({ hints: response });
     } catch (error) {
       alert(
-        `Something went wrong while fetching the data: \n${handleError(error)}`
+        `Something went wrong while loading the player's hints: \n${handleError(
+          error
+        )}`
       );
     }
   }
