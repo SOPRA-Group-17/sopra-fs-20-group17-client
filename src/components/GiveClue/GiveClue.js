@@ -39,7 +39,6 @@ class GiveClue extends React.Component {
 
   async checkTermAvailible() {
     try {
-
       const response = await api.get(`/games/${this.state.gameId}`);
 
       // check if game ready to give hints
@@ -102,33 +101,33 @@ class GiveClue extends React.Component {
   render() {
     return (
       <Container fluid>
+        <Row>
+          <Col xs="5" md="3">
+            <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
+          </Col>
+          <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+            <Row className="d-flex justify-content-end">
+              <Button
+                variant="outline-light"
+                className="outlineWhite-Dashboard"
+                size="lg"
+              >
+                Rules
+              </Button>
+            </Row>
+          </Col>
+        </Row>
         {!this.state.word ? (
-          <div>
-            <Spinner />
-            <p>Waiting for the word to guess</p>
+          <div style={{ marginTop: "5vw" }}>
+            <div class="row justify-content-center">
+              <Spinner />
+            </div>
+            <div class="row justify-content-center">
+              <p className="large-Font">Waiting for the word to guess</p>
+            </div>
           </div>
         ) : (
           <div>
-            <Row>
-              <Col xs="5" md="3">
-                <img
-                  className="logoImgSmall"
-                  src={logo}
-                  alt="Just One Logo"
-                ></img>
-              </Col>
-              <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
-                <Row className="d-flex justify-content-end">
-                  <Button
-                    variant="outline-light"
-                    className="outlineWhite-Dashboard"
-                    size="lg"
-                  >
-                    Rules
-                  </Button>
-                </Row>
-              </Col>
-            </Row>
             <div
               style={{ fontSize: "calc(1.2em + 4vw)" }}
               class="row justify-content-center"

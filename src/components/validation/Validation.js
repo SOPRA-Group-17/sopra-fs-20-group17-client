@@ -72,7 +72,6 @@ class Validation extends React.Component {
       this.state.token = localStorage.getItem("token");
       this.state.gameId = this.props.match.params.gameId;
       const response = await api.get(`/games/${this.state.gameId}/terms`);
-      
 
       // Get the returned terme and update the state.
       this.setState({ word: response.data.content });
@@ -140,19 +139,16 @@ class Validation extends React.Component {
     try {
       //what should i add to reporters?,why error 500?
 
-      
-
       const response = await api.put(
         `/games/${this.state.gameId}/hints`,
         requestBody
       );
-      
+
       console.log(index, this.state.hintsReport.length - 1);
       //does this work
       if (index === this.state.hintsReport.length - 1) {
         this.props.history.push(`/game/${this.state.gameId}/evalution`);
       }
-      
     } catch (error) {
       alert(
         `Something went wrong while rendering the clues \n${handleError(error)}`
@@ -332,8 +328,32 @@ class Validation extends React.Component {
       <Container fluid>
         {!this.state.readyToRender ? (
           <div>
-            <Spinner />
-            <p>Waiting for clues to validate</p>
+            <Row>
+              <Col xs="5" md="3">
+                <img
+                  className="logoImgSmall"
+                  src={logo}
+                  alt="Just One Logo"
+                ></img>
+              </Col>
+              <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+                <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    size="lg"
+                  >
+                    Rules
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
+            <div class="row justify-content-center" style={{ marginTop: "5vw" }}>
+              <Spinner />
+            </div>
+            <div class="row justify-content-center">
+              <p className="large-Font">Waiting for clues to validate</p>
+            </div>
           </div>
         ) : (
           <div>

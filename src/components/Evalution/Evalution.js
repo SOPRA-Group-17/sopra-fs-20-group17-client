@@ -13,63 +13,76 @@ class Evalution extends React.Component {
       gameId: null,
       word: null,
       guess: "Guesser didn´t give his guess yet",
-      timer:null,
-      gameStatus:null,
+      timer: null,
+      gameStatus: null,
+      readyToRender: null,
+      guessCorrect: null,
+      color: "green",
     };
   }
 
   async componentDidMount() {
     try {
-      
       console.log("comp");
       this.state.gameId = this.props.match.params.gameId;
       this.state.id = localStorage.getItem("Id");
       this.state.token = localStorage.getItem("token");
-      
 
       this.getGuessAndTerm();
 
       this.timer = setInterval(() => this.getGuessAndTerm(), 2000);
-
     } catch (error) {
       alert(
         `Something went wrong while getting the term: \n${handleError(error)}`
       );
     }
   }
-  async getGuessAndTerm(){
-    try{
+  async getGuessAndTerm() {
+    try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      this.setState({gameStatus: response.data.status})
+      this.setState({ gameStatus: response.data.status });
       // check if game ready to give hints
       console.log(response.data.status);
-      if (response.data.status === "FINISHED" ||response.data.status === "RECEIVINGTERM"  ) {
-        const response2 = await api.get(`/games/${this.state.gameId}/rounds?lastRound=true`);
-        
-        console.log(response2.data);
-        
+      if (
+        response.data.status === "FINISHED" ||
+        response.data.status === "RECEIVINGTERM"
+      ) {
+        const response2 = await api.get(
+          `/games/${this.state.gameId}/rounds?lastRound=true`
+        );
+
+        //setting guess
+        this.setState({ guess: response2.data[0].guess.content });
+
+        //setting term
+        this.setState({ word: response2.data[0].term.content });
+
+        //setting if guess was correct or not
+        if (response2.data[0].guess.status == "VALID") {
+          this.setState({ guessCorrect: "correct" });
+        } else {
+          this.setState({ guessCorrect: "incorrect" });
+          this.setState({ color: "red" });
+        }
+
+        this.setState({ readyToRender: true });
+
         clearInterval(this.timer);
-        this.timer =null;
+        this.timer = null;
         this.timer = setInterval(() => this.startNewRound(), 10000);
       }
-      
-    }
-    catch (error) {
+    } catch (error) {
       alert(
         `Something went wrong while getting the guess: \n${handleError(error)}`
       );
     }
-   
-
   }
 
-  startNewRound(){
+  startNewRound() {
     console.log("starting new round");
     clearInterval(this.timer);
-    this.timer =null;
+    this.timer = null;
   }
-
- 
 
   render() {
     return (
@@ -90,18 +103,39 @@ class Evalution extends React.Component {
             </Row>
           </Col>
         </Row>
-        <div
-          class="row justify-content-center"
-          style={{ marginTop: "calc(1.2em + 2vw)" }}
-        >
-          <p className="large-Font">Given word: {this.state.word}</p>
-        </div>
-        <div
-          class="row justify-content-center"
-          style={{ marginTop: "calc(0.5em + 1.5vw)" }}
-        >
-          <p className="large-Font">Guess: {this.state.guess}</p>
-        </div>
+        {!this.state.readyToRender ? (
+          <div style={{ marginTop: "5vw" }}>
+            <div class="row justify-content-center">
+              <Spinner />
+            </div>
+            <div class="row justify-content-center">
+              <p className="large-Font">Waiting for the guess</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+            >
+              <p className="large-Font" style={{ color: this.state.color }}>
+                The given guesse is {this.state.guessCorrect}
+              </p>
+            </div>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+            >
+              <p className="large-Font">Given word: {this.state.word}</p>
+            </div>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+            >
+              <p className="large-Font">Guess: {this.state.guess}</p>
+            </div>
+          </div>
+        )}
       </Container>
     );
   }
