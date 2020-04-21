@@ -17,7 +17,8 @@ class Evalution extends React.Component {
       gameStatus: null,
       readyToRender: null,
       guessCorrect: null,
-      color: "green",
+      color: "white",
+      skiped: null
     };
   }
 
@@ -51,8 +52,7 @@ class Evalution extends React.Component {
           `/games/${this.state.gameId}/rounds?lastRound=true`
         );
 
-        //setting guess
-        this.setState({ guess: response2.data[0].guess.content });
+        
 
         //setting term
         this.setState({ word: response2.data[0].term.content });
@@ -60,9 +60,18 @@ class Evalution extends React.Component {
         //setting if guess was correct or not
         if (response2.data[0].guess.status == "VALID") {
           this.setState({ guessCorrect: "correct" });
-        } else {
+          this.setState({ color: "green" });
+          //setting guess
+          this.setState({ guess: response2.data[0].guess.content });
+        } else if(response2.data[0].guess.status == "INVALID") {
           this.setState({ guessCorrect: "incorrect" });
           this.setState({ color: "red" });
+          //setting guess
+          this.setState({ guess: response2.data[0].guess.content });
+        }
+        else{
+          this.setState({ skiped: true });
+
         }
 
         this.setState({ readyToRender: true });
@@ -118,7 +127,10 @@ class Evalution extends React.Component {
               class="row justify-content-center"
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
             >
-              <p className="large-Font" style={{ color: this.state.color }}>
+              <p className="large-Font"  hidden={!this.state.skiped}>
+
+              </p>
+              <p className="large-Font" style={{ color: this.state.color }} hidden={this.state.skiped}>
                 The given guesse is {this.state.guessCorrect}
               </p>
             </div>
@@ -131,6 +143,7 @@ class Evalution extends React.Component {
             <div
               class="row justify-content-center"
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+              hidden={this.state.skiped}
             >
               <p className="large-Font">Guess: {this.state.guess}</p>
             </div>
