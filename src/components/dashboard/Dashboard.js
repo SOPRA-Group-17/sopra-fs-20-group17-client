@@ -62,7 +62,7 @@ toggle(){
       this.state.token = localStorage.getItem("token");
 
       const response = await api.get(`/users/${this.state.userId}`);
-
+      console.log(response);
       // Get the returned users and update the state.
       this.setState({ user: new User(response.data) });
       console.log(this.state.user.username);
@@ -123,7 +123,6 @@ toggle(){
 
       const game = new Game(response.data);
       console.log(game.gameId);
-      localStorage.setItem("Id");
       //add put to add player to the lobby that we got back
 
       //TODO: get this to work this.props.history.push(`/lobby/host/${game.id}`);
@@ -141,7 +140,6 @@ toggle(){
       localStorage.setItem("gameId", game.gameId);
       localStorage.setItem("role", "HOST");
       localStorage.setItem("Id", response.data.id);
-
       this.props.history.push(`/lobby/${game.gameId}/host`);
     } catch (error) {
       alert(`Couldnt creat the lobby: \n${handleError(error)}`);
@@ -182,7 +180,7 @@ toggle(){
         name: this.state.user.username,
         userToken: this.state.token,
       });
-console.log(requestBody)
+      console.log(requestBody);
       const response = await api.post(
         `/games/${this.state.selectLobby}/players`,
         requestBody
@@ -190,7 +188,6 @@ console.log(requestBody)
       //const game = new Game(response.data);
       localStorage.setItem("gameId", this.state.selectLobby);
       localStorage.setItem("role", "GUEST");
-      localStorage.setItem("who", "its me")
       console.log(response);
       console.log(response.data.id);
       localStorage.setItem("Id", response.data.id);
@@ -206,7 +203,7 @@ console.log(requestBody)
     let selectionList = [];
     console.log(this.state.games);
 
-    if (this.state.games === undefined || this.state.games.length == 0) {
+    if (this.state.games === undefined || this.state.games.length === 0) {
       return selectionList;
     } else {
       console.log(this.state.games);

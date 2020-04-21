@@ -266,12 +266,12 @@ class LobbyHost extends React.Component {
           // send request body to the backend
           console.log("this is the players id to delete:")
           console.log(requestBody);
+          // was muss genau in request body / Jetzt: der rausgeschmissen wird. soll? der der rausschmeisst?
           await api.delete(
-            `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+            `/games/${this.state.ID_game}/players/${this.state.players[i].id}`,
             requestBody
           );
 
-          this.props.history.push("/dashboard");
         } catch (error) {
           alert(
             `Something went wrong during updating your data: \n${handleError(
@@ -289,8 +289,12 @@ class LobbyHost extends React.Component {
     console.log(this.state.player.role);
     if (this.state.game_status === "RECEIVINGTERM") {
       if (this.state.player.status === "GUESSER") {
+        clearInterval(this.timer);
+            this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/number`);
       } else if (this.state.player.status === "CLUE_GIVER") {
+        clearInterval(this.timer);
+            this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/reportword`);
       }
     }
@@ -338,7 +342,8 @@ class LobbyHost extends React.Component {
       localStorage.removeItem("gameId");
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
-
+      clearInterval(this.timer);
+      this.timer = null;
       this.props.history.push("/dashboard");
     } catch (error) {
       alert(

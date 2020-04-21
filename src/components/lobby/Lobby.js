@@ -66,9 +66,13 @@ class Lobby extends React.Component {
       } else {
         this.setState({ help_status: false });
       }
+      let found = false;
+      const all_players = await api.get(`/games/${this.state.ID_game}/players`);
+
+      found = this.checkIfPlayerIsInGame(all_players, found);
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(), 1000);
+      this.timer = setInterval(() => this.getStatus(found), 3000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -76,25 +80,34 @@ class Lobby extends React.Component {
     }
   }
 
-  async getStatus() {
+  async getStatus(found) {
     try {
       //variable abhängig exit lobby
       if (!this.state.exit) {
-        console.log(localStorage);
-        //get current player
-        const current_player = await api.get(
-          `/games/players/${this.state.ID_player}`
-        );
-
         //get all players
         const all_players = await api.get(
           `/games/${this.state.ID_game}/players`
         );
+        found = this.checkIfPlayerIsInGame(all_players, found);
 
-        //get the game and its status
-        const get_game = await api.get(`/games/${this.state.ID_game}`);
+        console.log("this state found is");
+        console.log(found);
+        if (!found) {
+          clearInterval(this.timer);
+          this.timer = null;
+          this.props.history.push("/dashboard");
+        }
 
-        /*
+        if (found) {
+          //get the game and its status
+          const get_game = await api.get(`/games/${this.state.ID_game}`);
+
+          //get current player
+          const current_player = await api.get(
+            `/games/players/${this.state.ID_player}`
+          );
+
+          /*
       set and update state of:
       - current player
       - all players
@@ -104,19 +117,27 @@ class Lobby extends React.Component {
       then check if the game is ready to start
       */
 
-        this.setState(
-          {
-            player: current_player.data,
-            status: current_player.data.status,
-            players: all_players.data,
-            game: get_game.data,
-            game_status: get_game.data.status,
-          },
+          this.setState(
+            {
+              player: current_player.data,
+              status: current_player.data.status,
+              players: all_players.data,
+              game: get_game.data,
+              game_status: get_game.data.status,
+            },
 
-          this.startGame
-        );
-        //set local storage item "status"
-        localStorage.setItem("status", this.state.player.status);
+            this.startGame
+          );
+          //set local storage item "status"
+          localStorage.setItem("status", this.state.player.status);
+          localStorage.setItem("role", this.state.player.role);
+          console.log(localStorage);
+          if (this.state.player.role === "HOST") {
+            clearInterval(this.timer);
+            this.timer = null;
+            this.props.history.push(`/lobby/${this.state.ID_game}/host`);
+          }
+        }
       }
     } catch (error) {
       alert(
@@ -124,6 +145,23 @@ class Lobby extends React.Component {
       );
     }
   }
+
+  checkIfPlayerIsInGame(all_players, found) {
+    console.log(all_players.data);
+    let change = false;
+    all_players.data.forEach((player) => {
+      if (player.id.toString() === this.state.ID_player) {
+        found = true;
+        change = true;
+      }
+    });
+    if (!change) {
+      found = false;
+    }
+    change = false;
+    return found;
+  }
+
   changeStatusState() {
     if (this.state.help_status === true) {
       this.setState(
@@ -208,8 +246,12 @@ class Lobby extends React.Component {
     console.log(this.state.player.role);
     if (this.state.game_status === "RECEIVINGTERM") {
       if (this.state.player.status === "GUESSER") {
+        clearInterval(this.timer);
+        this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/number`);
       } else if (this.state.player.status === "CLUE_GIVER") {
+        clearInterval(this.timer);
+        this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/reportword`);
       }
     }
@@ -255,6 +297,8 @@ class Lobby extends React.Component {
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
 
+      clearInterval(this.timer);
+      this.timer = null;
       this.props.history.push("/dashboard");
     } catch (error) {
       alert(
@@ -319,7 +363,6 @@ class Lobby extends React.Component {
             </Col>
 
             <div className="d-flex flex-md-column flex-row">
-              {console.log(this.state.help_status)}
               {this.state.help_status ? (
                 <div>
                   <button
