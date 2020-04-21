@@ -7,10 +7,12 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../login/Login";
 import Register from "../../Register/Register";
-import Lobbyboard from "../../lobby/Lobby";
 import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
 import Dashboard from "../../dashboard/Dashboard";
+import EnterGuess from "../../game/EnterGuess";
+import { NumberGuard } from "../routeProtectors/NumberGuard";
+import Number from "../../number/Number";
 
 /**
  * Main router of your application.
@@ -37,7 +39,6 @@ class AppRouter extends React.Component {
                 </GameGuard>
               )}
             />
-
             <Route
               path="/lobby/:gameId"
               render={() => (
@@ -55,7 +56,6 @@ class AppRouter extends React.Component {
                 </LoginGuard>
               )}
             />
-
             <Route
               path="/register"
               exact
@@ -65,7 +65,6 @@ class AppRouter extends React.Component {
                 </RegisterGuard>
               )}
             />
-
             <Route
               path="/dashboard"
               exact
@@ -76,6 +75,7 @@ class AppRouter extends React.Component {
               )}
             />
 
+            <Route path="/" exact render={() => <Redirect to={"/game"} />} />
             <Route
               path="/"
               exact

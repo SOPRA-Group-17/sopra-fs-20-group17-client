@@ -41,12 +41,10 @@ class Dashboard extends React.Component {
       token: null,
       alarm: null,
     };
-   
+
     this.selectLobby = this.selectLobby.bind(this);
-    
   }
 
-  
   /*
 toggle(){
     this.setState({alarm:null})
@@ -54,11 +52,17 @@ toggle(){
 */
   async componentDidMount() {
     try {
-      this.state.userId = localStorage.getItem("Id");
+      //change local storage
+      localStorage.removeItem("status");
+      localStorage.removeItem("gameId");
+      localStorage.removeItem("role");
+      localStorage.removeItem("Id");
+
+      this.state.userId = localStorage.getItem("userId");
       this.state.token = localStorage.getItem("token");
 
       const response = await api.get(`/users/${this.state.userId}`);
-
+      console.log(response);
       // Get the returned users and update the state.
       this.setState({ user: new User(response.data) });
       console.log(this.state.user.username);
@@ -110,6 +114,7 @@ toggle(){
 
   async creatLobby() {
     try {
+      console.log("you reached CREATE LOBBY");
       const requestBody = JSON.stringify({
         name: this.state.newGame,
       });
@@ -118,7 +123,6 @@ toggle(){
 
       const game = new Game(response.data);
       console.log(game.gameId);
-
       //add put to add player to the lobby that we got back
 
       //TODO: get this to work this.props.history.push(`/lobby/host/${game.id}`);
@@ -134,7 +138,8 @@ toggle(){
       );
       //const game2 = new Game(response2.data);
       localStorage.setItem("gameId", game.gameId);
-
+      localStorage.setItem("role", "HOST");
+      localStorage.setItem("Id", response.data.id);
       this.props.history.push(`/lobby/${game.gameId}/host`);
     } catch (error) {
       alert(`Couldnt creat the lobby: \n${handleError(error)}`);
@@ -170,17 +175,22 @@ toggle(){
 
   async joinLobby() {
     try {
+      console.log("you reached JOIN LOBBY");
       const requestBody = JSON.stringify({
         name: this.state.user.username,
         userToken: this.state.token,
       });
-
+      console.log(requestBody);
       const response = await api.post(
         `/games/${this.state.selectLobby}/players`,
         requestBody
       );
       //const game = new Game(response.data);
       localStorage.setItem("gameId", this.state.selectLobby);
+      localStorage.setItem("role", "GUEST");
+      console.log(response);
+      console.log(response.data.id);
+      localStorage.setItem("Id", response.data.id);
       this.props.history.push(`/lobby/${this.state.selectLobby}/guest`);
     } catch (error) {
       alert(
@@ -193,7 +203,7 @@ toggle(){
     let selectionList = [];
     console.log(this.state.games);
 
-    if (this.state.games === undefined || this.state.games.length == 0) {
+    if (this.state.games === undefined || this.state.games.length === 0) {
       return selectionList;
     } else {
       console.log(this.state.games);
@@ -208,7 +218,6 @@ toggle(){
     }
     return selectionList;
   };
-  
 
   /*<Alert variant="info" isOpen={!this.state.alarm} toggle={this.toggle.bind(this)}>
   {this.state.alarm}
@@ -216,7 +225,6 @@ toggle(){
   render() {
     return (
       <Container fluid>
-        
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>

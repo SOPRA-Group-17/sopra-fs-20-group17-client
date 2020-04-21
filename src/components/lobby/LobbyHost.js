@@ -5,7 +5,6 @@ import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import game from "../shared/models/Game";
-import { Redirect } from "react-router-dom";
 
 const lobbyname = {
   fontSize: "4vw",
@@ -20,7 +19,12 @@ const bigbutton = {
   marginLeft: "10vw",
 };
 
-class Lobby extends React.Component {
+const tablebutton = {
+  //top right bottom left
+  margin: "0.33vw 0.2vw 0.33vw 0.33vw",
+};
+
+class LobbyHost extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -33,6 +37,7 @@ class Lobby extends React.Component {
       status: null,
       help_status: null,
       exit: false,
+      kick: false,
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -66,13 +71,9 @@ class Lobby extends React.Component {
       } else {
         this.setState({ help_status: false });
       }
-      let found = false;
-      const all_players = await api.get(`/games/${this.state.ID_game}/players`);
-
-      found = this.checkIfPlayerIsInGame(all_players, found);
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(found), 3000);
+      this.timer = setInterval(() => this.getStatus(), 6000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -80,34 +81,28 @@ class Lobby extends React.Component {
     }
   }
 
-  async getStatus(found) {
+  async getStatus() {
+    console.log(this.state.players)
+    console.log(this.state.kick)
+
     try {
       //variable abhängig exit lobby
-      if (!this.state.exit) {
+      if (!this.state.exit && !this.state.kick) {
+        console.log(localStorage);
+        //get current player
+        const current_player = await api.get(
+          `/games/players/${this.state.ID_player}`
+        );
+
         //get all players
         const all_players = await api.get(
           `/games/${this.state.ID_game}/players`
         );
-        found = this.checkIfPlayerIsInGame(all_players, found);
 
-        console.log("this state found is");
-        console.log(found);
-        if (!found) {
-          clearInterval(this.timer);
-          this.timer = null;
-          this.props.history.push("/dashboard");
-        }
+        //get the game and its status
+        const get_game = await api.get(`/games/${this.state.ID_game}`);
 
-        if (found) {
-          //get the game and its status
-          const get_game = await api.get(`/games/${this.state.ID_game}`);
-
-          //get current player
-          const current_player = await api.get(
-            `/games/players/${this.state.ID_player}`
-          );
-
-          /*
+        /*
       set and update state of:
       - current player
       - all players
@@ -117,27 +112,24 @@ class Lobby extends React.Component {
       then check if the game is ready to start
       */
 
-          this.setState(
-            {
-              player: current_player.data,
-              status: current_player.data.status,
-              players: all_players.data,
-              game: get_game.data,
-              game_status: get_game.data.status,
-            },
+        this.setState(
+          {
+            player: current_player.data,
+            status: current_player.data.status,
+            players: all_players.data,
+            game: get_game.data,
+            game_status: get_game.data.status,
+          },
 
-            this.startGame
-          );
-          //set local storage item "status"
-          localStorage.setItem("status", this.state.player.status);
-          localStorage.setItem("role", this.state.player.role);
-          console.log(localStorage);
-          if (this.state.player.role === "HOST") {
-            clearInterval(this.timer);
-            this.timer = null;
-            this.props.history.push(`/lobby/${this.state.ID_game}/host`);
-          }
-        }
+          this.startGame
+        );
+        //set local storage item "status"
+        localStorage.setItem("status", this.state.player.status);
+      }
+      else if (this.state.kick === true){
+        this.setState({
+          kick: false
+        });
       }
     } catch (error) {
       alert(
@@ -145,23 +137,6 @@ class Lobby extends React.Component {
       );
     }
   }
-
-  checkIfPlayerIsInGame(all_players, found) {
-    console.log(all_players.data);
-    let change = false;
-    all_players.data.forEach((player) => {
-      if (player.id.toString() === this.state.ID_player) {
-        found = true;
-        change = true;
-      }
-    });
-    if (!change) {
-      found = false;
-    }
-    change = false;
-    return found;
-  }
-
   changeStatusState() {
     if (this.state.help_status === true) {
       this.setState(
@@ -211,7 +186,7 @@ class Lobby extends React.Component {
     for (let i = 0; i < this.state.players.length; i++) {
       let children = [];
       //Inner loop to create children
-      for (let j = 0; j < 3; j++) {
+      for (let j = 0; j < 4; j++) {
         if (j === 0) {
           children.push(<td>{i + 1}</td>);
         }
@@ -233,11 +208,79 @@ class Lobby extends React.Component {
             );
           }
         }
+        if (j === 3) {
+          if (this.state.players[i].role === "GUEST") {
+            //you cannot kick yourself
+            children.push(
+              <td>
+                <Button
+                  variant="outline-light"
+                  style={tablebutton}
+                  onClick={() => {
+                    this.kickPlayer(this.state.players[i].id);
+                  }}
+                >
+                  Kick
+                </Button>
+              </td>
+            );
+          } else {
+            children.push(<p></p>);
+          }
+        }
       }
       table.push(<tr class="text-white">{children}</tr>);
     }
     //Create the parent and add the children
     return table;
+  }
+  async kickPlayer(id) {
+    /*
+    if a user exits the lobby then:
+    - change status to not ready
+    - delete player from player list in game
+    - redirect to dashboard
+  
+    */
+
+    //change status to not ready
+    for (let i = 0; i < this.state.players.length; i++) {
+      if (this.state.players[i].id === id) {
+        this.setState(
+          {
+            status: "NOT_READY",
+            help_status: false,
+            kick: true
+          },
+          this.saveChangePlayerStatus
+        );
+        //need time to change player status
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          let requestBody;
+
+          //delete player from player list in game
+          requestBody = JSON.stringify({
+            player: this.state.players[i].id,
+          });
+          // send request body to the backend
+          console.log("this is the players id to delete:")
+          console.log(requestBody);
+          // was muss genau in request body / Jetzt: der rausgeschmissen wird. soll? der der rausschmeisst?
+          await api.delete(
+            `/games/${this.state.ID_game}/players/${this.state.players[i].id}`,
+            requestBody
+          );
+
+        } catch (error) {
+          alert(
+            `Something went wrong during updating your data: \n${handleError(
+              error
+            )}`
+          );
+        }
+      }
+    }
   }
 
   startGame() {
@@ -247,11 +290,11 @@ class Lobby extends React.Component {
     if (this.state.game_status === "RECEIVINGTERM") {
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
-        this.timer = null;
+            this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/number`);
       } else if (this.state.player.status === "CLUE_GIVER") {
         clearInterval(this.timer);
-        this.timer = null;
+            this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/reportword`);
       }
     }
@@ -265,6 +308,9 @@ class Lobby extends React.Component {
     - redirect to dashboard
   
     */
+
+    //TODO: nächster Spieler neuer Host,
+    //TODO: wenn er alleine war dann delete Lobby
 
     //change status to not ready
     this.setState(
@@ -296,7 +342,6 @@ class Lobby extends React.Component {
       localStorage.removeItem("gameId");
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
-
       clearInterval(this.timer);
       this.timer = null;
       this.props.history.push("/dashboard");
@@ -349,20 +394,22 @@ class Lobby extends React.Component {
 
           <Row style={{ marginTop: "4vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 0 }}></Col>
-            <Col xs="7" md="3">
+            <Col xs="7" md="4">
               <Table striped bordered hover size="sm">
                 <thead class="text-white">
                   <tr>
                     <th>#</th>
                     <th>name</th>
                     <th>status</th>
+                    <th>kick player</th>
                   </tr>
                 </thead>
-                <tbody class="text-white">{this.createTable()}</tbody>
+                <tbody>{this.createTable()}</tbody>
               </Table>
             </Col>
 
             <div className="d-flex flex-md-column flex-row">
+              {console.log(this.state.help_status)}
               {this.state.help_status ? (
                 <div>
                   <button
@@ -384,6 +431,7 @@ class Lobby extends React.Component {
                   </button>
                 </div>
               )}
+              {console.log(this.state.status)}
             </div>
           </Row>
         </Container>
@@ -392,4 +440,4 @@ class Lobby extends React.Component {
   }
 }
 
-export default withRouter(Lobby);
+export default withRouter(LobbyHost);
