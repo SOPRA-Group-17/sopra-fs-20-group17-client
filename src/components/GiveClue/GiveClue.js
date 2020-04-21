@@ -108,11 +108,14 @@ class GiveClue extends React.Component {
           <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
             <Row className="d-flex justify-content-end">
               <Button
+                disabled={!this.state.clue}
                 variant="outline-light"
-                className="outlineWhite-Dashboard"
                 size="lg"
+                onClick={() => {
+                  this.submitClue();
+                }}
               >
-                Rules
+                Submit
               </Button>
             </Row>
           </Col>

@@ -6,6 +6,7 @@ import Evalution from "../../Evalution/Evalution";
 import Validation from "../../validation/Validation";
 import EnterGuess from "../../game/EnterGuess";
 import Number from "../../number/Number";
+import ReportWord from "../../ReportWord/ReportWord";
 
 const Container = styled.div`
   display: flex;
@@ -30,6 +31,11 @@ class GameRouter extends React.Component {
           exact
           path={`${this.props.base}/enterGuess`}
           render={() => <EnterGuess />}
+        />
+        <Route
+          exact
+          path={`${this.props.base}/reportWord`}
+          render={() => <ReportWord />}
         />
         <Route
           exact
