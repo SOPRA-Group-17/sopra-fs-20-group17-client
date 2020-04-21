@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import Player from "../shared/models/Player";
-import { Container, Row, Col, Button, Table } from "react-bootstrap";
+import { Container, Row, Col, Button, ProgressBar } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 
@@ -35,6 +35,10 @@ class ReportWord extends React.Component {
       gameId: null,
       roundId: null,
       word: "sun",
+
+      playersReportedNo: 2,
+      noOfPlayers: 7,
+      barWidth: 40,
     };
   }
 
@@ -147,6 +151,12 @@ class ReportWord extends React.Component {
                   Number of players that don't know the word
                 </p>
               </Col>
+            </Row>
+
+            <Row>
+              <div class="progress">
+                <div class="progress-bar" style={{ width: "100em" }}></div>
+              </div>
             </Row>
           </div>
         )}
