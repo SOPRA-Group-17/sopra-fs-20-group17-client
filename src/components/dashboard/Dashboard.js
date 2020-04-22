@@ -142,7 +142,14 @@ toggle(){
       // Get the returned users and update the state.
       this.setState({ games: response.data });
       if (this.state.games.length != 0) {
-        this.setState({ selectLobby: this.state.games[0].gameId });
+        for(let i = 0; i < this.state.games.length; i++){
+          if(this.state.games[i].status == "LOBBY"){
+            this.setState({ selectLobby: this.state.games[i].gameId });
+            break;
+          }
+          
+        }
+        
       }
     } catch (error) {
       alert(
@@ -235,6 +242,7 @@ toggle(){
   async joinLobby() {
     try {
       console.log("you reached JOIN LOBBY");
+      console.log(this.state.selectLobby)
       const requestBody = JSON.stringify({
         name: this.state.user.username,
         userToken: this.state.token,
@@ -269,11 +277,13 @@ toggle(){
       return selectionList;
     } else {
       for (let i = 0; i < this.state.games.length; i++) {
-        selectionList.push(
-          <option value={this.state.games[i].gameId}>
-            {this.state.games[i].name}
-          </option>
+        if(this.state.games[i].status == "LOBBY"){
+          selectionList.push(
+            <option value={this.state.games[i].gameId}>
+              {this.state.games[i].name}
+            </option>
         );
+          }
       }
     }
     return selectionList;
@@ -451,7 +461,7 @@ toggle(){
               <Col
                 xs={{ span: 10, offset: 1 }}
                 md={{ span: 5, offset: 0 }}
-                lg={{ span: 5, offset: 1 }}
+                lg={{ span: 5, offset: 2 }}
                 className="scoarboard"
               >
                 <div style={{fontSize: "calc(1.5em + 1vw)"}}>Leaderboard</div>
