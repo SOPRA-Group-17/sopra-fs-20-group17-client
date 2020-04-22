@@ -31,7 +31,7 @@ class Evalution extends React.Component {
 
       this.getGuessAndTerm();
 
-      this.timer = setInterval(() => this.getGuessAndTerm(), 2000);
+      this.timer = setInterval(() => this.getGuessAndTerm(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while getting the term: \n${handleError(error)}`

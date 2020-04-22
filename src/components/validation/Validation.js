@@ -78,7 +78,7 @@ class Validation extends React.Component {
 
       this.getHints();
 
-      this.timer = setInterval(() => this.getHints(), 2000);
+      this.timer = setInterval(() => this.getHints(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`

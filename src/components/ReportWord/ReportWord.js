@@ -89,7 +89,9 @@ class ReportWord extends React.Component {
         word: word.data.content,
       });
 
-      this.timer = setInterval(() => this.getPlayerTermStatus(), 4000);
+      this.timer = setInterval(() => this.getPlayerTermStatus(), 1000);
+
+      
     } catch (error) {
       alert(
         `Something went wrong while getting the word which has to be guessed: \n${handleError(

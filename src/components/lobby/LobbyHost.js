@@ -73,7 +73,7 @@ class LobbyHost extends React.Component {
       }
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(), 6000);
+      this.timer = setInterval(() => this.getStatus(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`

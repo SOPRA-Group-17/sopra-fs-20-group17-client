@@ -70,7 +70,7 @@ toggle(){
       this.getGames();
 
       //decreas timer
-      this.timer = setInterval(() => this.getGames(), 10000);
+      this.timer = setInterval(() => this.getGames(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
