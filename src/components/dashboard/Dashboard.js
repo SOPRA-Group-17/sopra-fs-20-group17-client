@@ -2,7 +2,7 @@ import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import User from "../shared/models/User";
-import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
+import { Container, Row, Col, Button, Form, Alert, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import aLobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
@@ -40,6 +40,7 @@ class Dashboard extends React.Component {
       noLobby: null,
       token: null,
       alarm: null,
+      rules: false,
     };
 
     this.selectLobby = this.selectLobby.bind(this);
@@ -225,6 +226,35 @@ toggle(){
   render() {
     return (
       <Container fluid>
+        <Modal
+        size="lg"
+        show={this.state.rules}
+        onHide={() => this.setState({rules: false})}
+        aria-labelledby="rules-dashboard"
+        
+      >
+        <Modal.Header closeButton className = "rules-header">
+          <Modal.Title id="rules-dashboard-title" className = "rules-header"> 
+            Rules
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className = "rules-text">
+          <p className="rules-text-title">
+                Game Overview
+          </p>
+          <p className="rules-text-s-title">
+               Choose the mystery word 
+          </p>
+          <p className="rules-text">
+            The aktive player chooses a number between 1 and 5 to tel which word he wants
+
+          </p>
+          
+          
+         
+          </Modal.Body>
+      </Modal>
+        
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
@@ -242,6 +272,7 @@ toggle(){
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
+                onClick={() => this.setState({rules: true})}
               >
                 Rules
               </Button>

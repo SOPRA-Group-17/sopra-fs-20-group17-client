@@ -11,6 +11,27 @@ body {
   color: white;
 }
 
+.rules-header{
+  background-color: #483061;
+  font-size: calc(0.8em + 0.5vw);
+  color: white;
+}
+
+.rules-text{
+  background-color: #483061;
+  font-size: calc(0.7em + 0.4vw);
+  color: white;
+}
+.rules-text-title{
+  font-size: calc(0.8em + 0.5vw);
+  text-decoration: underline;
+}
+
+.rules-text-s-title{
+  font-size: calc(0.7em + 0.4vw);
+  text-decoration: underline;
+
+}
 .logoImg {
   display: block;
   margin-left: auto;
