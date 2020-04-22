@@ -6,6 +6,7 @@ import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, ProgressBar } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
+import {progressbar} from 'react-bootstrap/ProgressBar';
 
 const word = {
   fontSize: "7vw",
@@ -25,6 +26,13 @@ const sentence = {
   opacity: 0.2,
 };
 
+const bigbutton = {
+  //top right bottom left
+  padding: "2vw 3vw 2vw 3vw",
+  marginTop: 0,
+  marginLeft: "10vw",
+};
+
 class ReportWord extends React.Component {
   constructor() {
     super();
@@ -32,13 +40,15 @@ class ReportWord extends React.Component {
     this.state = {
       playerToken: null,
       playerId: null,
+      player: null,
+      players: null,
       gameId: null,
       roundId: null,
-      word: "sun",
+      word: null,
 
-      playersReportedNo: 2,
-      noOfPlayers: 7,
-      barWidth: 40,
+      //playersReportedNo: 2,
+      //noOfPlayers: 7,
+      //barWidth: 40,
     };
   }
 
@@ -50,11 +60,35 @@ class ReportWord extends React.Component {
       this.state.gameId = this.props.match.params.gameId;
       this.state.roundId = this.props.match.params.roundId;
 
-      // get the term which has to be guessed
-      /*
-      const response = await api.get(`/games/${this.state.gameId}/terms`);
-      console.log(response);
-      this.setState({ word: response });*/
+      //get current player
+      const current_player = await api.get(
+        `/games/players/${this.state.playerId}`
+      );
+      //get all_players
+      const all_players = await api.get(`/games/${this.state.gameId}/players`);
+
+      //get word
+      let requestBody;
+
+      requestBody = JSON.stringify({
+        gameId: this.state.gameId,
+      });
+
+      const word = await api.get(
+        `/games/${this.state.gameId}/terms`,
+        requestBody
+      );
+
+      console.log(word.data)
+
+      //setting the states: current_player & word
+      this.setState({
+        player: current_player.data,
+        players: all_players.data,
+        word: word.data.content,
+      });
+
+      this.timer = setInterval(() => this.getPlayerTermStatus(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while getting the word which has to be guessed: \n${handleError(
@@ -64,10 +98,35 @@ class ReportWord extends React.Component {
     }
   }
 
+  async getPlayerTermStatus() {
+    try {
+      //get all players
+      const all_players = await api.get(`/games/${this.state.gameId}/players`);
+      this.setState(
+        {
+          players: all_players.data,
+        },
+
+        this.calculatingBar
+      );
+    } catch (error) {
+      alert(
+        `Something went wrong while fetching the data: \n${handleError(error)}`
+      );
+    }
+  }
+
   async yes() {
     try {
-      // is this api correct???
-      const response = await api.post(`/games/${this.state.gameId}/hints`);
+      let requestBody;
+
+      requestBody = JSON.stringify({
+        playerTermStatus: "KNOWN",
+      });
+      const response = await api.put(
+        `/games/${this.state.gameId}/players/${this.state.playerId}`,
+        requestBody
+      );
       console.log(response);
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
@@ -76,11 +135,29 @@ class ReportWord extends React.Component {
 
   async no() {
     try {
-      // is this api correct?
-      const response = await api.delete(`/games/${this.state.gameId}/hints`);
+      let requestBody;
+
+      requestBody = JSON.stringify({
+        playerTermStatus: "UNKNOWN",
+      });
+      const response = await api.put(
+        `/games/${this.state.gameId}/players/${this.state.playerId}`,
+        requestBody
+      );
       console.log(response);
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
+    }
+  }
+
+  calculatingBar() {
+    let count = 0;
+    let number_of_players = this.state.players.length;
+    for (let i = 0; i < number_of_players; i++) {
+      if (this.state.players[i].playerTermStatus === "UNKNOWN") {
+        count++;
+      }
+      return count / number_of_players;
     }
   }
 
@@ -120,32 +197,33 @@ class ReportWord extends React.Component {
             </Row>
 
             <Row>
-              <Col>
+            <Col xs={{ span: 0, offset: 0 }} md={{ span:3, offset: 0 }}></Col>
+              <Col xs="7" md="2">
                 <Button
                   variant="outline-success"
-                  className="outlineWhite-Dashboard"
+                  style={bigbutton}
                   onClick={() => {
                     this.yes();
                   }}
                 >
-                  Yes
+                  <h2>YES</h2>
                 </Button>
               </Col>
 
-              <Col>
+              <Col Col xs="7" md="2">
                 <Button
                   variant="outline-danger"
-                  className="outlineWhite-Dashboard"
+                  style={bigbutton}
                   onClick={() => {
                     this.no();
                   }}
                 >
-                  No
+                  <h2>NO</h2>
                 </Button>
               </Col>
             </Row>
 
-            <Row>
+            <Row style={{ marginTop: "8vw" }}>
               <Col>
                 <p style={sentence}>
                   Number of players that don't know the word
@@ -154,9 +232,9 @@ class ReportWord extends React.Component {
             </Row>
 
             <Row>
-              <div class="progress">
-                <div class="progress-bar" style={{ width: "100em" }}></div>
-              </div>
+              <div><progressbar striped variant="danger" now={30} /></div>
+            
+ 
             </Row>
           </div>
         )}

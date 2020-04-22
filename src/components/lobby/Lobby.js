@@ -5,7 +5,6 @@ import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import game from "../shared/models/Game";
-import { Redirect } from "react-router-dom";
 
 const lobbyname = {
   fontSize: "4vw",
