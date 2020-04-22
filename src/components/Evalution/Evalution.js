@@ -74,7 +74,7 @@ class Evalution extends React.Component {
 
         clearInterval(this.timer);
         this.timer = null;
-        this.timer = setInterval(() => this.startNewRound(), 1000);
+        this.timer = setInterval(() => this.startNewRound(), 8000);
       }
     } catch (error) {
       alert(

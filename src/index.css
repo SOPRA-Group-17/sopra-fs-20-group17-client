@@ -60,7 +60,7 @@ body {
 
 .DashboardForm {
   margin-left: 10vw;
-  margin-top: 8vw;
+  margin-top: 5vw;
 }
 
 .outlineWhite-Form {
@@ -85,8 +85,24 @@ body {
 .large-Font {
   font-size: calc(0.8em + 3.5vw);
 }
+.scoardboard-text{
+  color: white;
+}
 
+.scoardboard-text:hover{
+  color: #52ddfa;
+}
+
+/*to test 1366px x 768px */
 @media (min-width: 992px) {
+
+  .scoarboard{
+    position: relative;
+    overflow: auto;
+    display: block;
+    height: 35vw;
+    font-size: 1.5vw;
+  }
   .outlineWhite-Dashboard {
     margin-top: 1vw;
     font-size: 1.2vw;
@@ -120,8 +136,15 @@ body {
   }
 }
 
-/* Medium devices (tablets, 768px and up) to test 990* 556*/
+/* Medium devices (tablets, 768px and up) to test  990, 556*/
 @media (max-width: 991.98px) {
+  .scoarboard{
+    position: relative;
+    overflow: auto;
+    display: block;
+    height: 32.5vw;
+    font-size: 2vw;
+  }
   .outlineWhite-Dashboard {
     margin-top: 1vw;
     font-size: 1.5vw;
@@ -158,6 +181,15 @@ body {
 
 /*phone portrait xs and s*/
 @media (max-width: 767.98px) {
+
+  .scoarboard{
+    position: relative;
+    overflow: auto;
+    display: block;
+    height: 81vw;
+    margin-top: 5vw;
+    font-size: 4vw;
+  }
   .outlineWhite-Dashboard {
     margin-top: 2vw;
     font-size: 4vw;
