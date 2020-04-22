@@ -4,16 +4,14 @@ import { BaseContainer } from "../../helpers/layout";
 import { api, handleError } from "../../helpers/api";
 import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 import Link from "react-router-dom/Link";
 import logo from "../styling/JustOne_logo_white.svg";
 
 const FormContainer = styled.div`
   margin-top: 0px;
-
   display: flex;
   flex-direction: column;
-
   align-items: center;
   min-height: 200px;
   justify-content: center;
@@ -23,10 +21,9 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60%;
-  height: 375px;
-  font-size: 16px;
-  font-weight: 300;
+  width: 80vw;
+  height: 320px;
+  
   padding-left: 37px;
   padding-right: 37px;
 
@@ -58,7 +55,7 @@ const Label = styled.label`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 /**
@@ -144,28 +141,34 @@ class Login extends React.Component {
     return (
       <BaseContainer>
         <img className="logoImg" src={logo} alt="Just One Logo"></img>
-        <FormContainer>
-          <Form>
+        <FormContainer >
+          <Form className="login-Form">
             <Label>Username</Label>
             <InputField
+              
               placeholder="Enter here.."
               onChange={(e) => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
             <Label>Password</Label>
-            <InputField
+            
+              <InputField
               type={this.state.passwordHidden ? "password" : "text"}
               placeholder="Enter here.."
+              style ={{marginBottom: 0}}
               onChange={(e) => {
                 this.handleInputChange("password", e.target.value);
               }}
             />
+            
+            
+        
             {this.state.passwordHidden ? (
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -177,7 +180,7 @@ class Login extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -186,7 +189,7 @@ class Login extends React.Component {
                 </Button>
               </ButtonContainer>
             )}
-            <ButtonContainer>
+            <ButtonContainer style={{marginTop: "calc(0.7em + 0.5vw)"}}>
               <Button
                 variant="outline-info"
                 style={{ paddingLeft: "25px", paddingRight: "25px" }}

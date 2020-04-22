@@ -38,7 +38,7 @@ body {
   margin-right: auto;
   margin-bottom: 20px;
   margin-top: 10px;
-  width: 25%;
+  width: calc(5em + 11vw);
 }
 
 .logoImgSmall {
@@ -95,6 +95,10 @@ body {
 
 /*to test 1366px x 768px */
 @media (min-width: 992px) {
+  .login-Form{
+    width: 40vw;
+    font-size: 1.3vw;
+  }
 
   .scoarboard{
     position: relative;
@@ -138,6 +142,10 @@ body {
 
 /* Medium devices (tablets, 768px and up) to test  990, 556*/
 @media (max-width: 991.98px) {
+  .login-Form{
+    width: 50vw;
+    font-size: 1.8vw;
+  }
   .scoarboard{
     position: relative;
     overflow: auto;
@@ -181,6 +189,11 @@ body {
 
 /*phone portrait xs and s*/
 @media (max-width: 767.98px) {
+
+  .login-Form{
+    width: 80vw;
+    font-size: 3.5vw;
+  }
 
   .scoarboard{
     position: relative;
