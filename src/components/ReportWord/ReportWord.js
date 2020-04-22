@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import Player from "../shared/models/Player";
-import { Container, Row, Col, Button, ProgressBar } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
-import {progressbar} from 'react-bootstrap/ProgressBar';
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 const word = {
   fontSize: "7vw",
@@ -33,6 +33,10 @@ const bigbutton = {
   marginLeft: "10vw",
 };
 
+const progressbar = {
+  width: "22vw",
+};
+
 class ReportWord extends React.Component {
   constructor() {
     super();
@@ -45,10 +49,9 @@ class ReportWord extends React.Component {
       gameId: null,
       roundId: null,
       word: null,
-
-      //playersReportedNo: 2,
-      //noOfPlayers: 7,
-      //barWidth: 40,
+      perCentPositive: null,
+      perCentNegative: null,
+      readyToGo: false,
     };
   }
 
@@ -79,8 +82,6 @@ class ReportWord extends React.Component {
         requestBody
       );
 
-      console.log(word.data)
-
       //setting the states: current_player & word
       this.setState({
         player: current_player.data,
@@ -88,7 +89,7 @@ class ReportWord extends React.Component {
         word: word.data.content,
       });
 
-      this.timer = setInterval(() => this.getPlayerTermStatus(), 1000);
+      this.timer = setInterval(() => this.getPlayerTermStatus(), 4000);
     } catch (error) {
       alert(
         `Something went wrong while getting the word which has to be guessed: \n${handleError(
@@ -100,6 +101,23 @@ class ReportWord extends React.Component {
 
   async getPlayerTermStatus() {
     try {
+      //get the word if its not here allready
+      if (!this.state.word) {
+        //get word
+        let requestBody;
+
+        requestBody = JSON.stringify({
+          gameId: this.state.gameId,
+        });
+        const word = await api.get(
+          `/games/${this.state.gameId}/terms`,
+          requestBody
+        );
+        this.setState({
+          word: word.data,
+        });
+      }
+
       //get all players
       const all_players = await api.get(`/games/${this.state.gameId}/players`);
       this.setState(
@@ -107,13 +125,34 @@ class ReportWord extends React.Component {
           players: all_players.data,
         },
 
-        this.calculatingBar
+        this.calculatingBarPositive
       );
+      this.calculatingBarNegative();
+      const get_game = await api.get(`/games/${this.state.gameId}`);
+      let stay;
+      stay = this.stay(get_game);
+      if (!stay) {
+        //clear timer and push
+        clearInterval(this.timer);
+        this.timer = null;
+        this.props.history.push(`/game/${this.state.gameId}/giveClue`);
+      }
     } catch (error) {
       alert(
         `Something went wrong while fetching the data: \n${handleError(error)}`
       );
     }
+  }
+
+  stay(get_game) {
+    let stay;
+    if (get_game.data.status === "RECEIVING_HINTS") {
+      stay = false;
+    } else {
+      stay = true;
+    }
+    console.log(stay);
+    return stay;
   }
 
   async yes() {
@@ -127,7 +166,6 @@ class ReportWord extends React.Component {
         `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
-      console.log(response);
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
@@ -144,20 +182,32 @@ class ReportWord extends React.Component {
         `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
-      console.log(response);
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
   }
 
-  calculatingBar() {
+  calculatingBarNegative() {
     let count = 0;
     let number_of_players = this.state.players.length;
     for (let i = 0; i < number_of_players; i++) {
       if (this.state.players[i].playerTermStatus === "UNKNOWN") {
         count++;
       }
-      return count / number_of_players;
+      this.setState({ perCentNegative: (count / number_of_players) * 100 });
+    }
+  }
+  calculatingBarPositive() {
+    {
+      let count = 0;
+      let number_of_players = this.state.players.length;
+
+      for (let i = 0; i < number_of_players; i++) {
+        if (this.state.players[i].playerTermStatus === "KNOWN") {
+          count++;
+        }
+        this.setState({ perCentPositive: (count / number_of_players) * 100 });
+      }
     }
   }
 
@@ -181,7 +231,14 @@ class ReportWord extends React.Component {
         </Row>
 
         {!this.state.word ? (
-          <Spinner />
+          <div style={{ marginTop: "5vw" }}>
+            <div class="row justify-content-center">
+              <Spinner />
+            </div>
+            <div class="row justify-content-center">
+              <p className="large-Font">Waiting for the word</p>
+            </div>
+          </div>
         ) : (
           <div>
             <Row>
@@ -197,7 +254,10 @@ class ReportWord extends React.Component {
             </Row>
 
             <Row>
-            <Col xs={{ span: 0, offset: 0 }} md={{ span:3, offset: 0 }}></Col>
+              <Col
+                xs={{ span: 0, offset: 0 }}
+                md={{ span: 3, offset: 0 }}
+              ></Col>
               <Col xs="7" md="2">
                 <Button
                   variant="outline-success"
@@ -226,15 +286,35 @@ class ReportWord extends React.Component {
             <Row style={{ marginTop: "8vw" }}>
               <Col>
                 <p style={sentence}>
-                  Number of players that don't know the word
+                  Number of players that DON'T know the word
                 </p>
               </Col>
             </Row>
-
-            <Row>
-              <div><progressbar striped variant="danger" now={30} /></div>
-            
- 
+            <Row className="d-flex justify-content-center">
+              <div>
+                <ProgressBar
+                  style={progressbar}
+                  striped
+                  variant="danger"
+                  now={this.state.perCentNegative}
+                />
+              </div>
+            </Row>
+            <Row
+              className="d-flex justify-content-center"
+              style={{ marginTop: "1vw" }}
+            >
+              <p style={sentence}>Number of players that DO know the word</p>
+            </Row>
+            <Row className="d-flex justify-content-center">
+              <div>
+                <ProgressBar
+                  style={progressbar}
+                  striped
+                  variant="success"
+                  now={this.state.perCentPositive}
+                />
+              </div>
             </Row>
           </div>
         )}
