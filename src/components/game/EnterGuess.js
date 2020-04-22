@@ -101,8 +101,13 @@ class EnterGuess extends React.Component {
 
   async skip() {
     try {
-      // TODO: adapt url and request parameters
-      const response = await api.delete(`/games/${this.state.gameId}/guesses`);
+
+      const requestBody = JSON.stringify({
+        token: this.state.playerToken,
+      });
+
+      // TODO: check if works, janosch needs to update
+      const response = await api.delete(`/games/${this.state.gameId}/guesses`, requestBody);
 
       console.log(response);
       // TODO: what is the url of the page you are directed to?
