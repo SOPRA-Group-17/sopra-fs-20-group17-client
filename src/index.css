@@ -57,7 +57,7 @@ body {
 }
 
 .font-medium {
-  font-size: calc(0.8em + 0.8vw);
+  font-size: calc(1em + 0.6vw);
   color: white;
 }
 
@@ -69,6 +69,12 @@ body {
   .outlineWhite-Dashboard {
     margin-top: 1vw;
     font-size: 1.2vw;
+  }
+  .outlineWhite-Guess {
+    margin-top: 1.5vw;
+    font-size: 1.5vw;
+    padding-left: 3vw;
+    padding-right: 3vw;
   }
   .nr {
     font-size: 1.8vw;
@@ -87,13 +93,23 @@ body {
   .button-card {
     font-size: 1.2vw;
   }
+  .hints-table{
+    margin-top: -4vw;
+    margin-bottom: 1.5vw;
+  }
 }
 
-/* Medium devices (tablets, 573px and up) */
+/* Medium devices (tablets, 768px and up) to test 990* 556*/
 @media (max-width: 991.98px) {
   .outlineWhite-Dashboard {
     margin-top: 1vw;
     font-size: 1.5vw;
+  }
+  .outlineWhite-Guess {
+    margin-top: 2vw;
+    font-size: 1.8vw;
+    padding-left: 3vw;
+    padding-right: 3vw;
   }
   .nr {
     font-size: 2vw;
@@ -112,13 +128,24 @@ body {
   .button-card {
     font-size: 2vw;
   }
+  .hints-table{
+    margin-top: -3vw;
+    margin-bottom: 1.5vw;
+  }
 }
+
 
 /*phone portrait xs and s*/
 @media (max-width: 767.98px) {
   .outlineWhite-Dashboard {
-    margin-top: 1vw;
-    font-size: 2.5vw;
+    margin-top: 2vw;
+    font-size: 4vw;
+  }
+  .outlineWhite-Guess {
+    margin-top: 5vw;
+    font-size: 5vw;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
   .nr {
     font-size: calc(1em + 0.8vw);
@@ -136,5 +163,9 @@ body {
   }
   .button-card {
     font-size: 3.5vw;
+  }
+  .hints-table{
+    margin-top: 5vw;
+    margin-bottom: 3vw;
   }
 }
