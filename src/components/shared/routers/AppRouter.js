@@ -11,8 +11,7 @@ import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
 import Dashboard from "../../dashboard/Dashboard";
 import EnterGuess from "../../game/EnterGuess";
-import { NumberGuard } from "../routeProtectors/NumberGuard";
-import Number from "../../number/Number";
+
 
 /**
  * Main router of your application.
