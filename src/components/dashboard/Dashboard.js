@@ -388,12 +388,41 @@ toggle(){
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body className="rules-text">
-                <p className="rules-text-title">Game Overview</p>
-                <p className="rules-text-s-title">Choose the mystery word</p>
+                <p className="rules-text-title">Object of the Game</p>
                 <p className="rules-text">
-                  The aktive player chooses a number between 1 and 5 to tel
-                  which word he wants
+                  Just One is a cooperative game. You need to work together in
+                  order to get the best score!
                 </p>
+                <p className="rules-text-title">Game Overview</p>
+                <p className="rules-text">
+                  One game includes 13 rounds. Each of these is divided into 4
+                  phases.
+                </p>
+                <p className="rules-text-s-title">Choose the Mystery Word</p>
+                <p className="rules-text">
+                  The active player chooses a number between 1 and 5. The
+                  corresponding mystery word gets displayed to all the other
+                  players - the clue givers. These clue givers have now the
+                  opportunity to report whether they know the mystery word or
+                  not. If the word is unknown to many players, it is replaced by
+                  another mystery word.
+                </p>
+                <p className="rules-text-s-title">Clue Section</p>
+                <p className="rules-text">
+                  Each clue giver enters one clue. That clue must be composed of
+                  a single word.
+                </p>
+                <p className="rules-text">
+                  Note: A digit, an acronym, an onomatopoeia, or a special
+                  character are all considered to be words. Example: 007 is
+                  allowed to help someone guess Bond, just like Riiiiiinnng or
+                  SMS are allowed to help someone guess Telephone, and $ is
+                  allowed to help someone guess America.
+                </p>
+                <p className="rules-text-s-title">Comparing Clues</p>
+                <p className="rules-text">T</p>
+                <p className="rules-text-s-title">Guess</p>
+                <p className="rules-text">T</p>
               </Modal.Body>
             </Modal>
 
