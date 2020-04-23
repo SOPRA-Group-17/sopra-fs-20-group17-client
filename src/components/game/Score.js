@@ -1,11 +1,10 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import game from "../shared/models/Game";
-import { Redirect } from "react-router-dom";
+
+
 
 class Score extends React.Component {
   constructor() {
@@ -68,26 +67,41 @@ class Score extends React.Component {
   createTable() {
     let table = [];
     // Outer loop to create parent
-    for (let i = 0; i < this.state.players.length; i++) {
-      let children = [];
-      //Inner loop to create children
-      for (let j = 0; j < 3; j++) {
-        if (j === 0) {
-          children.push(<td>{i + 1}</td>);
+    if (this.state.players) {
+      for (let i = 0; i < this.state.players.length; i++) {
+        let children = [];
+        //Inner loop to create children
+        for (let j = 0; j < 3; j++) {
+          if (j === 0) {
+            children.push(<td>{i + 1}</td>);
+          }
+          if (j === 1) {
+            children.push(<td>{this.state.players[i].name}</td>);
+          }
+          if (j === 2) {
+            if (((i + 1) / this.state.players.length) * 100 <= 33) {
+              children.push(
+                <td class="text-success">{this.state.players[i].score}</td>
+              );
+            } else if (
+              ((i + 1) / this.state.players.length) * 100 <= 66 &&
+              ((i + 1) / this.state.players.length) * 100 > 33
+            ) {
+              children.push(
+                <td class="text-warning">{this.state.players[i].score}</td>
+              );
+            } else if (((i + 1) / this.state.players.length) * 100 > 66) {
+              children.push(
+                <td class="text-danger">{this.state.players[i].score}</td>
+              );
+            }
+          }
         }
-        if (j === 1) {
-          children.push(<td>{this.state.players[i].name}</td>);
-        }
-        if (j === 2) {
-          children.push(
-            <td class="text-success">{this.state.players[i].score}</td>
-          );
-        }
+        table.push(<tr class="text-white">{children}</tr>);
       }
-      table.push(<tr class="text-white">{children}</tr>);
+      //Create the parent and add the children
+      return table;
     }
-    //Create the parent and add the children
-    return table;
   }
 
   teamScore() {
