@@ -8,6 +8,7 @@ import { Button, Row, Col } from "react-bootstrap";
 import Link from "react-router-dom/Link";
 import logo from "../styling/JustOne_logo_white.svg";
 
+
 const FormContainer = styled.div`
   margin-top: 0px;
   display: flex;
