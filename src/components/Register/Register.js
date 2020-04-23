@@ -156,7 +156,7 @@ class Register extends React.Component {
       <BaseContainer>
         <img className="logoImg" src={logo} alt="Just One Logo"></img>
         <FormContainer>
-          <Form>
+          <Form className = "login-Form">
             <Label>Username</Label>
             <InputField
               placeholder="Enter here... "
@@ -184,7 +184,7 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -196,7 +196,7 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  style={{ paddingLeft: "25px", paddingRight: "25px" }}
+                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -205,10 +205,11 @@ class Register extends React.Component {
                 </Button>
               </ButtonContainer>
             )}
-            <ButtonContainer>
+            <ButtonContainer style={{marginTop: "calc(0.7em + 0.5vw)"}}>
               <Button
                 variant="outline-info"
                 style={{ paddingLeft: "25px", paddingRight: "25px" }}
+        
                 disabled={
                   !this.state.username ||
                   !this.state.password ||
@@ -227,7 +228,7 @@ class Register extends React.Component {
           <Button variant="outline-light">
             <Link
               to="/Login"
-              style={{ textDecoration: "none", color: "inherit" }}
+              style={{ textDecoration: "none", color: "inherit", paddingLeft: "25px", paddingRight: "25px"}}
             >
               Login
             </Link>

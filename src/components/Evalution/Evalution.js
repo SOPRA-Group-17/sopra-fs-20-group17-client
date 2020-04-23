@@ -18,7 +18,7 @@ class Evalution extends React.Component {
       readyToRender: null,
       guessCorrect: null,
       color: "white",
-      skiped: null
+      skiped: null,
     };
   }
 
@@ -52,8 +52,6 @@ class Evalution extends React.Component {
           `/games/${this.state.gameId}/rounds?lastRound=true`
         );
 
-        
-
         //setting term
         this.setState({ word: response2.data[0].term.content });
 
@@ -63,22 +61,20 @@ class Evalution extends React.Component {
           this.setState({ color: "green" });
           //setting guess
           this.setState({ guess: response2.data[0].guess.content });
-        } else if(response2.data[0].guess.status == "INVALID") {
+        } else if (response2.data[0].guess.status == "INVALID") {
           this.setState({ guessCorrect: "incorrect" });
           this.setState({ color: "red" });
           //setting guess
           this.setState({ guess: response2.data[0].guess.content });
-        }
-        else{
+        } else {
           this.setState({ skiped: true });
-
         }
 
         this.setState({ readyToRender: true });
 
         clearInterval(this.timer);
         this.timer = null;
-        this.timer = setInterval(() => this.startNewRound(), 10000);
+        this.timer = setInterval(() => this.startNewRound(), 8000);
       }
     } catch (error) {
       alert(
@@ -87,10 +83,30 @@ class Evalution extends React.Component {
     }
   }
 
-  startNewRound() {
-    console.log("starting new round");
-    clearInterval(this.timer);
-    this.timer = null;
+  async startNewRound() {
+    try {
+      console.log("starting new round");
+      clearInterval(this.timer);
+      this.timer = null;
+
+      const Player = await api.get(`/games/players/${this.state.id}`);
+      console.log(Player.data);
+      if (this.state.gameStatus == "RECEIVINGTERM") {
+        console.log(Player.data.status);
+        if (Player.data.state === "GUESSER") {
+          localStorage.setItem("status", "GUESSER");
+          this.props.history.push(`/game/${this.state.ID_game}/number`);
+        } else if (Player.data.status === "CLUE_GIVER") {
+          localStorage.setItem("status", "CLUE_GIVER");
+          this.props.history.push(`/game/${this.state.ID_game}/reportword`);
+        }
+      } else if (this.state.gameStatus == "FINISHED") {
+        //update the url
+        this.props.history.push(`/game/${this.state.ID_game}/endScreen`);
+      }
+    } catch (error) {
+      alert(`Something while starting the new round: \n${handleError(error)}`);
+    }
   }
 
   render() {
@@ -127,10 +143,12 @@ class Evalution extends React.Component {
               class="row justify-content-center"
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
             >
-              <p className="large-Font"  hidden={!this.state.skiped}>
-
-              </p>
-              <p className="large-Font" style={{ color: this.state.color }} hidden={this.state.skiped}>
+              <p className="large-Font" hidden={!this.state.skiped}></p>
+              <p
+                className="large-Font"
+                style={{ color: this.state.color }}
+                hidden={this.state.skiped}
+              >
                 The given guesse is {this.state.guessCorrect}
               </p>
             </div>

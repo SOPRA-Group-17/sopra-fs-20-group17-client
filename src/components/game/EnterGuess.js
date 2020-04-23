@@ -6,39 +6,12 @@ import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import Hint from "../shared/models/Hint";
-
-const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 60%;
-  height: 420px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  background: linear-gradient(rgb(42, 33, 79), rgb(30, 18, 43));
-  transition: opacity 0.5s ease, transform 0.5s ease;
-`;
-
-const InputField = styled.input`
-  &::placeholder {
-    color: rgba(255, 255, 255, 1);
-  }
-  height: 35px;
-  width: 25%;
-  padding-left: 15px;
-  margin-left: -4px;
-  border: none;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-`;
+import CarouselCaption from "react-bootstrap/CarouselCaption";
+import { Spinner } from "../../views/design/Spinner";
 
 const bigbutton = {
   padding: "0.5vw 1.5vw 0.5vw 1.5vw",
+  fontSize: "calc(0.5em, 0.5vw)",
   //top right bottom left
 };
 
@@ -51,11 +24,13 @@ class EnterGuess extends React.Component {
       playerId: null,
       gameId: null,
       roundId: null,
-
-      hints: ["yellow", "hot", "shine", "light"],
+      hints: null,
       //hints: [],
       guess: null,
+      timer: null,
+      readyToRender: null,
     };
+    this.getHints = this.getHints.bind(this);
   }
 
   async componentDidMount() {
@@ -64,18 +39,36 @@ class EnterGuess extends React.Component {
       this.state.playerToken = localStorage.getItem("token");
       this.state.playerId = localStorage.getItem("Id");
       this.state.gameId = this.props.match.params.gameId;
-      this.state.roundId = this.props.match.params.roundId;
 
       // get all the given hints
-      // TODO: adapt the url
-      const response = await api.get(`/games/${this.state.gameId}/hints`);
-      console.log(response);
-      this.setState({ hints: response });
+      this.getHints();
+      this.timer = setInterval(() => this.getHints(), 2000);
     } catch (error) {
       alert(
-        `Something went wrong while loading the player's hints: \n${handleError(
+        `Something went wrong while setting up the page: \n${handleError(
           error
         )}`
+      );
+    }
+  }
+
+  async getHints() {
+    try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+
+      // check if game ready to give hints
+      console.log(response.data.status);
+      if (response.data.status === "RECEIVINGGUESS") {
+        const response = await api.get(`/games/${this.state.gameId}/hints`);
+        console.log(response.data);
+        this.setState({ hints: response.data });
+        clearInterval(this.timer);
+        this.timer = null;
+        this.setState({ readyToRender: true });
+      }
+    } catch (error) {
+      alert(
+        `Something went wrong while getting the hints: \n${handleError(error)}`
       );
     }
   }
@@ -84,9 +77,10 @@ class EnterGuess extends React.Component {
     try {
       const requestBody = JSON.stringify({
         content: this.state.guess,
-
-        userToken: this.state.playerToken,
+        token: this.state.playerToken,
       });
+
+      console.log(requestBody);
       // TODO: adapt url and request parameters
       const response = await api.post(
         `/games/${this.state.gameId}/guesses`,
@@ -95,7 +89,7 @@ class EnterGuess extends React.Component {
 
       console.log(response);
       // TODO: what is the url of the page you are directed to?
-      // this.props.history.push(`/Login`);
+      this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
       alert(
         `Something went wrong while submitting the guess: \n${handleError(
@@ -107,18 +101,17 @@ class EnterGuess extends React.Component {
 
   async skip() {
     try {
+
       const requestBody = JSON.stringify({
-        userToken: this.state.playerToken,
+        token: this.state.playerToken,
       });
-      // TODO: adapt url and request parameters
-      const response = await api.delete(
-        `/games/${this.state.gameId}/terms`,
-        requestBody
-      );
+
+      // TODO: check if works, janosch needs to update
+      const response = await api.delete(`/games/${this.state.gameId}/guesses`, requestBody);
 
       console.log(response);
       // TODO: what is the url of the page you are directed to?
-      // this.props.history.push(`/Login`);
+      this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
       alert(`Something went wrong while skipping: \n${handleError(error)}`);
     }
@@ -133,65 +126,79 @@ class EnterGuess extends React.Component {
   createTable = () => {
     let table = [];
 
-    for (let i = 0; i < this.state.hints.length; i++) {
-      table.push(
-        <tr class="text-white" class="text-center">
-          {this.state.hints[i]}
-        </tr>
-      );
-    }
+    //do we have to look at status?
+    this.state.hints.forEach((hint) => {
+      //if (hint.status == "VALID") {
+        table.push(
+          <tr class="text-white" class="text-center">
+            {hint.content}
+          </tr>
+        );
+      //}
+    });
 
     return table;
   };
 
   render() {
     return (
-      <div>
-        <Container fluid>
-          <Row>
-            <Col xs="5" md="3">
-              <img
-                className="logoImgSmall"
-                src={logo}
-                alt="Just One Logo"
-              ></img>
-            </Col>
-            <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
-              <Row className="d-flex justify-content-end">
-                <Button
-                  variant="outline-light"
-                  className="outlineWhite-Dashboard"
-                >
-                  Rules
-                </Button>
-              </Row>
-            </Col>
-          </Row>
+      <Container fluid>
+        <Row>
+          <Col xs="5" md="3">
+            <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
+          </Col>
+          <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+            <Row className="d-flex justify-content-end">
+              <Button
+                variant="outline-light"
+                className="outlineWhite-Dashboard"
+              >
+                Rules
+              </Button>
+            </Row>
+          </Col>
+        </Row>
+        {!this.state.readyToRender ? (
+          <div>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "5vw" }}
+            >
+              <Spinner />
+            </div>
+            <div class="row justify-content-center">
+              <p className="large-Font">Waiting for the hints</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <Row className="hints-table">
+              <Col
+                xs={{ span: 10, offset: 1 }}
+                md={{ span: 6, offset: 3 }}
+                lg={{ span: 4, offset: 4 }}
+              >
+                <Table bordered size="sm" className="font-medium">
+                  <thead class="text-white">
+                    <tr>
+                      <th
+                        class="text-center"
+                        style={{
+                          fontSize: "calc(1em + 0.8vw)",
+                          color: "white",
+                        }}
+                      >
+                        hints
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-white" className="font-medium">
+                    {this.createTable()}
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
 
-          <Row style={{ marginTop: "4vw", marginBottom: "4vw" }}>
-            <Col xs={{ span: 4, offset: 4 }} md={{ span: 4, offset: 4 }}>
-              <Table bordered size="sm" className="font-medium">
-                <thead class="text-white">
-                  <tr>
-                    <th
-                      class="text-center"
-                      style={{
-                        fontSize: "calc(0.8em + 0.8vw)",
-                        color: "white",
-                      }}
-                    >
-                      hints
-                    </th>
-                  </tr>
-                </thead>
-                <tbody class="text-white" className="font-medium">
-                  {this.createTable()}
-                </tbody>
-              </Table>
-            </Col>
-          </Row>
-
-          <Row className="d-flex justify-content-center">
             <div class="row justify-content-center">
               <input
                 style={{
@@ -208,44 +215,36 @@ class EnterGuess extends React.Component {
                 }}
               />
             </div>
-          </Row>
 
-          <Row>
-            <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 5 }}>
-              <Row className="d-flex justify-content-center">
-                <Button
-                  variant="outline-light"
-                  className="outlineWhite-Dashboard"
-                  block="true"
-                  disabled={!this.state.guess}
-                  onClick={() => {
-                    this.submit();
-                  }}
-                >
-                  Submit
-                </Button>
-              </Row>
-            </Col>
-          </Row>
+            <div class="row justify-content-center">
+              <Button
+                variant="outline-light"
+                className="outlineWhite-Guess"
+                size="lg"
+                disabled={!this.state.guess}
+                onClick={() => {
+                  this.submit();
+                }}
+              >
+                Submit
+              </Button>
+            </div>
 
-          <Row class="row justify-content-center">
-            <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 5 }}>
-              <Row className="d-flex justify-content-center">
-                <Button
-                  variant="outline-light"
-                  className="outlineWhite-Dashboard"
-                  block="true"
-                  onClick={() => {
-                    this.skip();
-                  }}
-                >
-                  Skip
-                </Button>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+            <div class="row justify-content-center">
+              <Button
+                variant="outline-light"
+                className="outlineWhite-Guess"
+                size="lg"
+                onClick={() => {
+                  this.skip();
+                }}
+              >
+                Skip
+              </Button>
+            </div>
+          </div>
+        )}
+      </Container>
     );
   }
 }
