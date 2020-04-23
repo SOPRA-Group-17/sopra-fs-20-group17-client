@@ -5,6 +5,7 @@ import GiveClue from "../../GiveClue/GiveClue";
 import Evalution from "../../Evalution/Evalution";
 import Validation from "../../validation/Validation";
 import EnterGuess from "../../game/EnterGuess";
+import Score from "../../game/Score";
 import Number from "../../number/Number";
 import ReportWord from "../../ReportWord/ReportWord";
 
@@ -52,6 +53,12 @@ class GameRouter extends React.Component {
           exact
           path={`${this.props.base}/number`}
           render={() => <Number />}
+        />
+
+        <Route
+          exact
+          path={`${this.props.base}/score`}
+          render={() => <Score />}
         />
       </Container>
     );

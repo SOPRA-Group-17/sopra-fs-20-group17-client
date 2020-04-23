@@ -5,7 +5,6 @@ import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import game from "../shared/models/Game";
-import { Redirect } from "react-router-dom";
 
 const lobbyname = {
   fontSize: "4vw",
@@ -23,7 +22,7 @@ const bigbutton = {
 class Lobby extends React.Component {
   constructor() {
     super();
-    this.state = {
+    this.state = { 
       game: new game(),
       game_status: null,
       player: new Player(),
@@ -72,7 +71,7 @@ class Lobby extends React.Component {
       found = this.checkIfPlayerIsInGame(all_players, found);
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(found), 3000);
+      this.timer = setInterval(() => this.getStatus(found), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -244,7 +243,7 @@ class Lobby extends React.Component {
     //as soon as game ready, start the game
     console.log(this.state.game.status);
     console.log(this.state.player.role);
-    if (this.state.game_status === "RECEIVINGTERM") {
+    if (this.state.game_status === "RECEIVING_TERM") {
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
         this.timer = null;

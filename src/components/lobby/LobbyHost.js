@@ -73,7 +73,7 @@ class LobbyHost extends React.Component {
       }
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getStatus(), 6000);
+      this.timer = setInterval(() => this.getStatus(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -82,8 +82,8 @@ class LobbyHost extends React.Component {
   }
 
   async getStatus() {
-    console.log(this.state.players)
-    console.log(this.state.kick)
+    console.log(this.state.players);
+    console.log(this.state.kick);
 
     try {
       //variable abhängig exit lobby
@@ -125,10 +125,9 @@ class LobbyHost extends React.Component {
         );
         //set local storage item "status"
         localStorage.setItem("status", this.state.player.status);
-      }
-      else if (this.state.kick === true){
+      } else if (this.state.kick === true) {
         this.setState({
-          kick: false
+          kick: false,
         });
       }
     } catch (error) {
@@ -250,7 +249,7 @@ class LobbyHost extends React.Component {
           {
             status: "NOT_READY",
             help_status: false,
-            kick: true
+            kick: true,
           },
           this.saveChangePlayerStatus
         );
@@ -264,14 +263,13 @@ class LobbyHost extends React.Component {
             player: this.state.players[i].id,
           });
           // send request body to the backend
-          console.log("this is the players id to delete:")
+          console.log("this is the players id to delete:");
           console.log(requestBody);
           // was muss genau in request body / Jetzt: der rausgeschmissen wird. soll? der der rausschmeisst?
           await api.delete(
             `/games/${this.state.ID_game}/players/${this.state.players[i].id}`,
             requestBody
           );
-
         } catch (error) {
           alert(
             `Something went wrong during updating your data: \n${handleError(
@@ -286,16 +284,18 @@ class LobbyHost extends React.Component {
   startGame() {
     //as soon as game ready, start the game
     console.log(this.state.game.status);
-    console.log(this.state.player.role);
-    if (this.state.game_status === "RECEIVINGTERM") {
+    console.log(this.state.player.status);
+    if (this.state.game_status === "RECEIVING_TERM") {
+      console.log("am i getting here")
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
-            this.timer = null;
+        this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/number`);
       } else if (this.state.player.status === "CLUE_GIVER") {
+        
         clearInterval(this.timer);
-            this.timer = null;
-        this.props.history.push(`/game/${this.state.ID_game}/reportword`);
+        this.timer = null;
+        this.props.history.push(`/game/${this.state.ID_game}/reportWord`);
       }
     }
   }
