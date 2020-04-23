@@ -243,7 +243,7 @@ class Lobby extends React.Component {
     //as soon as game ready, start the game
     console.log(this.state.game.status);
     console.log(this.state.player.role);
-    if (this.state.game_status === "RECEIVINGTERM") {
+    if (this.state.game_status === "RECEIVING_TERM") {
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
         this.timer = null;

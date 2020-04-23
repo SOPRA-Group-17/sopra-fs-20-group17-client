@@ -42,27 +42,25 @@ class ReportWord extends React.Component {
     super();
 
     this.state = {
-      playerToken: null,
       playerId: null,
       player: null,
       players: null,
       gameId: null,
-      roundId: null,
       word: null,
       perCentPositive: null,
       perCentNegative: null,
       readyToGo: false,
+      pressed: false,
     };
   }
 
   async componentDidMount() {
     try {
       // set the states
-      this.state.playerToken = localStorage.getItem("token");
       this.state.playerId = localStorage.getItem("Id");
       this.state.gameId = this.props.match.params.gameId;
-      this.state.roundId = this.props.match.params.roundId;
 
+      console.log(this.state.playerId);
       //get current player
       const current_player = await api.get(
         `/games/players/${this.state.playerId}`
@@ -90,8 +88,6 @@ class ReportWord extends React.Component {
       });
 
       this.timer = setInterval(() => this.getPlayerTermStatus(), 1000);
-
-      
     } catch (error) {
       alert(
         `Something went wrong while getting the word which has to be guessed: \n${handleError(
@@ -119,7 +115,7 @@ class ReportWord extends React.Component {
           word: word.data,
         });
       }
-
+      console.log(this.state.word);
       //get all players
       const all_players = await api.get(`/games/${this.state.gameId}/players`);
       this.setState(
@@ -164,10 +160,13 @@ class ReportWord extends React.Component {
       requestBody = JSON.stringify({
         playerTermStatus: "KNOWN",
       });
-      const response = await api.put(
+      await api.put(
         `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
+      this.setState({
+        pressed: true,
+      });
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
@@ -180,10 +179,13 @@ class ReportWord extends React.Component {
       requestBody = JSON.stringify({
         playerTermStatus: "UNKNOWN",
       });
-      const response = await api.put(
+      await api.put(
         `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
+      this.setState({
+        pressed: true,
+      });
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
@@ -264,6 +266,7 @@ class ReportWord extends React.Component {
                 <Button
                   variant="outline-success"
                   style={bigbutton}
+                  disabled={this.state.pressed}
                   onClick={() => {
                     this.yes();
                   }}
@@ -276,6 +279,7 @@ class ReportWord extends React.Component {
                 <Button
                   variant="outline-danger"
                   style={bigbutton}
+                  disabled={this.state.pressed}
                   onClick={() => {
                     this.no();
                   }}
