@@ -395,7 +395,7 @@ toggle(){
                 </p>
                 <p className="rules-text-title">Game Overview</p>
                 <p className="rules-text">
-                  One game includes 13 rounds. Each of these is divided into 4
+                  One game includes 13 rounds. Each of these is divided into 5
                   phases.
                 </p>
                 <p className="rules-text-s-title">Choose the Mystery Word</p>
@@ -419,10 +419,71 @@ toggle(){
                   SMS are allowed to help someone guess Telephone, and $ is
                   allowed to help someone guess America.
                 </p>
+                <p className="rules-text">
+                  Invalid clues: - The Mystery word but written differently.
+                  Example: Shurt is not allowed when trying to make the player
+                  guess Shirt. - A word from the same family as the Mystery
+                  word. Example: Princess is not allowed if the word to be
+                  guessed is Prince. - An invented word. Example: Swee’ting is
+                  not allowed to try to help someone guess Cake. - A word
+                  phonetically identical to the Mystery word, but the meaning of
+                  which is different. Example: Whether is not allowed to try to
+                  get someone to guess Weather.
+                </p>
                 <p className="rules-text-s-title">Comparing Clues</p>
-                <p className="rules-text">T</p>
+                <p className="rules-text">
+                  Once all players have submitted their clues, they are compared
+                  in two steps: First an API cancels all clues that are
+                  certainly invalid or have been submitted several times. In a
+                  second step, all the submitted clues are displayed to all the
+                  clue givers and each one can report invalid clues and
+                  duplicates. If several players choose the same clues to be
+                  invalid respectively duplicates, they also get cancelled.
+                </p>
+                <p className="rules-text">
+                  Identical clues: - Two identical words. Example: Mouse and
+                  Mouse are identical. - Variants from the same word family.
+                  Example: Prince and Princess are considered to be identical. -
+                  Variants of the same word: plurals, gender differentiations,
+                  and spelling mistakes don’t count as actual differences.
+                  Example: Prince and Princes, Actor and Actress, Philosophy and
+                  Filosofie are identical.
+                </p>
+                <p className="rules-text">
+                  Note: If all clues have been cancelled, place the Mystery
+                  word’s card back in the box and move directly to the End of
+                  turn phase.
+                </p>
                 <p className="rules-text-s-title">Guess</p>
-                <p className="rules-text">T</p>
+                <p className="rules-text">
+                  Once the identical or invalid clues have been cancelled, all
+                  the remaining clues are displayed to the active player. He can
+                  now try to guess the mystery word. To do so, he is only
+                  allowed to submit one guess! However, if he has no idea what
+                  the mystery word could be, he is also allowed to skip the
+                  word.
+                </p>
+                <p className="rules-text">
+                  Results: Success: If the active player correctly guesses the
+                  mystery word, he gets a lot of points (also dependent on how
+                  fast he guessed it!). Failure: If the active player makes a
+                  wrong guess, he will get minus points and as an additional
+                  penalty there will be one round less for the team to play.
+                  Skip: If the active player chooses not to answer and skips
+                  their turn, none of the players gets any plus or minus points.
+                  However, there won't be an additional penalty of removing one
+                  round.{" "}
+                </p>
+                <p className="rules-text">
+                  Notes: - If the active player’s guess has the same
+                  pronunciation as the Mystery word, that guess is considered to
+                  be valid. - If the player gives a wrong guess during the final
+                  turn, also remove a card previously guessed successfully.
+                </p>
+                <p className="rules-text-s-title">End of Turn</p>
+                <p className="rules-text">
+                  A new player becomes the active player and a new round begins.
+                </p>
               </Modal.Body>
             </Modal>
 
