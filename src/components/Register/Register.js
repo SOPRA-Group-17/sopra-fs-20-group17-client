@@ -140,6 +140,7 @@ class Register extends React.Component {
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
     this.setState({ [key]: value });
+    
   }
 
   /**
