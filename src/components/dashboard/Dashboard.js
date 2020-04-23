@@ -142,14 +142,12 @@ toggle(){
       // Get the returned users and update the state.
       this.setState({ games: response.data });
       if (this.state.games.length != 0) {
-        for(let i = 0; i < this.state.games.length; i++){
-          if(this.state.games[i].status == "LOBBY"){
+        for (let i = 0; i < this.state.games.length; i++) {
+          if (this.state.games[i].status == "LOBBY") {
             this.setState({ selectLobby: this.state.games[i].gameId });
             break;
           }
-          
         }
-        
       }
     } catch (error) {
       alert(
@@ -242,7 +240,7 @@ toggle(){
   async joinLobby() {
     try {
       console.log("you reached JOIN LOBBY");
-      console.log(this.state.selectLobby)
+      console.log(this.state.selectLobby);
       const requestBody = JSON.stringify({
         name: this.state.user.username,
         userToken: this.state.token,
@@ -277,13 +275,13 @@ toggle(){
       return selectionList;
     } else {
       for (let i = 0; i < this.state.games.length; i++) {
-        if(this.state.games[i].status == "LOBBY"){
+        if (this.state.games[i].status == "LOBBY") {
           selectionList.push(
             <option value={this.state.games[i].gameId}>
               {this.state.games[i].name}
             </option>
-        );
-          }
+          );
+        }
       }
     }
     return selectionList;
@@ -399,7 +397,7 @@ toggle(){
               </Modal.Body>
             </Modal>
 
-            <Row >
+            <Row>
               <Form className="DashboardForm">
                 <Form.Row>
                   <p style={{ color: "red" }} hidden={!this.state.toLong}>
@@ -464,9 +462,8 @@ toggle(){
                 lg={{ span: 5, offset: 2 }}
                 className="scoarboard"
               >
-                <div style={{fontSize: "calc(1.5em + 1vw)"}}>Leaderboard</div>
+                <div style={{ fontSize: "calc(1.5em + 1vw)" }}>Leaderboard</div>
                 <Table striped bordered size="sm">
-                  
                   <thead class="text-white">
                     <tr>
                       <th>#</th>
