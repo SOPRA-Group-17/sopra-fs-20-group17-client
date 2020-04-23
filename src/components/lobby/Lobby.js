@@ -22,7 +22,7 @@ const bigbutton = {
 class Lobby extends React.Component {
   constructor() {
     super();
-    this.state = {
+    this.state = { 
       game: new game(),
       game_status: null,
       player: new Player(),
