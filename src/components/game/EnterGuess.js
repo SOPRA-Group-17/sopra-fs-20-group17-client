@@ -58,7 +58,7 @@ class EnterGuess extends React.Component {
 
       // check if game ready to give hints
       console.log(response.data.status);
-      if (response.data.status === "RECEIVINGGUESS") {
+      if (response.data.status === "RECEIVING_GUESS") {
         const response = await api.get(`/games/${this.state.gameId}/hints`);
         console.log(response.data);
         this.setState({ hints: response.data });

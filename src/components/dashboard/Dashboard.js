@@ -402,7 +402,7 @@ class Dashboard extends React.Component {
                         this.creatLobby();
                       }}
                     >
-                      Create Lobby
+                      Creat Lobby
                     </Button>
                   </Form.Group>
                 </Form.Row>

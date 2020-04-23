@@ -46,7 +46,7 @@ class Evalution extends React.Component {
       console.log(response.data.status);
       if (
         response.data.status === "FINISHED" ||
-        response.data.status === "RECEIVINGTERM"
+        response.data.status === "RECEIVING_TERM"
       ) {
         const response2 = await api.get(
           `/games/${this.state.gameId}/rounds?lastRound=true`
@@ -91,7 +91,7 @@ class Evalution extends React.Component {
 
       const Player = await api.get(`/games/players/${this.state.id}`);
       console.log(Player.data);
-      if (this.state.gameStatus == "RECEIVINGTERM") {
+      if (this.state.gameStatus == "RECEIVING_TERM") {
         console.log(Player.data.status);
         if (Player.data.state === "GUESSER") {
           localStorage.setItem("status", "GUESSER");
@@ -102,7 +102,7 @@ class Evalution extends React.Component {
         }
       } else if (this.state.gameStatus == "FINISHED") {
         //update the url
-        this.props.history.push(`/game/${this.state.ID_game}/endScreen`);
+        this.props.history.push(`/game/${this.state.ID_game}/Score`);
       }
     } catch (error) {
       alert(`Something while starting the new round: \n${handleError(error)}`);

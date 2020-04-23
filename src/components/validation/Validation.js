@@ -92,7 +92,7 @@ class Validation extends React.Component {
 
       // check if game ready to give hints
       console.log(response.data.status);
-      if (response.data.status === "VALIDATION") {
+      if (response.data.status === "VALIDATING_HINTS") {
         const response2 = await api.get(`/games/${this.state.gameId}/hints`);
         console.log(response2.data);
         clearInterval(this.timer);

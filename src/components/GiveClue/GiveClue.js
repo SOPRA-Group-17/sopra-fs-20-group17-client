@@ -43,7 +43,7 @@ class GiveClue extends React.Component {
 
       // check if game ready to give hints
       console.log(response.data.status);
-      if (response.data.status === "RECEIVINGHINTS") {
+      if (response.data.status === "RECEIVING_HINTS") {
         clearInterval(this.timer);
         this.timer = null;
         this.getTerme();
@@ -115,7 +115,7 @@ class GiveClue extends React.Component {
                   this.submitClue();
                 }}
               >
-                Submit
+               Rules
               </Button>
             </Row>
           </Col>
