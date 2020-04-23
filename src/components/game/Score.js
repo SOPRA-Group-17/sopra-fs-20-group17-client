@@ -35,7 +35,9 @@ class Score extends React.Component {
       );
 
       //get all players sorted descendend
-      const all_players = await api.get(`/games/${this.state.ID_game}/players?sort_by=score.desc`);
+      const all_players = await api.get(
+        `/games/${this.state.ID_game}/players?sort_by=score.desc`
+      );
 
       //get the game and its status
       const get_game = await api.get(`/games/${this.state.ID_game}`);
@@ -77,7 +79,9 @@ class Score extends React.Component {
           children.push(<td>{this.state.players[i].name}</td>);
         }
         if (j === 2) {
-          children.push(<td class="text-success">{this.state.players[i].score}</td>);
+          children.push(
+            <td class="text-success">{this.state.players[i].score}</td>
+          );
         }
       }
       table.push(<tr class="text-white">{children}</tr>);
@@ -88,8 +92,10 @@ class Score extends React.Component {
 
   teamScore() {
     let sum = 0;
-    for (let i = 0; i < this.state.players.length; i++) {
-      sum += this.state.players[i].score;
+    if (this.state.players) {
+      for (let i = 0; i < this.state.players.length; i++) {
+        sum += this.state.players[i].score;
+      }
     }
     return sum;
   }
@@ -157,7 +163,6 @@ class Score extends React.Component {
       );
     }
   }
-
 
   render() {
     return (
