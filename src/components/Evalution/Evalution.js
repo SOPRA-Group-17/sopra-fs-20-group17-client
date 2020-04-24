@@ -24,6 +24,7 @@ class Evalution extends React.Component {
 
   async componentDidMount() {
     try {
+      localStorage.removeItem("chosen_nr");
       console.log("comp");
       this.state.gameId = this.props.match.params.gameId;
       this.state.id = localStorage.getItem("Id");

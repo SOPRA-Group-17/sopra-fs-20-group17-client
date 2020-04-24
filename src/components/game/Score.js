@@ -79,18 +79,17 @@ class Score extends React.Component {
             children.push(<td>{this.state.players[i].name}</td>);
           }
           if (j === 2) {
-            if (((i + 1) / this.state.players.length) * 100 <= 33) {
+            if (this.state.players[i].score > 200) {
               children.push(
                 <td class="text-success">{this.state.players[i].score}</td>
               );
             } else if (
-              ((i + 1) / this.state.players.length) * 100 <= 66 &&
-              ((i + 1) / this.state.players.length) * 100 > 33
+              this.state.players[i].score < 200 &&  this.state.players[i].score > 50
             ) {
               children.push(
                 <td class="text-warning">{this.state.players[i].score}</td>
               );
-            } else if (((i + 1) / this.state.players.length) * 100 > 66) {
+            } else if (this.state.players[i].score < 50) {
               children.push(
                 <td class="text-danger">{this.state.players[i].score}</td>
               );
