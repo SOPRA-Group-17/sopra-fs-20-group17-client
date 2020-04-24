@@ -180,7 +180,7 @@ class LobbyHost extends React.Component {
     }
   }
 
-  createTable() {
+  createTable() { 
     let table = [];
     // Outer loop to create parent
     for (let i = 0; i < this.state.players.length; i++) {
