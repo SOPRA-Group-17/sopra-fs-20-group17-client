@@ -304,7 +304,7 @@ class Number extends React.Component {
                   <p
                     style={bignumbers}
                     onClick={() => {
-                      this.handleNumberClick(1);
+                      this.handleNumberClickAlternative(1);
                     }}
                   >
                     1
