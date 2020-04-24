@@ -282,13 +282,13 @@ class Validation extends React.Component {
               </ToggleButtonGroup>
             </div>
             <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
+              <p className="card-text">Clue is valid?</p>
             </div>
             <div class="row justify-content-center">
               {hint.marked === "VALID" ? (
                 <Button
                   size="md"
-                  variant="outline-danger"
+                  variant="outline-success"
                   className="button-card"
                   style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
                   onClick={() => {
@@ -304,7 +304,7 @@ class Validation extends React.Component {
               ) : (
                 <Button
                   size="md"
-                  variant="outline-success"
+                  variant="outline-danger"
                   className="button-card"
                   style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
                   onClick={() => {
