@@ -50,9 +50,10 @@ class LobbyHost extends React.Component {
 
       //player id aus local storage, set in dahboard
       this.state.ID_player = localStorage.getItem("Id");
-
+      console.log(localStorage.getItem("Id"))
+      console.log(this.state.ID_player)
       //set player and playerstatus
-      const response = await api.get(`/games/players/${this.state.ID_player}`);
+      const response = await api.get(`/games/players/${localStorage.getItem("Id")}`);
 
       /*
       initial set state of:
@@ -166,7 +167,7 @@ class LobbyHost extends React.Component {
       });
 
       // send request body to the backend
-      await api.put(
+      const response = await api.put(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
       );
