@@ -50,7 +50,7 @@ class ReportWord extends React.Component {
       perCentPositive: null,
       perCentNegative: null,
       readyToGo: false,
-      clicked: true,
+      clicked: false,
     };
   }
 
