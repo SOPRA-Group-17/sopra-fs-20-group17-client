@@ -214,6 +214,9 @@ class Dashboard extends React.Component {
   }
 
   selectLobby(event) {
+    
+    clearInterval(this.timer);
+    this.timer = null;
     this.setState({ selectLobby: event.target.value });
   }
 
