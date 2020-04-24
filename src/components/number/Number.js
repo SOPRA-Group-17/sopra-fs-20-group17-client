@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../styling/JustOne_logo_white.svg";
-import { Container, Row, Col, Button, Table } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import { api, handleError } from "../../helpers/api";
 import { Spinner } from "../../views/design/Spinner";
@@ -18,7 +18,6 @@ const sentence = {
 };
 
 class Number extends React.Component {
-  // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props);
     this.state = {
@@ -57,27 +56,32 @@ class Number extends React.Component {
   }
   async getGameStatus() {
     try {
+      //if the game is not ready for the next page then we are waiting and ask for the state again
       if (!this.state.readyForNext) {
-        //this.setNumberState();
         //get the game and its status
         const get_game = await api.get(`/games/${this.state.ID_game}`);
         this.setState({
           game: get_game.data,
           game_status: get_game.data.status,
         });
+        //game state changes to RECEIVING GUESS then change the helper states
         if (get_game.data.status === "RECEIVING_GUESS") {
           this.setState({
             readyForNext: true,
             readyToRender: false,
           });
         }
+        //game state changes to RECEIVING TERM then change the helper states
         if (get_game.data.status === "RECEIVING_TERM") {
           this.setState({
             readyForNext: false,
             readyToRender: true,
           });
         }
-      } else {
+      }
+      //game is in RECEIVING GUESS status and can be pushed to enter guess
+      // deleting timer before going
+      else {
         //clear timer and push to enter guess
         clearInterval(this.timer);
         this.timer = null;
@@ -95,34 +99,30 @@ class Number extends React.Component {
     // gets called every time the component changes (also state changes)
     // you could also compare the prevState with the current state
     // and then save it if something changed
-    /*
-    console.log("------------------------");
-    console.log("[componentDidUpdate]");
-    console.log("previous state: ", prevState);
-    console.log("updated state: ", this.state);
-    console.log("------------------------");
-    */
   }
 
-  changeNumberState(number1) {
+  //change the number state
+  changeNumberState(number) {
     this.setState(
       {
-        chosen_number: number1,
+        chosen_number: number,
         readyToRender: false,
       },
       this.saveChange //Nik: pass a function as callback (gets executed AFTER state change)
     );
-    this.saveChangeAlternative(number1);
+    this.saveChangeAlternative(number);
   }
 
-  handleNumberClickAlternative(number1) {
+  //change the number state with another method
+  handleNumberClickAlternative(number) {
     this.setState({
-      chosen_number: number1,
+      chosen_number: number,
       readyToRender: false,
     });
-    this.saveChangeAlternative(number1); //Nik: call the save function with the received number
+    this.saveChangeAlternative(number); //Nik: call the save function with the received number
   }
 
+  //save the change and send the wordId chosen to the backend
   async saveChangeAlternative(number) {
     try {
       let requestBody;
@@ -131,20 +131,8 @@ class Number extends React.Component {
         wordId: number - 1,
         token: localStorage.getItem("token"),
       });
-      /*
-      console.log(number - 1);
-      console.log(requestBody);
-      console.log(localStorage.getItem("status"));
-      */
 
-      const response = await api.post(
-        `/games/${this.state.ID_game}/terms`,
-        requestBody
-      );
-      /*
-      console.log(requestBody);
-      console.log(localStorage.getItem("status"));
-      */
+      await api.post(`/games/${this.state.ID_game}/terms`, requestBody);
 
       // Get the existing data
       var existing = localStorage.getItem("chosen_nr");
@@ -158,9 +146,9 @@ class Number extends React.Component {
 
       // Save back to localStorage
       localStorage.setItem("chosen_nr", existing.toString());
+
+      //helper state to check if number should be hidden or not
       this.setNumberState(number);
-      //true or false if number was used before from this player
-      //TODO delete it from the local storage at end of round
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -170,32 +158,26 @@ class Number extends React.Component {
     }
   }
 
+  //change the number state with another method
   async handleNumberClick(number) {
     // Nik:
     // number is available here, so use it directly if you want to call the backend
-    const requestBody = JSON.stringify({
-      id: this.state.ID_game,
-      status: number,
-      readyToRender: false,
-    });
 
     this.setState({ chosen_number: number });
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate backend call delay of 1second
-      /*
-      console.log(requestBody);
-      console.log(this.state); // state is has changed
-      */
+
       this.saveChangeAlternative(number);
     } catch (error) {
       console.log(error);
     }
   }
 
+  //which states has already been chosen, hide them
+  //here set the states for the hiding
   setNumberState() {
     if (localStorage.getItem("chosen_nr")) {
-      console.log("am i getting here");
       if (this.checkIfNumberAlreadyUsed(1)) {
         this.setState({
           hide1: true,
@@ -244,12 +226,8 @@ class Number extends React.Component {
     }
   }
 
+  //checks if the number was already taken by the user
   checkIfNumberAlreadyUsed(number) {
-    console.log("-------------------------");
-    console.log(number.toString());
-    console.log(localStorage.getItem("chosen_nr"));
-    console.log(localStorage.getItem("chosen_nr").includes(number.toString()));
-    console.log("-------------------------");
     return localStorage.getItem("chosen_nr").includes(number.toString());
   }
 

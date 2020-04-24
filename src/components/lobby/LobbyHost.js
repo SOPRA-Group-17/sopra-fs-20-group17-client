@@ -85,11 +85,8 @@ class LobbyHost extends React.Component {
   }
 
   async getStatus() {
-    console.log(this.state.players);
-    console.log(this.state.kick);
-
     try {
-      //variable abhängig exit lobby
+      //check if we already want to exit the lobby, if so all the get functions dont have to be called
       if (!this.state.exit && !this.state.kick) {
         console.log(localStorage);
         //get current player
@@ -128,7 +125,9 @@ class LobbyHost extends React.Component {
         );
         //set local storage item "status"
         localStorage.setItem("status", this.state.player.status);
-      } else if (this.state.kick === true) {
+      }
+      //when a player gets kicked then after rerendering the helper state kicked should be false, so the host can kick one more player
+      else if (this.state.kick === true) {
         this.setState({
           kick: false,
         });
@@ -139,6 +138,7 @@ class LobbyHost extends React.Component {
       );
     }
   }
+  //if player chooses to click the button ready or not ready the internal status should be changes (state) and the player status (saveChangePlayerStatus) should be changed
   changeStatusState() {
     if (this.state.help_status === true) {
       this.setState(
@@ -158,7 +158,7 @@ class LobbyHost extends React.Component {
       );
     }
   }
-
+  //if player chooses to click the button ready or not ready the internal status (changeStatusState()) should be changes (state) and the player status should be changed
   async saveChangePlayerStatus() {
     try {
       let requestBody;
@@ -182,19 +182,23 @@ class LobbyHost extends React.Component {
     }
   }
 
-  createTable() { 
+  //create the table with all the users
+  createTable() {
     let table = [];
     // Outer loop to create parent
     for (let i = 0; i < this.state.players.length; i++) {
       let children = [];
       //Inner loop to create children
       for (let j = 0; j < 4; j++) {
+        //player number, not id!
         if (j === 0) {
           children.push(<td>{i + 1}</td>);
         }
+        //player name
         if (j === 1) {
           children.push(<td>{this.state.players[i].name}</td>);
         }
+        //player status
         if (j === 2) {
           console.log(this.state.players[i].status);
           console.log(this.state.players);
@@ -210,6 +214,7 @@ class LobbyHost extends React.Component {
             );
           }
         }
+        //kick button
         if (j === 3) {
           if (this.state.players[i].role === "GUEST") {
             //you cannot kick yourself
@@ -226,7 +231,9 @@ class LobbyHost extends React.Component {
                 </Button>
               </td>
             );
-          } else {
+          }
+          //needed for the umrandung of the table
+          else {
             children.push(<p></p>);
           }
         }
@@ -238,7 +245,7 @@ class LobbyHost extends React.Component {
   }
   async kickPlayer(id) {
     /*
-    if a user exits the lobby then:
+    if a player gets kicked out of the lobby
     - change status to not ready
     - delete player from player list in game
     - redirect to dashboard
@@ -265,9 +272,7 @@ class LobbyHost extends React.Component {
           requestBody = JSON.stringify({
             player: this.state.players[i].id,
           });
-          // send request body to the backend
-          console.log("this is the players id to delete:");
-          console.log(requestBody);
+
           // was muss genau in request body / Jetzt: der rausgeschmissen wird. soll? der der rausschmeisst?
           await api.delete(
             `/games/${this.state.ID_game}/players/${this.state.players[i].id}`,
@@ -284,6 +289,8 @@ class LobbyHost extends React.Component {
     }
   }
 
+  //check if the game is ready to start, if so then start and send the player to the correct position
+  //clear timer before starting
   startGame() {
     //as soon as game ready, start the game
     console.log(this.state.game.status);

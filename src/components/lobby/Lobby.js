@@ -22,7 +22,7 @@ const bigbutton = {
 class Lobby extends React.Component {
   constructor() {
     super();
-    this.state = { 
+    this.state = {
       game: new game(),
       game_status: null,
       player: new Player(),
@@ -33,7 +33,7 @@ class Lobby extends React.Component {
       help_status: null,
       exit: false,
     };
-
+    //TODO: dont know anymore for what this is, check if it works without it
     this.changeStatusState = this.changeStatusState.bind(this);
   }
 
@@ -61,16 +61,19 @@ class Lobby extends React.Component {
       //helper state for the if else clause in the render function (needs true false value)
       if (this.state.player.status === "READY") {
         this.setState({ help_status: true });
-        console.log(this.state.help_status);
       } else {
         this.setState({ help_status: false });
       }
+      //need to check if player is still in game
       let found = false;
+
+      //get all players
       const all_players = await api.get(`/games/${this.state.ID_game}/players`);
 
+      //check if player is still in game
       found = this.checkIfPlayerIsInGame(all_players, found);
 
-      //poll every 1 seconds all players, search game
+      //poll every 1 seconds get status
       this.timer = setInterval(() => this.getStatus(found), 1000);
     } catch (error) {
       alert(
@@ -81,22 +84,23 @@ class Lobby extends React.Component {
 
   async getStatus(found) {
     try {
-      //variable abhängig exit lobby
+      //check if we already want to exit the lobby, if so all the get functions dont have to be called
       if (!this.state.exit) {
         //get all players
         const all_players = await api.get(
           `/games/${this.state.ID_game}/players`
         );
+        //check if the player still in the game / was he kicked?
         found = this.checkIfPlayerIsInGame(all_players, found);
 
-        console.log("this state found is");
-        console.log(found);
+        //if the player is not in the game anymore then clear timer and push him to the dashboard
         if (!found) {
           clearInterval(this.timer);
           this.timer = null;
           this.props.history.push("/dashboard");
         }
 
+        //otherwise if the player is found then process normally
         if (found) {
           //get the game and its status
           const get_game = await api.get(`/games/${this.state.ID_game}`);
@@ -107,13 +111,13 @@ class Lobby extends React.Component {
           );
 
           /*
-      set and update state of:
-      - current player
-      - all players
-      - game
-      - game status
-      then check if the game is ready to start
-      */
+            set and update state of:
+              - current player
+              - all players
+              - game
+              - game status
+             then check if the game is ready to start
+          */
 
           this.setState(
             {
@@ -129,7 +133,8 @@ class Lobby extends React.Component {
           //set local storage item "status"
           localStorage.setItem("status", this.state.player.status);
           localStorage.setItem("role", this.state.player.role);
-          console.log(localStorage);
+
+          //if the Host tries to get on the guest page, send him back on the host page
           if (this.state.player.role === "HOST") {
             clearInterval(this.timer);
             this.timer = null;
@@ -143,23 +148,19 @@ class Lobby extends React.Component {
       );
     }
   }
-
+  //checks if the player is still in the game
   checkIfPlayerIsInGame(all_players, found) {
-    console.log(all_players.data);
-    let change = false;
+    // set value found to false, if the player is in the player list then found should be true and the method should return true
+    found = false;
     all_players.data.forEach((player) => {
       if (player.id.toString() === this.state.ID_player) {
         found = true;
-        change = true;
       }
     });
-    if (!change) {
-      found = false;
-    }
-    change = false;
     return found;
   }
 
+  //if player chooses to click the button ready or not ready the internal status should be changes (state) and the player status (saveChangePlayerStatus) should be changed
   changeStatusState() {
     if (this.state.help_status === true) {
       this.setState(
@@ -179,7 +180,7 @@ class Lobby extends React.Component {
       );
     }
   }
-
+  //if player chooses to click the button ready or not ready the internal status (changeStatusState()) should be changes (state) and the player status should be changed
   async saveChangePlayerStatus() {
     try {
       let requestBody;
@@ -203,6 +204,7 @@ class Lobby extends React.Component {
     }
   }
 
+  //create the table with all the users
   createTable() {
     let table = [];
     // Outer loop to create parent
@@ -210,12 +212,15 @@ class Lobby extends React.Component {
       let children = [];
       //Inner loop to create children
       for (let j = 0; j < 3; j++) {
+        //player number, not id!
         if (j === 0) {
           children.push(<td>{i + 1}</td>);
         }
+        //player name
         if (j === 1) {
           children.push(<td>{this.state.players[i].name}</td>);
         }
+        //player status
         if (j === 2) {
           console.log(this.state.players[i].status);
           console.log(this.state.players);
@@ -237,11 +242,10 @@ class Lobby extends React.Component {
     //Create the parent and add the children
     return table;
   }
-
+  //check if the game is ready to start, if so then start and send the player to the correct position
+  //clear timer before starting
   startGame() {
     //as soon as game ready, start the game
-    console.log(this.state.game.status);
-    console.log(this.state.player.role);
     if (this.state.game_status === "RECEIVING_TERM") {
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
@@ -257,7 +261,7 @@ class Lobby extends React.Component {
 
   async exitLobby() {
     /*
-    if a user exits the lobby then:
+    if a player exits the lobby then:
     - change status to not ready
     - delete player from player list in game
     - redirect to dashboard
@@ -384,10 +388,10 @@ class Lobby extends React.Component {
               )}
             </div>
           </Row>
-        </Container> 
+        </Container>
       </div>
     );
   }
 }
 
-export default withRouter(Lobby); 
+export default withRouter(Lobby);

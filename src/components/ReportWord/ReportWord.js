@@ -1,8 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import Player from "../shared/models/Player";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
@@ -87,7 +85,6 @@ class ReportWord extends React.Component {
         player: current_player.data,
         players: all_players.data,
         word: word.data.content,
-        last_word: word.data.content,
       });
 
       this.timer = setInterval(() => this.getPlayerTermStatus(), 1000);
@@ -99,11 +96,9 @@ class ReportWord extends React.Component {
       );
     }
   }
-
+  //get the word and set it to the internal state
   async getPlayerTermStatus() {
     try {
-      //get the word if its not here allready
-
       //get word
       let requestBody;
 
@@ -114,7 +109,6 @@ class ReportWord extends React.Component {
         `/games/${this.state.gameId}/terms`,
         requestBody
       );
-      console.log(word.data.content);
       this.setState(
         {
           word: word.data.content,
@@ -128,12 +122,13 @@ class ReportWord extends React.Component {
         {
           players: all_players.data,
         },
-
-        this.calculatingBarPositive
+        this.calculatingBarNegative
+        //this.calculatingBarPositive
       );
-      this.calculatingBarNegative();
+      //does the player clicked on the yes or no button
       this.setClicked();
       const get_game = await api.get(`/games/${this.state.gameId}`);
+      //check if we are allowed to go on
       let stay;
       stay = this.stay(get_game);
       if (!stay) {
@@ -148,7 +143,8 @@ class ReportWord extends React.Component {
       );
     }
   }
-  callback() { 
+  //callback function check if its really needed
+  callback() {
     let b = "this is just for nothing";
   }
   setClicked() {
@@ -161,6 +157,7 @@ class ReportWord extends React.Component {
     }
   }
 
+  //stay at the report word page until we are allowed to send hints
   stay(get_game) {
     let stay;
     if (get_game.data.status === "RECEIVING_HINTS") {
@@ -168,10 +165,11 @@ class ReportWord extends React.Component {
     } else {
       stay = true;
     }
-    console.log(stay);
     return stay;
   }
 
+  //when user clicked yes button, then change internal and external state
+  //internal set clicked to true
   async yes() {
     try {
       let requestBody;
@@ -191,6 +189,8 @@ class ReportWord extends React.Component {
     }
   }
 
+  //when user clicked yes button, then change internal and external state
+  //internal set clicked to true
   async no() {
     try {
       let requestBody;
@@ -209,7 +209,7 @@ class ReportWord extends React.Component {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
   }
-
+  //calculating the result for the progess bar
   calculatingBarNegative() {
     let count = 0;
     let number_of_players = this.state.players.length;
@@ -222,6 +222,7 @@ class ReportWord extends React.Component {
       });
     }
   }
+  /*
   calculatingBarPositive() {
     {
       let count = 0;
@@ -237,6 +238,7 @@ class ReportWord extends React.Component {
       }
     }
   }
+  */
 
   render() {
     return (
@@ -329,9 +331,7 @@ class ReportWord extends React.Component {
 
             <Row style={{ marginTop: "3vw" }}>
               <Col>
-                <p style={sentence}>
-                  Players that DON'T know the word
-                </p>
+                <p style={sentence}>Players that DON'T know the word</p>
               </Col>
             </Row>
             <Row className="d-flex justify-content-center">
@@ -341,22 +341,6 @@ class ReportWord extends React.Component {
                   striped
                   variant="danger"
                   now={this.state.perCentNegative}
-                />
-              </div>
-            </Row>
-            <Row
-              className="d-flex justify-content-center"
-              style={{ marginTop: "1vw" }}
-            >
-              <p style={sentence}>Players that know the word</p>
-            </Row>
-            <Row className="d-flex justify-content-center">
-              <div>
-                <ProgressBar
-                  style={progressbar}
-                  striped
-                  variant="success"
-                  now={this.state.perCentPositive}
                 />
               </div>
             </Row>

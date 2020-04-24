@@ -24,6 +24,7 @@ class Evalution extends React.Component {
 
   async componentDidMount() {
     try {
+      //remove chosen_nr, then in the next round are no problems with the number screen
       localStorage.removeItem("chosen_nr");
       console.log("comp");
       this.state.gameId = this.props.match.params.gameId;

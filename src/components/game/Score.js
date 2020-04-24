@@ -4,8 +4,6 @@ import { withRouter } from "react-router-dom";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 
-
-
 class Score extends React.Component {
   constructor() {
     super();
@@ -43,14 +41,11 @@ class Score extends React.Component {
 
       /*
             set and update state of:
-            - current player
             - all players
-            - game
-            - game status
-      
-            then check if the game is ready to start
-            */
-
+            - current player
+            - the status from the current player
+  
+      */
       this.setState({
         players: all_players.data,
         player: current_player.data,
@@ -84,7 +79,8 @@ class Score extends React.Component {
                 <td class="text-success">{this.state.players[i].score}</td>
               );
             } else if (
-              this.state.players[i].score < 200 &&  this.state.players[i].score > 50
+              this.state.players[i].score < 200 &&
+              this.state.players[i].score > 50
             ) {
               children.push(
                 <td class="text-warning">{this.state.players[i].score}</td>
@@ -116,13 +112,11 @@ class Score extends React.Component {
   async exitLobby() {
     /*
     if a user exits the lobby then:
-    - change status to not ready
     - delete player from player list in game
+    - remove localStorage
     - redirect to dashboard
   
     */
-
-    //need time to change player status
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -145,7 +139,7 @@ class Score extends React.Component {
       localStorage.removeItem("Id");
 
       this.props.history.push("/dashboard");
-      //who is resetting the game state
+      //TODO: who is resetting the game state
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
