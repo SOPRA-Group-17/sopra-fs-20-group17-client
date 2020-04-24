@@ -86,7 +86,6 @@ class Evalution extends React.Component {
   async startNewRound() {
     try {
       console.log("starting new round");
-      console.log(localStorage);
       clearInterval(this.timer);
       this.timer = null;
 
@@ -95,10 +94,10 @@ class Evalution extends React.Component {
       if (this.state.gameStatus == "RECEIVING_TERM") {
         console.log(Player.data.status);
         if (Player.data.status === "GUESSER") {
-          localStorage.setItem("role", "GUESSER");
+          localStorage.setItem("status", "GUESSER");
           this.props.history.push(`/game/${this.state.gameId}/number`);
         } else if (Player.data.status === "CLUE_GIVER") {
-          localStorage.setItem("role", "CLUE_GIVER");
+          localStorage.setItem("status", "CLUE_GIVER");
           this.props.history.push(`/game/${this.state.gameId}/reportWord`);
         }
       } else if (this.state.gameStatus == "FINISHED") {
