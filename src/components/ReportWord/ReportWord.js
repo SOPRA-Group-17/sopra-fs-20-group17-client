@@ -330,7 +330,7 @@ class ReportWord extends React.Component {
             <Row style={{ marginTop: "3vw" }}>
               <Col>
                 <p style={sentence}>
-                  Number of players that DON'T know the word
+                  Players that DON'T know the word
                 </p>
               </Col>
             </Row>
@@ -348,7 +348,7 @@ class ReportWord extends React.Component {
               className="d-flex justify-content-center"
               style={{ marginTop: "1vw" }}
             >
-              <p style={sentence}>Number of players that know the word</p>
+              <p style={sentence}>Players that know the word</p>
             </Row>
             <Row className="d-flex justify-content-center">
               <div>

@@ -58,7 +58,7 @@ class Number extends React.Component {
   async getGameStatus() {
     try {
       if (!this.state.readyForNext) {
-        this.setNumberState();
+        //this.setNumberState();
         //get the game and its status
         const get_game = await api.get(`/games/${this.state.ID_game}`);
         this.setState({
