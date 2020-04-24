@@ -158,7 +158,7 @@ class Number extends React.Component {
 
       // Save back to localStorage
       localStorage.setItem("chosen_nr", existing.toString());
-
+      this.setNumberState(number);
       //true or false if number was used before from this player
       //TODO delete it from the local storage at end of round
     } catch (error) {
@@ -304,7 +304,7 @@ class Number extends React.Component {
                   <p
                     style={bignumbers}
                     onClick={() => {
-                      this.handleNumberClickAlternative(1); 
+                      this.handleNumberClickAlternative(1);
                     }}
                   >
                     1
