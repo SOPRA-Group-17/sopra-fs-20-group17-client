@@ -47,10 +47,12 @@ class ReportWord extends React.Component {
       players: null,
       gameId: null,
       word: null,
+      last_word: null,
       perCentPositive: null,
       perCentNegative: null,
       readyToGo: false,
       clicked: false,
+      last_time: null,
     };
   }
 
@@ -85,6 +87,7 @@ class ReportWord extends React.Component {
         player: current_player.data,
         players: all_players.data,
         word: word.data.content,
+        last_word: word.data.content,
       });
 
       this.timer = setInterval(() => this.getPlayerTermStatus(), 1000);
@@ -126,6 +129,7 @@ class ReportWord extends React.Component {
         this.calculatingBarPositive
       );
       this.calculatingBarNegative();
+      this.setClicked();
       const get_game = await api.get(`/games/${this.state.gameId}`);
       let stay;
       stay = this.stay(get_game);
@@ -139,6 +143,16 @@ class ReportWord extends React.Component {
       alert(
         `Something went wrong while fetching the data: \n${handleError(error)}`
       );
+    }
+  }
+
+  setClicked() {
+    //save last word and check with current word, if different then set state clicked to false and update last word
+    if(this.state.last_word !== this.state.word){
+      this.setState({
+        last_word: this.state.word,
+        clicked: false
+      })
     }
   }
 
@@ -296,16 +310,13 @@ class ReportWord extends React.Component {
               </div>
             ) : (
               <div style={{ marginTop: "2vw" }}>
-            <div class="row justify-content-center">
-              <Spinner />
-            </div>
-            <div class="row justify-content-center">
-              <p className="large-Font">
-                waiting for the others
-              </p>
-            </div>
-          </div>
-              
+                <div class="row justify-content-center">
+                  <Spinner />
+                </div>
+                <div class="row justify-content-center">
+                  <p className="large-Font">waiting for the others</p>
+                </div>
+              </div>
             )}
 
             <Row style={{ marginTop: "3vw" }}>
