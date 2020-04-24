@@ -269,7 +269,7 @@ class LobbyHost extends React.Component {
           // was muss genau in request body / Jetzt: der rausgeschmissen wird. soll? der der rausschmeisst?
           await api.delete(
             `/games/${this.state.ID_game}/players/${this.state.players[i].id}`,
-            requestBody
+            requestBody 
           );
         } catch (error) {
           alert(
