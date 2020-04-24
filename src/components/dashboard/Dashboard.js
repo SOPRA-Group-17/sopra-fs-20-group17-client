@@ -169,14 +169,14 @@ class Dashboard extends React.Component {
       });
       console.log(requestBody2);
 
-      const response2 = await api.post(
+      const player = await api.post(
         `/games/${game.gameId}/players`,
         requestBody2
       );
       //const game2 = new Game(response2.data);
       localStorage.setItem("gameId", game.gameId);
       localStorage.setItem("role", "HOST");
-      localStorage.setItem("Id", response.data.id);
+      localStorage.setItem("Id", player.data.id);
       clearInterval(this.timer);
       this.timer = null;
       clearInterval(this.timerScoarboard);

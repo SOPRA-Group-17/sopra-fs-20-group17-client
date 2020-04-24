@@ -50,7 +50,7 @@ class ReportWord extends React.Component {
       perCentPositive: null,
       perCentNegative: null,
       readyToGo: false,
-      pressed: false,
+      clicked: true,
     };
   }
 
@@ -165,7 +165,7 @@ class ReportWord extends React.Component {
         requestBody
       );
       this.setState({
-        pressed: true,
+        clicked: true,
       });
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
@@ -184,7 +184,7 @@ class ReportWord extends React.Component {
         requestBody
       );
       this.setState({
-        pressed: true,
+        clicked: true,
       });
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
@@ -198,7 +198,9 @@ class ReportWord extends React.Component {
       if (this.state.players[i].playerTermStatus === "UNKNOWN") {
         count++;
       }
-      this.setState({ perCentNegative: (count / number_of_players) * 100 });
+      this.setState({
+        perCentNegative: (count / (number_of_players - 1)) * 100,
+      });
     }
   }
   calculatingBarPositive() {
@@ -210,7 +212,9 @@ class ReportWord extends React.Component {
         if (this.state.players[i].playerTermStatus === "KNOWN") {
           count++;
         }
-        this.setState({ perCentPositive: (count / number_of_players) * 100 });
+        this.setState({
+          perCentPositive: (count / (number_of_players - 1)) * 100,
+        });
       }
     }
   }
@@ -235,7 +239,7 @@ class ReportWord extends React.Component {
         </Row>
 
         {!this.state.word ? (
-          <div style={{ marginTop: "5vw" }}>
+          <div style={{ marginTop: "4vw" }}>
             <div class="row justify-content-center">
               <Spinner />
             </div>
@@ -251,45 +255,60 @@ class ReportWord extends React.Component {
               </Col>
             </Row>
 
-            <Row>
-              <Col>
-                <p style={question}>Do you know the word?</p>
-              </Col>
-            </Row>
+            {!this.state.clicked ? (
+              <div>
+                <Row>
+                  <Col className="d-flex justify-content-center">
+                    <p style={question}>Do you know the word?</p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col
+                    xs={{ span: 0, offset: 0 }}
+                    md={{ span: 3, offset: 0 }}
+                  ></Col>
+                  <Col xs="7" md="2">
+                    <Button
+                      variant="outline-success"
+                      style={bigbutton}
+                      disabled={this.state.pressed}
+                      onClick={() => {
+                        this.yes();
+                      }}
+                    >
+                      <h2>YES</h2>
+                    </Button>
+                  </Col>
 
-            <Row>
-              <Col
-                xs={{ span: 0, offset: 0 }}
-                md={{ span: 3, offset: 0 }}
-              ></Col>
-              <Col xs="7" md="2">
-                <Button
-                  variant="outline-success"
-                  style={bigbutton}
-                  disabled={this.state.pressed}
-                  onClick={() => {
-                    this.yes();
-                  }}
-                >
-                  <h2>YES</h2>
-                </Button>
-              </Col>
+                  <Col Col xs="7" md="2">
+                    <Button
+                      variant="outline-danger"
+                      style={bigbutton}
+                      disabled={this.state.pressed}
+                      onClick={() => {
+                        this.no();
+                      }}
+                    >
+                      <h2>NO</h2>
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            ) : (
+              <div style={{ marginTop: "2vw" }}>
+            <div class="row justify-content-center">
+              <Spinner />
+            </div>
+            <div class="row justify-content-center">
+              <p className="large-Font">
+                waiting for the others
+              </p>
+            </div>
+          </div>
+              
+            )}
 
-              <Col Col xs="7" md="2">
-                <Button
-                  variant="outline-danger"
-                  style={bigbutton}
-                  disabled={this.state.pressed}
-                  onClick={() => {
-                    this.no();
-                  }}
-                >
-                  <h2>NO</h2>
-                </Button>
-              </Col>
-            </Row>
-
-            <Row style={{ marginTop: "8vw" }}>
+            <Row style={{ marginTop: "3vw" }}>
               <Col>
                 <p style={sentence}>
                   Number of players that DON'T know the word
