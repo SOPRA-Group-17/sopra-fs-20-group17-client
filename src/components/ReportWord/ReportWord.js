@@ -148,7 +148,7 @@ class ReportWord extends React.Component {
       );
     }
   }
-  callback() {
+  callback() { 
     let b = "this is just for nothing";
   }
   setClicked() {
