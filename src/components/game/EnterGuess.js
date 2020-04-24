@@ -147,15 +147,16 @@ class EnterGuess extends React.Component {
     let table = [];
 
     //do we have to look at status?
+    //TODO 
     this.state.hints.forEach((hint) => {
-      //if (hint.status == "VALID") {
+      if (hint.status == "VALID") {
         table.push(
           <tr class="text-white" class="text-center">
             {hint.content}
           </tr>
         );
-      //}
-    });
+    }
+  });
 
     return table;
   };

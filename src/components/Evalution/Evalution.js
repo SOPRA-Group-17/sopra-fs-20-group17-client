@@ -100,9 +100,10 @@ class Evalution extends React.Component {
           localStorage.setItem("status", "CLUE_GIVER");
           this.props.history.push(`/game/${this.state.gameId}/reportWord`);
         }
-      } else if (this.state.gameStatus == "FINISHED") {
-        //update the url
-        this.props.history.push(`/game/${this.state.ID_game}/Score`);
+      } //check if this works, is Finished the correct state
+      else if (this.state.gameStatus == "FINISHED") {
+        
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
     } catch (error) {
       alert(`Something while starting the new round: \n${handleError(error)}`);
