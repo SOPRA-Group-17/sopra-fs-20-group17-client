@@ -384,10 +384,10 @@ class Lobby extends React.Component {
               )}
             </div>
           </Row>
-        </Container>
+        </Container> 
       </div>
     );
   }
 }
 
-export default withRouter(Lobby);
+export default withRouter(Lobby); 
