@@ -48,7 +48,7 @@ class Number extends React.Component {
       this.setNumberState();
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getGameStatus(), 4000);
+      this.timer = setInterval(() => this.getGameStatus(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -182,7 +182,7 @@ class Number extends React.Component {
     this.setState({ chosen_number: number });
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 10000)); // simulate backend call delay of 1second
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate backend call delay of 1second
       /*
       console.log(requestBody);
       console.log(this.state); // state is has changed

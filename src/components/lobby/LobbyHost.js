@@ -50,10 +50,12 @@ class LobbyHost extends React.Component {
 
       //player id aus local storage, set in dahboard
       this.state.ID_player = localStorage.getItem("Id");
-      console.log(localStorage.getItem("Id"))
-      console.log(this.state.ID_player)
+      console.log(localStorage.getItem("Id"));
+      console.log(this.state.ID_player);
       //set player and playerstatus
-      const response = await api.get(`/games/players/${localStorage.getItem("Id")}`);
+      const response = await api.get(
+        `/games/players/${localStorage.getItem("Id")}`
+      );
 
       /*
       initial set state of:
@@ -269,7 +271,7 @@ class LobbyHost extends React.Component {
           // was muss genau in request body / Jetzt: der rausgeschmissen wird. soll? der der rausschmeisst?
           await api.delete(
             `/games/${this.state.ID_game}/players/${this.state.players[i].id}`,
-            requestBody 
+            requestBody
           );
         } catch (error) {
           alert(
@@ -287,13 +289,12 @@ class LobbyHost extends React.Component {
     console.log(this.state.game.status);
     console.log(this.state.player.status);
     if (this.state.game_status === "RECEIVING_TERM") {
-      console.log("am i getting here")
+      console.log("am i getting here");
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
         this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/number`);
       } else if (this.state.player.status === "CLUE_GIVER") {
-        
         clearInterval(this.timer);
         this.timer = null;
         this.props.history.push(`/game/${this.state.ID_game}/reportWord`);

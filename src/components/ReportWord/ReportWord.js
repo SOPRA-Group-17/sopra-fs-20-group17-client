@@ -103,21 +103,24 @@ class ReportWord extends React.Component {
   async getPlayerTermStatus() {
     try {
       //get the word if its not here allready
-      if (!this.state.word) {
-        //get word
-        let requestBody;
 
-        requestBody = JSON.stringify({
-          gameId: this.state.gameId,
-        });
-        const word = await api.get(
-          `/games/${this.state.gameId}/terms`,
-          requestBody
-        );
-        this.setState({
-          word: word.data,
-        });
-      }
+      //get word
+      let requestBody;
+
+      requestBody = JSON.stringify({
+        gameId: this.state.gameId,
+      });
+      const word = await api.get(
+        `/games/${this.state.gameId}/terms`,
+        requestBody
+      );
+      console.log(word.data.content);
+      this.setState(
+        {
+          word: word.data.content,
+        },
+        this.callback
+      );
       console.log(this.state.word);
       //get all players
       const all_players = await api.get(`/games/${this.state.gameId}/players`);
@@ -145,14 +148,16 @@ class ReportWord extends React.Component {
       );
     }
   }
-
+  callback() {
+    let b = "this is just for nothing";
+  }
   setClicked() {
     //save last word and check with current word, if different then set state clicked to false and update last word
-    if(this.state.last_word !== this.state.word){
+    if (this.state.last_word !== this.state.word) {
       this.setState({
         last_word: this.state.word,
-        clicked: false
-      })
+        clicked: false,
+      });
     }
   }
 
@@ -263,9 +268,12 @@ class ReportWord extends React.Component {
           </div>
         ) : (
           <div>
+            {console.log(this.state.word)}
             <Row>
               <Col>
-                <p style={word}>{this.state.word}</p>
+                <div>
+                  <p style={word}>{this.state.word.toString()}</p>
+                </div>
               </Col>
             </Row>
 
@@ -340,7 +348,7 @@ class ReportWord extends React.Component {
               className="d-flex justify-content-center"
               style={{ marginTop: "1vw" }}
             >
-              <p style={sentence}>Number of players that DO know the word</p>
+              <p style={sentence}>Number of players that know the word</p>
             </Row>
             <Row className="d-flex justify-content-center">
               <div>

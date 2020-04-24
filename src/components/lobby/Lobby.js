@@ -22,7 +22,7 @@ const bigbutton = {
 class Lobby extends React.Component {
   constructor() {
     super();
-    this.state = { 
+    this.state = {
       game: new game(),
       game_status: null,
       player: new Player(),
@@ -68,7 +68,7 @@ class Lobby extends React.Component {
       let found = false;
       const all_players = await api.get(`/games/${this.state.ID_game}/players`);
 
-      found = this.checkIfPlayerIsInGame(all_players, found);
+      found = this.checkIfPlayerIsInGame(all_players);
 
       //poll every 1 seconds all players, search game
       this.timer = setInterval(() => this.getStatus(found), 1000);
@@ -87,7 +87,7 @@ class Lobby extends React.Component {
         const all_players = await api.get(
           `/games/${this.state.ID_game}/players`
         );
-        found = this.checkIfPlayerIsInGame(all_players, found);
+        found = this.checkIfPlayerIsInGame(all_players);
 
         console.log("this state found is");
         console.log(found);
@@ -145,20 +145,14 @@ class Lobby extends React.Component {
     }
   }
 
-  checkIfPlayerIsInGame(all_players, found) {
-    console.log(all_players.data);
-    let change = false;
+  checkIfPlayerIsInGame(all_players) {
     all_players.data.forEach((player) => {
       if (player.id.toString() === this.state.ID_player) {
-        found = true;
-        change = true;
+        return true;
       }
     });
-    if (!change) {
-      found = false;
-    }
-    change = false;
-    return found;
+
+    return false;
   }
 
   changeStatusState() {
