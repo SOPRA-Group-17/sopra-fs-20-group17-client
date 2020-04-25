@@ -104,6 +104,8 @@ class Dashboard extends React.Component {
       list.push({
         username: player.username,
         score: player.overallScore,
+        id: player.id
+
       });
       if (player.id === this.state.userId) {
         this.setState({ score: player.overallScore });
@@ -259,6 +261,7 @@ class Dashboard extends React.Component {
     } else {
       for (let i = 0; i < this.state.games.length; i++) {
         if (this.state.games[i].status == "LOBBY") {
+         
           selectionList.push(
             <option value={this.state.games[i].gameId}>
               {this.state.games[i].name}
@@ -274,13 +277,27 @@ class Dashboard extends React.Component {
     let table = [];
     // Outer loop to create parent
     this.state.scoarboardList.forEach((player, index) => {
+
+      if(player.id == this.state.userId){
+
       table.push(
+        
+          <tr className="scoardboard-text" style={{color:"#1376f0", fontWeight: "bold"}}>
+          <td>{index + 1}</td>
+          <td>{player.username}</td>
+          <td>{player.score}</td>
+          </tr>
+      );}
+        else{
+          table.push(
         <tr className="scoardboard-text">
           <td>{index + 1}</td>
           <td>{player.username}</td>
           <td>{player.score}</td>
         </tr>
-      );
+          );
+        }
+
     });
     return table;
   };

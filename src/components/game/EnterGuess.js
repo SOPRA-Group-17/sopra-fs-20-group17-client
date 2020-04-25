@@ -102,13 +102,15 @@ class EnterGuess extends React.Component {
       const requestBody = JSON.stringify({
         token: this.state.playerToken,
       });
-      console.log(requestBody);
+      
       // doesnt work but why, because request body not supported
       
        const response = await api.delete(
         `/games/${this.state.gameId}/guesses`,
         requestBody
       );
+
+      console.log(response);
         /*
       const request =  new HttpRequestMessage{
         Method = HttpMethod.Delete,
