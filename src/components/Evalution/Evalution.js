@@ -58,25 +58,31 @@ class Evalution extends React.Component {
         this.setState({ word: response2.data[0].term.content });
 
         //setting if guess was correct or not
-        if (response2.data[0].guess.status == "VALID") {
-          this.setState({ guessCorrect: "correct" });
-          this.setState({ color: "green" });
-          //setting guess
-          this.setState({ guess: response2.data[0].guess.content });
-        } else if (response2.data[0].guess.status == "INVALID") {
-          this.setState({ guessCorrect: "incorrect" });
-          this.setState({ color: "red" });
-          //setting guess
-          this.setState({ guess: response2.data[0].guess.content });
-        } else {
+        //checking if guess null, happens if guesser skipped
+        if(!response2.data[0].guess){
           this.setState({ skiped: true });
+          console.log("Skiped");
         }
+        else{
+          if (response2.data[0].guess.status == "VALID") {
+            this.setState({ guessCorrect: "correct" });
+            this.setState({ color: "green" });
+            //setting guess
+            this.setState({ guess: response2.data[0].guess.content });
+          } else if (response2.data[0].guess.status == "INVALID") {
+            this.setState({ guessCorrect: "incorrect" });
+            this.setState({ color: "red" });
+            //setting guess
+            this.setState({ guess: response2.data[0].guess.content });
+          }
+        }
+          
 
         this.setState({ readyToRender: true });
 
         clearInterval(this.timer);
         this.timer = null;
-        this.timer = setInterval(() => this.startNewRound(), 8000);
+        this.timer = setInterval(() => this.startNewRound(), 11000);
       }
     } catch (error) {
       alert(
@@ -146,18 +152,21 @@ class Evalution extends React.Component {
               class="row justify-content-center"
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
             >
-              <p className="large-Font" hidden={!this.state.skiped}></p>
+              <p className="large-Font" hidden={!this.state.skiped}>
+                The guesser skiped the word
+              </p>
               <p
                 className="large-Font"
                 style={{ color: this.state.color }}
                 hidden={this.state.skiped}
               >
-                The given guesse is {this.state.guessCorrect}
+                The given guess is {this.state.guessCorrect}
               </p>
             </div>
             <div
               class="row justify-content-center"
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+              
             >
               <p className="large-Font">Given word: {this.state.word}</p>
             </div>
