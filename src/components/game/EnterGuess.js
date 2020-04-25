@@ -107,7 +107,7 @@ class EnterGuess extends React.Component {
       
        const response = await api.delete(
         `/games/${this.state.gameId}/guesses`,
-        requestBody
+        {data: requestBody}
       );
 
       console.log(response);
