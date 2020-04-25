@@ -20,7 +20,7 @@ import { Spinner } from "../../views/design/Spinner";
 class Dashboard extends React.Component {
   constructor() {
     super();
-   
+
     this.state = {
       // games stores only the games with status
       //games: [game1, game2],
@@ -63,11 +63,12 @@ class Dashboard extends React.Component {
       this.setState({ user: new User(response.data) });
       console.log(this.state.user.username);
 
+      //decreas timer
       this.getGames();
       this.timer = setInterval(() => this.getGames(), 1000);
 
       this.getScoarboard();
-      //decreas timer
+
       this.timerScoarboard = setInterval(() => this.getScoarboard(), 1000);
     } catch (error) {
       alert(
@@ -104,6 +105,7 @@ class Dashboard extends React.Component {
       list.push({
         username: player.username,
         score: player.overallScore,
+        id: player.id,
       });
       if (player.id === this.state.userId) {
         this.setState({ score: player.overallScore });
@@ -118,14 +120,30 @@ class Dashboard extends React.Component {
   async getGames() {
     try {
       const response = await api.get(`/games`);
-
+      let selectedValid = 0;
+      console.log(this.state.selectLobby, "in get Games");
       // Get the returned users and update the state.
-      this.setState({ games: response.data });
-      if (this.state.games.length != 0) {
-        for (let i = 0; i < this.state.games.length; i++) {
-          if (this.state.games[i].status == "LOBBY") {
-            this.setState({ selectLobby: this.state.games[i].gameId });
-            break;
+
+      if (response.data.length != 0) {
+        this.setState({ games: response.data });
+        console.log(this.state.selectLobby, response.data[1].gameId);
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].gameId == this.state.selectLobby) {
+            console.log("found match");
+            if (response.data[i].status == "LOBBY") {
+              selectedValid = 1;
+              break;
+            }
+          }
+        }
+
+        if (selectedValid == 0) {
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].status == "LOBBY") {
+              console.log("resetting because not valid");
+              this.setState({ selectLobby: response.data[i].gameId });
+              break;
+            }
           }
         }
       }
@@ -214,7 +232,16 @@ class Dashboard extends React.Component {
   }
 
   selectLobby(event) {
-    this.setState({ selectLobby: event.target.value });
+    clearInterval(this.timer);
+    this.timer = null;
+    this.setState({ selectLobby: event.target.value }, () =>
+      this.getGamesAfterSelecting()
+    );
+  }
+
+  getGamesAfterSelecting() {
+    this.getGames();
+    this.timer = setInterval(() => this.getGames(), 1000);
   }
 
   async joinLobby() {
@@ -250,17 +277,33 @@ class Dashboard extends React.Component {
 
   createSelectionList = () => {
     let selectionList = [];
+    let selected = -1;
+    console.log(this.state.selectLobby);
 
     if (this.state.games === undefined || this.state.games.length === 0) {
       return selectionList;
     } else {
       for (let i = 0; i < this.state.games.length; i++) {
-        if (this.state.games[i].status == "LOBBY") {
-          selectionList.push(
-            <option value={this.state.games[i].gameId}>
-              {this.state.games[i].name}
-            </option>
-          );
+        if (this.state.games[i].gameId == this.state.selectLobby) {
+          if (this.state.games[i].status == "LOBBY") {
+            selected = i;
+            selectionList.push(
+              <option value={this.state.games[i].gameId}>
+                {this.state.games[i].name}
+              </option>
+            );
+          }
+        }
+      }
+      for (let i = 0; i < this.state.games.length; i++) {
+        if (i != selected) {
+          if (this.state.games[i].status == "LOBBY") {
+            selectionList.push(
+              <option value={this.state.games[i].gameId}>
+                {this.state.games[i].name}
+              </option>
+            );
+          }
         }
       }
     }
@@ -271,13 +314,26 @@ class Dashboard extends React.Component {
     let table = [];
     // Outer loop to create parent
     this.state.scoarboardList.forEach((player, index) => {
-      table.push(
-        <tr className="scoardboard-text">
-          <td>{index + 1}</td>
-          <td>{player.username}</td>
-          <td>{player.score}</td>
-        </tr>
-      );
+      if (player.id == this.state.userId) {
+        table.push(
+          <tr
+            className="scoardboard-text"
+            style={{ color: "#1376f0", fontWeight: "bold" }}
+          >
+            <td>{index + 1}</td>
+            <td>{player.username}</td>
+            <td>{player.score}</td>
+          </tr>
+        );
+      } else {
+        table.push(
+          <tr className="scoardboard-text">
+            <td>{index + 1}</td>
+            <td>{player.username}</td>
+            <td>{player.score}</td>
+          </tr>
+        );
+      }
     });
     return table;
   };

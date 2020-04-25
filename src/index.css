@@ -9,6 +9,7 @@ body {
   font-size: large; /**calc(1em + 1vw)**/
   background: #1e122b;
   color: white;
+  scrollbar-color: white black;
 }
 
 .rules-header{
@@ -106,6 +107,7 @@ body {
     display: block;
     height: 32vw;
     font-size: 1.3vw;
+    
   }
   .outlineWhite-Dashboard {
     margin-top: 1vw;
@@ -152,6 +154,7 @@ body {
     display: block;
     height: 32.5vw;
     font-size: 2vw;
+    
   }
   .outlineWhite-Dashboard {
     margin-top: 1vw;
@@ -202,6 +205,7 @@ body {
     height: 81vw;
     margin-top: 5vw;
     font-size: 4vw;
+    
   }
   .outlineWhite-Dashboard {
     margin-top: 2vw;

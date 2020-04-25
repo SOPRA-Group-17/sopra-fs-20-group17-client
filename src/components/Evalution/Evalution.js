@@ -95,16 +95,17 @@ class Evalution extends React.Component {
       console.log(Player.data);
       if (this.state.gameStatus == "RECEIVING_TERM") {
         console.log(Player.data.status);
-        if (Player.data.state === "GUESSER") {
+        if (Player.data.status === "GUESSER") {
           localStorage.setItem("status", "GUESSER");
-          this.props.history.push(`/game/${this.state.ID_game}/number`);
+          this.props.history.push(`/game/${this.state.gameId}/number`);
         } else if (Player.data.status === "CLUE_GIVER") {
           localStorage.setItem("status", "CLUE_GIVER");
-          this.props.history.push(`/game/${this.state.ID_game}/reportword`);
+          this.props.history.push(`/game/${this.state.gameId}/reportWord`);
         }
-      } else if (this.state.gameStatus == "FINISHED") {
-        //update the url
-        this.props.history.push(`/game/${this.state.ID_game}/Score`);
+      } //check if this works, is Finished the correct state
+      else if (this.state.gameStatus == "FINISHED") {
+        
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
     } catch (error) {
       alert(`Something while starting the new round: \n${handleError(error)}`);

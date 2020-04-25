@@ -2,11 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import Hint from "../shared/models/Hint";
-import CarouselCaption from "react-bootstrap/CarouselCaption";
 import { Spinner } from "../../views/design/Spinner";
 
 const bigbutton = {
@@ -101,15 +98,40 @@ class EnterGuess extends React.Component {
 
   async skip() {
     try {
-
+      console.log(this.state.playerToken);
       const requestBody = JSON.stringify({
         token: this.state.playerToken,
       });
-
-      // TODO: check if works, janosch needs to update
-      const response = await api.delete(`/games/${this.state.gameId}/guesses`, requestBody);
+      
+      // doesnt work but why, because request body not supported
+      
+       const response = await api.delete(
+        `/games/${this.state.gameId}/guesses`,
+        requestBody
+      );
 
       console.log(response);
+        /*
+      const request =  new HttpRequestMessage{
+        Method = HttpMethod.Delete,
+        RequestUri = `/games/${this.state.gameId}/guesses`,
+        Content = requestBody,
+    };
+
+    var response = await client.SendAsync(request);
+*/
+
+      /*
+        var request = new HttpRequestMessage {
+              Method = HttpMethod.Delete,
+              RequestUri = new Uri("http://mydomain/api/something"),
+              Content = new StringContent(JsonConvert.SerializeObject(myObj), Encoding.UTF8, "application/json")
+          };
+          var response = await client.SendAsync(request);
+
+      */
+
+      
       // TODO: what is the url of the page you are directed to?
       this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
@@ -127,15 +149,16 @@ class EnterGuess extends React.Component {
     let table = [];
 
     //do we have to look at status?
+    //TODO 
     this.state.hints.forEach((hint) => {
-      //if (hint.status == "VALID") {
+      if (hint.status == "VALID") {
         table.push(
           <tr class="text-white" class="text-center">
             {hint.content}
           </tr>
         );
-      //}
-    });
+    }
+  });
 
     return table;
   };
