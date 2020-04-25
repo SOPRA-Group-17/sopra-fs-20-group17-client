@@ -150,7 +150,7 @@ class Evalution extends React.Component {
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
             >
               <p className="large-Font" hidden={!this.state.skiped}>
-                The guesser skiped the word
+                The guesser skipped the word
               </p>
               <p
                 className="large-Font"
