@@ -128,31 +128,37 @@ class Validation extends React.Component {
   }
 
   submitReport() {
-    this.state.hintsReport.forEach((hint, index) => {
+
+    let listRequestBody = [];
+    
+    this.state.hintsReport.forEach((hint) => {
       const requestBody = JSON.stringify({
         token: hint.token,
         marked: hint.marked,
         similarity: hint.similarity,
         reporters: [this.state.token],
       });
-      this.submitReportPut(requestBody, index);
+      listRequestBody.push(requestBody);
+      
     });
+
+    this.submitReportPut(listRequestBody);
+    
+
   }
 
-  async submitReportPut(requestBody, index) {
+  async submitReportPut(listRequestBody) {
     try {
-      //what should i add to reporters?,why error 500?
 
-      const response = await api.put(
-        `/games/${this.state.gameId}/hints`,
-        requestBody
-      );
-
-      console.log(index, this.state.hintsReport.length - 1);
-      //does this work
-      if (index === this.state.hintsReport.length - 1) {
-        this.props.history.push(`/game/${this.state.gameId}/evalution`);
+      for (let i = 0; i < this.state.hintsReport.length; i++) {
+        let requestBody = listRequestBody[i];
+        const response = await api.put(
+          `/games/${this.state.gameId}/hints`,
+          requestBody
+        );
       }
+      this.props.history.push(`/game/${this.state.gameId}/evalution`);
+      
     } catch (error) {
       alert(
         `Something went wrong while rendering the clues \n${handleError(error)}`
