@@ -136,7 +136,6 @@ class Dashboard extends React.Component {
             }
           }
         }
-
         if (selectedValid == 0) {
           for (let i = 0; i < response.data.length; i++) {
             if (response.data[i].status == "LOBBY") {
