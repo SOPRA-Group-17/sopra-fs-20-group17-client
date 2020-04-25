@@ -161,7 +161,7 @@ class Validation extends React.Component {
       
     } catch (error) {
       alert(
-        `Something went wrong while rendering the clues \n${handleError(error)}`
+        `Something went wrong while submiting your Reports \n${handleError(error)}`
       );
     }
   }
