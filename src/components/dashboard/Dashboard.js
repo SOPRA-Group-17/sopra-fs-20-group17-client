@@ -65,11 +65,11 @@ class Dashboard extends React.Component {
 
       //decreas timer
       this.getGames();
-      this.timer = setInterval(() => this.getGames(), 5000);
+      this.timer = setInterval(() => this.getGames(), 1000);
 
       this.getScoarboard();
 
-      //this.timerScoarboard = setInterval(() => this.getScoarboard(), 1000);
+      this.timerScoarboard = setInterval(() => this.getScoarboard(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -241,7 +241,7 @@ class Dashboard extends React.Component {
 
   getGamesAfterSelecting() {
     this.getGames();
-    this.timer = setInterval(() => this.getGames(), 5000);
+    this.timer = setInterval(() => this.getGames(), 1000);
   }
 
   async joinLobby() {
