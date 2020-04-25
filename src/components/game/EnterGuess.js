@@ -26,6 +26,7 @@ class EnterGuess extends React.Component {
       guess: null,
       timer: null,
       readyToRender: null,
+      noHintsValid: null,
     };
     this.getHints = this.getHints.bind(this);
   }
@@ -147,11 +148,13 @@ class EnterGuess extends React.Component {
 
   createTable = () => {
     let table = [];
+    let oneValid = 0;
 
-    //do we have to look at status?
+    //do we have to look at status? or marked?
     //TODO 
     this.state.hints.forEach((hint) => {
       if (hint.status == "VALID") {
+        oneValid =1;
         table.push(
           <tr class="text-white" class="text-center">
             {hint.content}
@@ -159,6 +162,14 @@ class EnterGuess extends React.Component {
         );
     }
   });
+    if(oneValid == 0){
+      table.push(
+        <tr class="text-white" class="text-center" style={{color: "red"}}>
+          All given hints are invalid
+        </tr>
+      );
+
+    }
 
     return table;
   };
@@ -221,6 +232,11 @@ class EnterGuess extends React.Component {
                 </Table>
               </Col>
             </Row>
+            <div class="row justify-content-center">
+              <p className>
+
+              </p>
+            </div>
 
             <div class="row justify-content-center">
               <input
