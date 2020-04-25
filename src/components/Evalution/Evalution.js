@@ -59,11 +59,10 @@ class Evalution extends React.Component {
 
         //setting if guess was correct or not
         //checking if guess null, happens if guesser skipped
-        if(!response2.data[0].guess){
+        if (!response2.data[0].guess) {
           this.setState({ skiped: true });
           console.log("Skiped");
-        }
-        else{
+        } else {
           if (response2.data[0].guess.status == "VALID") {
             this.setState({ guessCorrect: "correct" });
             this.setState({ color: "green" });
@@ -76,7 +75,6 @@ class Evalution extends React.Component {
             this.setState({ guess: response2.data[0].guess.content });
           }
         }
-          
 
         this.setState({ readyToRender: true });
 
@@ -110,7 +108,6 @@ class Evalution extends React.Component {
         }
       } //check if this works, is Finished the correct state
       else if (this.state.gameStatus == "FINISHED") {
-        
         this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
     } catch (error) {
@@ -166,7 +163,6 @@ class Evalution extends React.Component {
             <div
               class="row justify-content-center"
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
-              
             >
               <p className="large-Font">Given word: {this.state.word}</p>
             </div>
