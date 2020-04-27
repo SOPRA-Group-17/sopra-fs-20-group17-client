@@ -423,15 +423,31 @@ toggle(){
                   allowed to help someone guess America.
                 </p>
                 <p className="rules-text">
-                  Invalid clues: - The Mystery word but written differently.
-                  Example: Shurt is not allowed when trying to make the player
-                  guess Shirt. - A word from the same family as the Mystery
-                  word. Example: Princess is not allowed if the word to be
-                  guessed is Prince. - An invented word. Example: Swee’ting is
-                  not allowed to try to help someone guess Cake. - A word
-                  phonetically identical to the Mystery word, but the meaning of
-                  which is different. Example: Whether is not allowed to try to
-                  get someone to guess Weather.
+                  Invalid clues:
+                  <ul>
+                    <li>
+                      The Mystery word but written differently. Example: Shurt
+                      is not allowed when trying to make the player guess Shirt.
+                    </li>
+                    <li>
+                      The Mystery word written in a foreign language. Example:
+                      Buisson is not allowed if the word to be guessed is Shrub.
+                    </li>
+                    <li>
+                      A word from the same family as the Mystery word. Example:
+                      Princess is not allowed if the word to be guessed is
+                      Prince
+                    </li>
+                    <li>
+                      An invented word. Example: Swee’ting is not allowed to try
+                      to help someone guess Cake.
+                    </li>
+                    <li>
+                      A word phonetically identical to the Mystery word, but the
+                      meaning of which is different. Example: Whether is not
+                      allowed to try to get someone to guess Weather.
+                    </li>
+                  </ul>
                 </p>
                 <p className="rules-text-s-title">Comparing Clues</p>
                 <p className="rules-text">
@@ -444,18 +460,28 @@ toggle(){
                   invalid respectively duplicates, they also get cancelled.
                 </p>
                 <p className="rules-text">
-                  Identical clues: - Two identical words. Example: Mouse and
-                  Mouse are identical. - Variants from the same word family.
-                  Example: Prince and Princess are considered to be identical. -
-                  Variants of the same word: plurals, gender differentiations,
-                  and spelling mistakes don’t count as actual differences.
-                  Example: Prince and Princes, Actor and Actress, Philosophy and
-                  Filosofie are identical.
+                  Identical clues:
+                  <ul>
+                    <li>
+                      Two identical words. Example: Mouse and Mouse are
+                      identical.
+                    </li>
+                    <li>
+                      Variants from the same word family. Example: Prince and
+                      Princess are considered to be identical.
+                    </li>
+                    <li>
+                      Variants of the same word: plurals, gender
+                      differentiations, and spelling mistakes don’t count as
+                      actual differences. Example: Prince and Princes, Actor and
+                      Actress, Philosophy and Filosofie are identical.
+                    </li>
+                  </ul>
                 </p>
                 <p className="rules-text">
-                  Note: If all clues have been cancelled, place the Mystery
-                  word’s card back in the box and move directly to the End of
-                  turn phase.
+                  Note: If all clues have been cancelled, no hints are displayed
+                  to the active player. Nevertheless, he may submit a guess or
+                  just skip it.
                 </p>
                 <p className="rules-text-s-title">Guess</p>
                 <p className="rules-text">
@@ -467,22 +493,27 @@ toggle(){
                   word.
                 </p>
                 <p className="rules-text">
-                  Results: Success: If the active player correctly guesses the
-                  mystery word, he gets a lot of points (also dependent on how
-                  fast he guessed it!). Failure: If the active player makes a
-                  wrong guess, he will get minus points and as an additional
-                  penalty there will be one round less for the team to play.
-                  Skip: If the active player chooses not to answer and skips
-                  their turn, none of the players gets any plus or minus points.
-                  However, there won't be an additional penalty of removing one
-                  round.{" "}
+                  Results:
+                  <ul>
+                    <li>
+                      Success: If the active player correctly guesses the
+                      mystery word, he gets a lot of points (also dependent on
+                      how fast he guessed it!).
+                    </li>
+                    <li>
+                      Failure: If the active player makes a wrong guess, he will
+                      get minus points and as an additional penalty there will
+                      be one round less for the team to play.
+                    </li>
+                    <li>
+                      Skip: If the active player chooses not to answer and skips
+                      their turn, none of the players gets any plus or minus
+                      points. However, there won't be an additional penalty of
+                      removing one round.
+                    </li>
+                  </ul>
                 </p>
-                <p className="rules-text">
-                  Notes: - If the active player’s guess has the same
-                  pronunciation as the Mystery word, that guess is considered to
-                  be valid. - If the player gives a wrong guess during the final
-                  turn, also remove a card previously guessed successfully.
-                </p>
+
                 <p className="rules-text-s-title">End of Turn</p>
                 <p className="rules-text">
                   A new player becomes the active player and a new round begins.
