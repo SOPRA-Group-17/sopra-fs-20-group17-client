@@ -80,7 +80,7 @@ class Evalution extends React.Component {
 
         clearInterval(this.timer);
         this.timer = null;
-        this.timer = setInterval(() => this.startNewRound(), 11000);
+       this.timer = setInterval(() => this.startNewRound(), 9000);
       }
     } catch (error) {
       alert(
@@ -147,7 +147,6 @@ class Evalution extends React.Component {
           <div>
             <div
               class="row justify-content-center"
-              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
             >
               <p className="large-Font" hidden={!this.state.skiped}>
                 The guesser skipped the word
@@ -172,6 +171,12 @@ class Evalution extends React.Component {
               hidden={this.state.skiped}
             >
               <p className="large-Font">Guess: {this.state.guess}</p>
+            </div>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+            >
+              <p className="medium-Font-grey"> New round will start in 10 seconds</p>
             </div>
           </div>
         )}

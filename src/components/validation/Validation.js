@@ -10,7 +10,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Form,
-  ButtonGroup,
+  Modal
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
@@ -60,6 +60,7 @@ class Validation extends React.Component {
       invalid: [],
       readyToRender: null,
       successfull: 0,
+      help: true,
     };
 
     this.creatReportHintArray = this.creatReportHintArray.bind(this);
@@ -274,7 +275,7 @@ class Validation extends React.Component {
               <p className="card-text">{hint.content}</p>
             </div>
             <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
+              <p className="card-text">Clue is too similar to:</p>
             </div>
             <div class="row justify-content-center">
               <ToggleButtonGroup
@@ -288,7 +289,7 @@ class Validation extends React.Component {
               </ToggleButtonGroup>
             </div>
             <div class="row justify-content-center">
-              <p className="card-text">Clue is valid?</p>
+              <p className="card-text">Clue is </p>
             </div>
             <div class="row justify-content-center">
               {hint.marked === "VALID" ? (
@@ -305,7 +306,7 @@ class Validation extends React.Component {
                     console.log(this.state.hintsReport);
                   }}
                 >
-                  YES
+                  VALID
                 </Button>
               ) : (
                 <Button
@@ -321,7 +322,7 @@ class Validation extends React.Component {
                     console.log(this.state.hintsReport);
                   }}
                 >
-                  NO
+                  INVALID
                 </Button>
               )}
             </div>
@@ -338,6 +339,8 @@ class Validation extends React.Component {
       <Container fluid>
         {!this.state.readyToRender ? (
           <div>
+
+           
             <Row>
               <Col xs="5" md="3">
                 <img
@@ -356,6 +359,7 @@ class Validation extends React.Component {
                     Rules
                   </Button>
                 </Row>
+                
               </Col>
             </Row>
             <div
@@ -392,8 +396,50 @@ class Validation extends React.Component {
                     Rules
                   </Button>
                 </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ help: true })}
+                  >
+                    Help
+                  </Button>
+                </Row>
               </Col>
             </Row>
+            <Modal
+              size="lg"
+              show={this.state.help}
+              onHide={() => this.setState({ help: false })}
+              aria-labelledby="help-validation"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  How to validate
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text-s-title">Report similar</p>
+                <p className="rules-text">
+                  If a word is too similiar to an other word, click on the corresponding number 
+                </p>
+
+                <p className="rules-text-s-title">Decide if valid or invalid</p>
+                <p className="rules-text">
+                  If you want to mark a clue as invalid click on the VALID button after clicking the button the clue is marked as INVALID.
+                  <br/>
+                  To change the clue back to Valide click on the INVALID button after clicking the button the clue is marked as VALID. 
+                </p>
+                <p>
+                  For further informations if a clue is Valid or Invalid have a look at the rules. 
+                </p>
+              </Modal.Body>
+            </Modal>
+
+            
 
             <div
               class="row row-cols-1 row-cols-md-2 row-cols-lg-3 justify-content-center "
