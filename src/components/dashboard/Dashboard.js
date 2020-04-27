@@ -391,7 +391,10 @@ toggle(){
                 <p className="rules-text-title">Object of the Game</p>
                 <p className="rules-text">
                   Just One is a cooperative game. You need to work together in
-                  order to get the best score!
+                  order to get the best score! In each round there is one player
+                  - he is called the active player - who needs to guess a
+                  mystery word. He gets some clues from the other players which
+                  help him guessing the correct answer.
                 </p>
                 <p className="rules-text-title">Game Overview</p>
                 <p className="rules-text">
@@ -483,6 +486,13 @@ toggle(){
                 <p className="rules-text-s-title">End of Turn</p>
                 <p className="rules-text">
                   A new player becomes the active player and a new round begins.
+                </p>
+                <p className="rules-text-s-title">Scoring System</p>
+                <p className="rules-text">
+                  Whenever the active player makes a correct guess, he is
+                  rewarded with points. The number of points varies depending on
+                  how fast he submitted the guess. Clue givers also have the
+                  opportunity to earn points for their hints.
                 </p>
               </Modal.Body>
             </Modal>
