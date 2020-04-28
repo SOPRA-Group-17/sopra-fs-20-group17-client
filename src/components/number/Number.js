@@ -238,6 +238,7 @@ class Number extends React.Component {
   render() {
     return (
       <Container fluid>
+        {this.getGameStatus}
         {console.log("this is the game status")}
         {console.log(this.state.game_status)}
         {console.log("checks if we are ready to render if we are not then spinner")}
