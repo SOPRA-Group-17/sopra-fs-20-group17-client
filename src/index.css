@@ -90,8 +90,36 @@ body {
   color: white;
 }
 
+.overflow{
+  overflow-x: auto;
+  position: relative;
+  display: inline-block;
+  
+}
+/*could be improved*/
 .scoardboard-text:hover{
-  color: #52ddfa;
+  color: #a28abd;
+}
+/* width */
+::-webkit-scrollbar {
+  width: calc(0.6em + 0.1vw);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px #7a6d87; 
+  border-radius: calc(0.4em + 0.2vw);
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #7a6d87;
+  border-radius: calc(0.4em + 0.2vw);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a291b3; 
 }
 
 /*to test 1366px x 768px */

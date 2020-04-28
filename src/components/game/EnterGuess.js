@@ -147,15 +147,16 @@ class EnterGuess extends React.Component {
 
   createTable = () => {
     let table = [];
+    
 
-    //do we have to look at status?
-    //TODO 
+
     this.state.hints.forEach((hint) => {
       if (hint.status == "VALID") {
         table.push(
           <tr class="text-white" class="text-center">
-            {hint.content}
+            &bull;{hint.content}
           </tr>
+          
         );
     }
   });
@@ -200,8 +201,9 @@ class EnterGuess extends React.Component {
                 xs={{ span: 10, offset: 1 }}
                 md={{ span: 6, offset: 3 }}
                 lg={{ span: 4, offset: 4 }}
+                
               >
-                <Table bordered size="sm" className="font-medium">
+                <Table bordered size="sm" className="font-medium" >
                   <thead class="text-white">
                     <tr>
                       <th
@@ -215,7 +217,7 @@ class EnterGuess extends React.Component {
                       </th>
                     </tr>
                   </thead>
-                  <tbody class="text-white" className="font-medium">
+                  <tbody class="text-white" className="font-medium" >
                     {this.createTable()}
                   </tbody>
                 </Table>
@@ -232,7 +234,7 @@ class EnterGuess extends React.Component {
                   width: "calc(8em + 23vw)",
                   fontSize: "calc(1em + 1vw)",
                 }}
-                placeholder="Enter your guess here... "
+                placeholder="Enter your guess here "
                 onChange={(e) => {
                   this.handleInputChange("guess", e.target.value);
                 }}
