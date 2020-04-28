@@ -317,7 +317,7 @@ class Dashboard extends React.Component {
         table.push(
           <tr
             className="scoardboard-text"
-            style={{ color: "#1376f0", fontWeight: "bold" }}
+            style={{ color: "#a363eb", fontWeight: "bold" }}
           >
             <td>{index + 1}</td>
             <td>{player.username}</td>
