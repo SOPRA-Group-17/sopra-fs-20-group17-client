@@ -109,6 +109,13 @@ class Score extends React.Component {
     return sum;
   }
 
+  correctGuesses() {
+    console.log(this.state.game)
+    if (this.state.game) {
+      return this.state.game.correctCards;
+    }
+  }
+
   async exitLobby() {
     /*
     if a user exits the lobby then:
@@ -193,7 +200,7 @@ class Score extends React.Component {
                   className="outlineWhite-Dashboard"
                   onClick={() => this.exitLobby()}
                 >
-                  Back to Lobby
+                  Back to Dashboard
                 </Button>
               </Row>
               <Row className="d-flex justify-content-end">
@@ -208,8 +215,10 @@ class Score extends React.Component {
           </Row>
           <Row>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 2 }}></Col>
-            <Col xs="7" md="3">
+            <Col xs="7" md="6">
               <h1>Team Score: {this.teamScore()}</h1>
+
+              <h1># of correct guesses: {this.correctGuesses()} </h1>
             </Col>
           </Row>
           <Row style={{ marginTop: "6vw" }}>

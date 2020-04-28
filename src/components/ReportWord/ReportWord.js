@@ -287,11 +287,8 @@ class ReportWord extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col
-                    xs={{ span: 0, offset: 0 }}
-                    md={{ span: 3, offset: 0 }}
-                  ></Col>
-                  <Col xs="7" md="2">
+                <Col xs={{ span: 3, offset: 4 }} md={{ span: 0, offset: 0 }}></Col>
+                  <Col  xs="5" md="6">
                     <Button
                       variant="outline-success"
                       style={bigbutton}
@@ -302,9 +299,9 @@ class ReportWord extends React.Component {
                     >
                       <h2>YES</h2>
                     </Button>
-                  </Col>
+                  
 
-                  <Col Col xs="7" md="2">
+              
                     <Button
                       variant="outline-danger"
                       style={bigbutton}

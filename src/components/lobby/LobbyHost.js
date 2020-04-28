@@ -2,7 +2,7 @@ import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import Player from "../shared/models/Player";
-import { Container, Row, Col, Button, Table } from "react-bootstrap";
+import { Container, Row, Col, Button, Table, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import game from "../shared/models/Game";
 
@@ -38,6 +38,7 @@ class LobbyHost extends React.Component {
       help_status: null,
       exit: false,
       kick: false,
+      help: true,
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -400,6 +401,34 @@ class LobbyHost extends React.Component {
               </Row>
             </Col>
           </Row>
+          <Modal
+            size="lg"
+            show={this.state.help}
+            onHide={() => this.setState({ help: false })}
+            aria-labelledby="info-Lobby"
+          >
+            <Modal.Header closeButton className="rules-header">
+              <Modal.Title id="rules-dashboard-title" className="rules-header">
+                Lobby info
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="rules-text">
+              <p className="rules-text-s-title">game starts when</p>
+              <p className="rules-text">
+                - there are at least three players in the Lobby
+                <br />
+                - there are maximum seven players in the Lobby
+                <br />- all players in the lobby are ready
+              </p>
+
+              <p className="rules-text-s-title">additional information</p>
+              <p className="rules-text">
+                - only the host can kick players <br />- you can exit the lobby,
+                with the 'Exit Lobby' button on the top right corner
+              </p>
+              <p>For further informations have a look at the rules.</p>
+            </Modal.Body>
+          </Modal>
 
           <Row style={{ marginTop: "4vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 0 }}></Col>
