@@ -266,7 +266,7 @@ class Number extends React.Component {
             </div>
             <div class="row justify-content-center">
               <p className="large-Font">
-                Waiting for the hint makers to give their hints
+                Waiting for the hints
               </p>
             </div>
           </div>
