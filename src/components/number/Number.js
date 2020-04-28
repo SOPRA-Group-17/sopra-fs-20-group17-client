@@ -77,6 +77,10 @@ class Number extends React.Component {
             readyForNext: false,
             readyToRender: true,
           });
+        }else{
+          this.setState({
+            readyToRender: false,
+          });
         }
       }
       //game is in RECEIVING GUESS status and can be pushed to enter guess
@@ -234,6 +238,9 @@ class Number extends React.Component {
   render() {
     return (
       <Container fluid>
+        {console.log("this is the game status")}
+        {console.log(this.state.game_status)}
+        {console.log("checks if we are ready to render if we are not then spinner")}
         {console.log(this.state.readyToRender)}
         <Row>
           {" "}
