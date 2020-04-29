@@ -2,11 +2,12 @@ import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter, useParams } from "react-router-dom";
 import User from "../shared/models/User";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import aLobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
 import { Spinner } from "../../views/design/Spinner";
+import Rules from "../rules/Rules";
 
 class GiveClue extends React.Component {
   constructor() {
@@ -18,6 +19,7 @@ class GiveClue extends React.Component {
       gameId: null,
       token: null,
       timer: null,
+      rules: false,
     };
   }
 
@@ -108,16 +110,23 @@ class GiveClue extends React.Component {
           <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
             <Row className="d-flex justify-content-end">
               <Button
-                className="outlineWhite-Dashboard"
                 variant="outline-light"
-                size="lg"
-                
+                className="outlineWhite-Dashboard"
+                onClick={() => this.setState({ rules: true })}
               >
-               Rules
+                Rules
               </Button>
             </Row>
           </Col>
         </Row>
+        <Modal
+          size="lg"
+          show={this.state.rules}
+          onHide={() => this.setState({ rules: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Rules />
+        </Modal>
         {!this.state.word ? (
           <div style={{ marginTop: "5vw" }}>
             <div class="row justify-content-center">
