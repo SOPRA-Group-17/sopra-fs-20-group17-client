@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button, Table } from "react-bootstrap";
+import { Container, Row, Col, Button, Table, Modal } from "react-bootstrap";
+import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 
@@ -103,16 +104,15 @@ class EnterGuess extends React.Component {
       const requestBody = JSON.stringify({
         token: this.state.playerToken,
       });
-      
+
       // doesnt work but why, because request body not supported
-      
-       const response = await api.delete(
-        `/games/${this.state.gameId}/guesses`,
-        {data: requestBody}
-      );
+
+      const response = await api.delete(`/games/${this.state.gameId}/guesses`, {
+        data: requestBody,
+      });
 
       console.log(response);
-        /*
+      /*
       const request =  new HttpRequestMessage{
         Method = HttpMethod.Delete,
         RequestUri = `/games/${this.state.gameId}/guesses`,
@@ -132,7 +132,6 @@ class EnterGuess extends React.Component {
 
       */
 
-      
       // TODO: what is the url of the page you are directed to?
       this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
@@ -151,24 +150,23 @@ class EnterGuess extends React.Component {
     let oneValid = 0;
 
     //do we have to look at status? or marked?
-    //TODO 
+    //TODO
     this.state.hints.forEach((hint) => {
       if (hint.status == "VALID") {
-        oneValid =1;
+        oneValid = 1;
         table.push(
           <tr class="text-white" class="text-center">
             {hint.content}
           </tr>
         );
-    }
-  });
-    if(oneValid == 0){
+      }
+    });
+    if (oneValid == 0) {
       table.push(
-        <tr class="text-white" class="text-center" style={{color: "red"}}>
+        <tr class="text-white" class="text-center" style={{ color: "red" }}>
           All given hints are invalid
         </tr>
       );
-
     }
 
     return table;
@@ -186,12 +184,21 @@ class EnterGuess extends React.Component {
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
+                onClick={() => this.setState({ rules: true })}
               >
                 Rules
               </Button>
             </Row>
           </Col>
         </Row>
+        <Modal
+          size="lg"
+          show={this.state.rules}
+          onHide={() => this.setState({ rules: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Rules />
+        </Modal>
         {!this.state.readyToRender ? (
           <div>
             <div
@@ -233,9 +240,7 @@ class EnterGuess extends React.Component {
               </Col>
             </Row>
             <div class="row justify-content-center">
-              <p className>
-
-              </p>
+              <p className></p>
             </div>
 
             <div class="row justify-content-center">
