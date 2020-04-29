@@ -28,6 +28,7 @@ class EnterGuess extends React.Component {
       timer: null,
       readyToRender: null,
       noHintsValid: null,
+      rules: false
     };
     this.getHints = this.getHints.bind(this);
   }
