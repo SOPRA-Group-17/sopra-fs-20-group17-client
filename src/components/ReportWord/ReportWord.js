@@ -1,10 +1,11 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import Rules from "../rules/Rules";
 
 const word = {
   fontSize: "7vw",
@@ -51,6 +52,7 @@ class ReportWord extends React.Component {
       readyToGo: false,
       clicked: false,
       last_time: null,
+      rules: false,
     };
   }
 
@@ -252,12 +254,21 @@ class ReportWord extends React.Component {
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
+                onClick={() => this.setState({ rules: true })}
               >
                 Rules
               </Button>
             </Row>
           </Col>
         </Row>
+        <Modal
+          size="lg"
+          show={this.state.rules}
+          onHide={() => this.setState({ rules: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Rules />
+        </Modal>
 
         {!this.state.word ? (
           <div style={{ marginTop: "4vw" }}>
@@ -287,8 +298,11 @@ class ReportWord extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                <Col xs={{ span: 3, offset: 4 }} md={{ span: 0, offset: 0 }}></Col>
-                  <Col  xs="5" md="6">
+                  <Col
+                    xs={{ span: 3, offset: 4 }}
+                    md={{ span: 0, offset: 0 }}
+                  ></Col>
+                  <Col xs="5" md="6">
                     <Button
                       variant="outline-success"
                       style={bigbutton}
@@ -299,9 +313,7 @@ class ReportWord extends React.Component {
                     >
                       <h2>YES</h2>
                     </Button>
-                  
 
-              
                     <Button
                       variant="outline-danger"
                       style={bigbutton}
