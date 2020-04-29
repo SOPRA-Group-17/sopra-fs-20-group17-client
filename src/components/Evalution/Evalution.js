@@ -1,7 +1,8 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
+import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 
@@ -19,6 +20,7 @@ class Evalution extends React.Component {
       guessCorrect: null,
       color: "white",
       skiped: null,
+      rules: false,
     };
   }
 
@@ -80,7 +82,7 @@ class Evalution extends React.Component {
 
         clearInterval(this.timer);
         this.timer = null;
-       this.timer = setInterval(() => this.startNewRound(), 9000);
+        this.timer = setInterval(() => this.startNewRound(), 9000);
       }
     } catch (error) {
       alert(
@@ -127,13 +129,21 @@ class Evalution extends React.Component {
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
-                size="lg"
+                onClick={() => this.setState({ rules: true })}
               >
                 Rules
               </Button>
             </Row>
           </Col>
         </Row>
+        <Modal
+          size="lg"
+          show={this.state.rules}
+          onHide={() => this.setState({ rules: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Rules />
+        </Modal>
         {!this.state.readyToRender ? (
           <div style={{ marginTop: "5vw" }}>
             <div class="row justify-content-center">
@@ -145,9 +155,7 @@ class Evalution extends React.Component {
           </div>
         ) : (
           <div>
-            <div
-              class="row justify-content-center"
-            >
+            <div class="row justify-content-center">
               <p className="large-Font" hidden={!this.state.skiped}>
                 The guesser skipped the word
               </p>
@@ -176,7 +184,10 @@ class Evalution extends React.Component {
               class="row justify-content-center"
               style={{ marginTop: "calc(0.5em + 0.5vw)" }}
             >
-              <p className="medium-Font-grey"> New round will start in 10 seconds</p>
+              <p className="medium-Font-grey">
+                {" "}
+                New round will start in 10 seconds
+              </p>
             </div>
           </div>
         )}
