@@ -1,11 +1,8 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
-import { withRouter, useParams } from "react-router-dom";
-import User from "../shared/models/User";
+import { withRouter,} from "react-router-dom";
 import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import aLobby from "../../views/aLobby";
-import Game from "../shared/models/Game";
 import { Spinner } from "../../views/design/Spinner";
 import Rules from "../rules/Rules";
 
