@@ -1,4 +1,5 @@
 import React from "react";
+import Rules from "../rules/Rules";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import User from "../shared/models/User";
@@ -426,7 +427,7 @@ class Dashboard extends React.Component {
                 <p className="rules-text-title">Game Overview</p>
                 <p className="rules-text-s-title">Choose the mystery word</p>
                 <p className="rules-text">
-                  The aktive player chooses a number between 1 and 5 to tel
+                  The active player chooses a number between 1 and 5 to tel
                   which word he wants
                 </p>
               </Modal.Body>
