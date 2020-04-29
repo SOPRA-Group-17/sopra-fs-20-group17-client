@@ -6,12 +6,7 @@ class Rules extends React.Component {
     return (
       <div>
         {" "}
-        <Modal
-          size="lg"
-          show={this.state.rules}
-          onHide={() => this.setState({ rules: false })}
-          aria-labelledby="rules-dashboard"
-        >
+       
           <Modal.Header closeButton className="rules-header">
             <Modal.Title id="rules-dashboard-title" className="rules-header">
               Rules
@@ -152,7 +147,7 @@ class Rules extends React.Component {
               points for their hints.
             </p>
           </Modal.Body>
-        </Modal>
+       
       </div>
     );
   }
