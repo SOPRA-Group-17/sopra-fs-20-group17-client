@@ -1,6 +1,7 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter, useParams } from "react-router-dom";
+import Rules from "../rules/Rules";
 
 import {
   Container,
@@ -10,7 +11,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Form,
-  Modal
+  Modal,
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
@@ -61,6 +62,7 @@ class Validation extends React.Component {
       readyToRender: null,
       successfull: 0,
       help: true,
+      rules: false,
     };
 
     this.creatReportHintArray = this.creatReportHintArray.bind(this);
@@ -112,8 +114,8 @@ class Validation extends React.Component {
   creatReportHintArray() {
     console.log(this.state.hints);
     this.state.hints.forEach((hint) => {
-      let marked = "VALID"
-      if(hint.status == "INVALID"){
+      let marked = "VALID";
+      if (hint.status == "INVALID") {
         marked = "INVALID";
       }
       this.state.hintsReport.push({
@@ -129,9 +131,8 @@ class Validation extends React.Component {
   }
 
   submitReport() {
-
     let listRequestBody = [];
-    
+
     this.state.hintsReport.forEach((hint) => {
       const requestBody = JSON.stringify({
         token: hint.token,
@@ -140,17 +141,13 @@ class Validation extends React.Component {
         reporters: [this.state.token],
       });
       listRequestBody.push(requestBody);
-      
     });
 
     this.submitReportPut(listRequestBody);
-    
-
   }
 
   async submitReportPut(listRequestBody) {
     try {
-
       for (let i = 0; i < this.state.hintsReport.length; i++) {
         let requestBody = listRequestBody[i];
         const response = await api.put(
@@ -159,10 +156,11 @@ class Validation extends React.Component {
         );
       }
       this.props.history.push(`/game/${this.state.gameId}/evalution`);
-      
     } catch (error) {
       alert(
-        `Something went wrong while submiting your Reports \n${handleError(error)}`
+        `Something went wrong while submiting your Reports \n${handleError(
+          error
+        )}`
       );
     }
   }
@@ -339,8 +337,6 @@ class Validation extends React.Component {
       <Container fluid>
         {!this.state.readyToRender ? (
           <div>
-
-           
             <Row>
               <Col xs="5" md="3">
                 <img
@@ -355,13 +351,21 @@ class Validation extends React.Component {
                     variant="outline-light"
                     className="outlineWhite-Dashboard"
                     size="lg"
+                    onClick={() => this.setState({ rules: true })}
                   >
                     Rules
                   </Button>
                 </Row>
-                
               </Col>
             </Row>
+            <Modal
+              size="lg"
+              show={this.state.rules}
+              onHide={() => this.setState({ rules: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Rules />
+            </Modal>
             <div
               class="row justify-content-center"
               style={{ marginTop: "5vw" }}
@@ -392,6 +396,7 @@ class Validation extends React.Component {
                     variant="outline-light"
                     className="outlineWhite-Dashboard"
                     size="md"
+                    onClick={() => this.setState({ rules: true })}
                   >
                     Rules
                   </Button>
@@ -409,6 +414,14 @@ class Validation extends React.Component {
             </Row>
             <Modal
               size="lg"
+              show={this.state.rules}
+              onHide={() => this.setState({ rules: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Rules />
+            </Modal>
+            <Modal
+              size="lg"
               show={this.state.help}
               onHide={() => this.setState({ help: false })}
               aria-labelledby="help-validation"
@@ -424,22 +437,25 @@ class Validation extends React.Component {
               <Modal.Body className="rules-text">
                 <p className="rules-text-s-title">Report similar</p>
                 <p className="rules-text">
-                  If a word is too similiar to an other word, click on the corresponding number 
+                  If a word is too similiar to an other word, click on the
+                  corresponding number
                 </p>
 
                 <p className="rules-text-s-title">Decide if valid or invalid</p>
                 <p className="rules-text">
-                  If you want to mark a clue as invalid click on the VALID button after clicking the button the clue is marked as INVALID.
-                  <br/>
-                  To change the clue back to Valide click on the INVALID button after clicking the button the clue is marked as VALID. 
+                  If you want to mark a clue as invalid click on the VALID
+                  button after clicking the button the clue is marked as
+                  INVALID.
+                  <br />
+                  To change the clue back to Valide click on the INVALID button
+                  after clicking the button the clue is marked as VALID.
                 </p>
                 <p>
-                  For further informations if a clue is Valid or Invalid have a look at the rules. 
+                  For further informations if a clue is Valid or Invalid have a
+                  look at the rules.
                 </p>
               </Modal.Body>
             </Modal>
-
-            
 
             <div
               class="row row-cols-1 row-cols-md-2 row-cols-lg-3 justify-content-center "
