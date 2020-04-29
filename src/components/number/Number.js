@@ -1,9 +1,10 @@
 import React from "react";
 import logo from "../styling/JustOne_logo_white.svg";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import { api, handleError } from "../../helpers/api";
 import { Spinner } from "../../views/design/Spinner";
+import Rules from "../rules/Rules";
 
 const bignumbers = {
   fontSize: "18vw",
@@ -32,6 +33,7 @@ class Number extends React.Component {
       hide3: false,
       hide4: false,
       hide5: false,
+      rules: false,
     };
   }
 
@@ -77,7 +79,7 @@ class Number extends React.Component {
             readyForNext: false,
             readyToRender: true,
           });
-        }else{
+        } else {
           this.setState({
             readyToRender: false,
           });
@@ -241,7 +243,9 @@ class Number extends React.Component {
         {this.getGameStatus}
         {console.log("this is the game status")}
         {console.log(this.state.game_status)}
-        {console.log("checks if we are ready to render if we are not then spinner")}
+        {console.log(
+          "checks if we are ready to render if we are not then spinner"
+        )}
         {console.log(this.state.readyToRender)}
         <Row>
           {" "}
@@ -253,21 +257,28 @@ class Number extends React.Component {
               <Button
                 variant="outline-light"
                 className="outlineWhite-Dashboard"
+                onClick={() => this.setState({ rules: true })}
               >
                 Rules
               </Button>
             </Row>
           </Col>
         </Row>
+        <Modal
+          size="lg"
+          show={this.state.rules}
+          onHide={() => this.setState({ rules: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Rules />
+        </Modal>
         {!this.state.readyToRender ? (
           <div style={{ marginTop: "8vw" }}>
             <div class="row justify-content-center">
               <Spinner />
             </div>
             <div class="row justify-content-center">
-              <p className="large-Font">
-                Waiting for the hints
-              </p>
+              <p className="large-Font">Waiting for the hints</p>
             </div>
           </div>
         ) : (
