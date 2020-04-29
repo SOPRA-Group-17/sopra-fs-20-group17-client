@@ -1,7 +1,8 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button, Table } from "react-bootstrap";
+import { Container, Row, Col, Button, Table, Modal } from "react-bootstrap";
+import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 
 class Score extends React.Component {
@@ -14,6 +15,7 @@ class Score extends React.Component {
       status: null,
       game: null,
       players: null,
+      rules: false,
     };
   }
 
@@ -110,7 +112,7 @@ class Score extends React.Component {
   }
 
   correctGuesses() {
-    console.log(this.state.game)
+    console.log(this.state.game);
     if (this.state.game) {
       return this.state.game.correctCards;
     }
@@ -207,12 +209,21 @@ class Score extends React.Component {
                 <Button
                   variant="outline-light"
                   className="outlineWhite-Dashboard"
+                  onClick={() => this.setState({ rules: true })}
                 >
                   Rules
                 </Button>
               </Row>
             </Col>
           </Row>
+          <Modal
+            size="lg"
+            show={this.state.rules}
+            onHide={() => this.setState({ rules: false })}
+            aria-labelledby="rules-dashboard"
+          >
+            <Rules />
+          </Modal>
           <Row>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 2 }}></Col>
             <Col xs="7" md="6">
