@@ -5,6 +5,7 @@ import Player from "../shared/models/Player";
 import { Container, Row, Col, Button, Table, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import game from "../shared/models/Game";
+import Rules from "../rules/Rules";
 
 const lobbyname = {
   fontSize: "4vw",
@@ -39,6 +40,7 @@ class LobbyHost extends React.Component {
       exit: false,
       kick: false,
       help: true,
+      rules: false,
     };
 
     this.changeStatusState = this.changeStatusState.bind(this);
@@ -395,12 +397,22 @@ class LobbyHost extends React.Component {
                 <Button
                   variant="outline-light"
                   className="outlineWhite-Dashboard"
+                  onClick={() => this.setState({ rules: true })}
                 >
                   Rules
                 </Button>
               </Row>
             </Col>
           </Row>
+          <Modal
+            size="lg"
+            show={this.state.rules}
+            onHide={() => this.setState({ rules: false })}
+            aria-labelledby="rules-dashboard"
+          >
+            <Rules />
+          </Modal>
+
           <Modal
             size="lg"
             show={this.state.help}
