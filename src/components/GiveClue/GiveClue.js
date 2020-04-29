@@ -153,7 +153,7 @@ class GiveClue extends React.Component {
                   width: "calc(8em + 23vw)",
                   fontSize: "calc(1em + 1vw)",
                 }}
-                placeholder="Enter here your clue"
+                placeholder="Enter your clue here"
                 onChange={(e) => {
                   this.handleInputChange("clue", e.target.value);
                 }}
