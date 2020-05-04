@@ -1,6 +1,6 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
-import { withRouter,} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
@@ -27,19 +27,20 @@ class GiveClue extends React.Component {
       this.state.token = localStorage.getItem("token");
 
       this.checkTermAvailible();
-
       this.timer = setInterval(() => this.checkTermAvailible(), 1000);
     } catch (error) {
       alert(
-        `Something went wrong while getting the term: \n${handleError(error)}`
+        `Something went wrong while setting up the page: \n${handleError(
+          error
+        )}`
       );
     }
   }
 
+  //checks if state of game receiving_Hints
   async checkTermAvailible() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-
       // check if game ready to give hints
       console.log(response.data.status);
       if (response.data.status === "RECEIVING_HINTS") {
@@ -58,12 +59,10 @@ class GiveClue extends React.Component {
 
   async getTerme() {
     try {
-      console.log("get Till here");
       const response = await api.get(`/games/${this.state.gameId}/terms`);
 
       // Get the returned terme and update the state.
       this.setState({ word: response.data.content });
-      console.log(this.state.word);
     } catch (error) {
       alert(
         `Something went wrong while getting the term: \n${handleError(error)}`
@@ -82,9 +81,6 @@ class GiveClue extends React.Component {
         `/games/${this.state.gameId}/hints`,
         requestBody
       );
-
-      console.log(response);
-
       this.props.history.push(`/game/${this.state.gameId}/validation`);
     } catch (error) {
       alert(

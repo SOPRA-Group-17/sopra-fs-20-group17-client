@@ -131,33 +131,18 @@ class Register extends React.Component {
     }
   }
 
-  /**
-   *  Every time the user enters something in the input field, the state gets updated.
-   * @param key (the key of the state for identifying the field that needs to be updated)
-   * @param value (the value that gets assigned to the identified state key)
-   */
   handleInputChange(key, value) {
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
     this.setState({ [key]: value });
-    
   }
-
-  /**
-   * componentDidMount() is invoked immediately after a component is mounted (inserted into the tree).
-   * Initialization that requires DOM nodes should go here.
-   * If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-   * You may call setState() immediately in componentDidMount().
-   * It will trigger an extra rendering, but it will happen before the browser updates the screen.
-   */
-  componentDidMount() {}
 
   render() {
     return (
       <BaseContainer>
         <img className="logoImg" src={logo} alt="Just One Logo"></img>
         <FormContainer>
-          <Form className = "login-Form">
+          <Form className="login-Form">
             <Label>Username</Label>
             <InputField
               placeholder="Enter here... "
@@ -185,7 +170,6 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -197,7 +181,6 @@ class Register extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -206,11 +189,10 @@ class Register extends React.Component {
                 </Button>
               </ButtonContainer>
             )}
-            <ButtonContainer style={{marginTop: "calc(0.7em + 0.5vw)"}}>
+            <ButtonContainer style={{ marginTop: "calc(0.7em + 0.5vw)" }}>
               <Button
                 variant="outline-info"
                 style={{ paddingLeft: "25px", paddingRight: "25px" }}
-        
                 disabled={
                   !this.state.username ||
                   !this.state.password ||
@@ -229,7 +211,12 @@ class Register extends React.Component {
           <Button variant="outline-light">
             <Link
               to="/Login"
-              style={{ textDecoration: "none", color: "inherit", paddingLeft: "25px", paddingRight: "25px"}}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                paddingLeft: "25px",
+                paddingRight: "25px",
+              }}
             >
               Login
             </Link>
@@ -240,10 +227,4 @@ class Register extends React.Component {
   }
 }
 
-/**
- * You can get access to the history object's properties via the withRouter.
- * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
- *
- * What does this do, do i need to change anywhere else too?
- */
 export default withRouter(Register);

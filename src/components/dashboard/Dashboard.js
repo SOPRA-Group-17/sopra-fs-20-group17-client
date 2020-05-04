@@ -54,6 +54,7 @@ class Dashboard extends React.Component {
       localStorage.removeItem("gameId");
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
+      localStorage.removeItem("sawHelp");
 
       this.state.userId = localStorage.getItem("userId");
       this.state.token = localStorage.getItem("token");
@@ -64,7 +65,6 @@ class Dashboard extends React.Component {
       this.setState({ user: new User(response.data) });
       console.log(this.state.user.username);
 
-      //decreas timer
       this.getGames();
       this.timer = setInterval(() => this.getGames(), 1000);
 
@@ -75,21 +75,15 @@ class Dashboard extends React.Component {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
       );
-      /*this.setState({alarm: `Something went wrong while fetching the users: \n${handleError(error)}` })
-      console.log(this.state.alarm)
-      */
     }
   }
   async getScoarboard() {
     try {
-      console.log("getting the scoarboard");
       const response = await api.get(`/users?sort_by=score.desc`);
 
       this.setState({ scoarboard: response.data }, () =>
         this.creatScoarboardList()
       );
-
-      console.log(response);
     } catch (error) {
       alert(
         `Something went wrong while fetching the scoarboard: \n${handleError(
@@ -145,14 +139,13 @@ class Dashboard extends React.Component {
             }
           }
         }
-      }
-      else{
-        this.setState({ games: []});
-        this.setState({ selectLobby: null});
+      } else {
+        this.setState({ games: [] });
+        this.setState({ selectLobby: null });
       }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the data: \n${handleError(error)}`
+        `Something went wrong while fetching the games: \n${handleError(error)}`
       );
     }
   }
@@ -198,6 +191,7 @@ class Dashboard extends React.Component {
       localStorage.setItem("gameId", game.gameId);
       localStorage.setItem("role", "HOST");
       localStorage.setItem("Id", player.data.id);
+      localStorage.setItem("sawHelp", 0);
       clearInterval(this.timer);
       this.timer = null;
       clearInterval(this.timerScoarboard);
@@ -249,22 +243,20 @@ class Dashboard extends React.Component {
 
   async joinLobby() {
     try {
-      console.log("you reached JOIN LOBBY");
-      console.log(this.state.selectLobby);
       const requestBody = JSON.stringify({
         name: this.state.user.username,
         userToken: this.state.token,
       });
-      console.log(requestBody);
+
       const response = await api.post(
         `/games/${this.state.selectLobby}/players`,
         requestBody
       );
       //const game = new Game(response.data);
+      localStorage.setItem("sawHelp", 0);
       localStorage.setItem("gameId", this.state.selectLobby);
       localStorage.setItem("role", "GUEST");
-      console.log(response);
-      console.log(response.data.id);
+
       localStorage.setItem("Id", response.data.id);
       clearInterval(this.timer);
       this.timer = null;
@@ -341,9 +333,6 @@ class Dashboard extends React.Component {
     return table;
   };
 
-  /*<Alert variant="info" isOpen={!this.state.alarm} toggle={this.toggle.bind(this)}>
-  {this.state.alarm}
-  </Alert> */
   render() {
     return (
       <Container fluid>

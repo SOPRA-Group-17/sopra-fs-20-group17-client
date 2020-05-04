@@ -21,11 +21,11 @@ class Evalution extends React.Component {
       color: "white",
       skiped: null,
       rules: false,
-      token:null,
-      id:null,
-      score:null,
+      token: null,
+      id: null,
+      score: null,
       timerDown: null,
-      timeNewRound: 10
+      timeNewRound: 10,
     };
   }
 
@@ -33,7 +33,7 @@ class Evalution extends React.Component {
     try {
       //remove chosen_nr, then in the next round are no problems with the number screen
       localStorage.removeItem("chosen_nr");
-      console.log("comp");
+
       this.state.gameId = this.props.match.params.gameId;
       this.state.id = localStorage.getItem("Id");
       this.state.token = localStorage.getItem("token");
@@ -43,22 +43,19 @@ class Evalution extends React.Component {
 
       this.timer = setInterval(() => this.getGuessAndTerm(), 1000);
     } catch (error) {
-      alert(
-        `Something went wrong while getting the term: \n${handleError(error)}`
-      );
+      alert(`Something went wrong while mounting: \n${handleError(error)}`);
     }
   }
 
+  //gets the current score of a player
   async getScore() {
     try {
       const players = await api.get(`/games/${this.state.gameId}/players`);
-
-      players.data.forEach(player => {
-        if(this.state.id == player.id){
-          this.setState({score: player.score})
+      players.data.forEach((player) => {
+        if (this.state.id == player.id) {
+          this.setState({ score: player.score });
         }
       });
-     
     } catch (error) {
       alert(
         `Something went wrong while getting the score: \n${handleError(error)}`
@@ -111,14 +108,16 @@ class Evalution extends React.Component {
       }
     } catch (error) {
       alert(
-        `Something went wrong while getting the guess: \n${handleError(error)}`
+        `Something went wrong while getting the term and guess: \n${handleError(
+          error
+        )}`
       );
     }
   }
 
-  decreaseTime(){
-    if(this.state.timeNewRound > 0){
-      this.setState({timeNewRound: this.state.timeNewRound-1  })
+  decreaseTime() {
+    if (this.state.timeNewRound > 0) {
+      this.setState({ timeNewRound: this.state.timeNewRound - 1 });
     }
   }
 
@@ -146,121 +145,128 @@ class Evalution extends React.Component {
         this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
     } catch (error) {
-      alert(`Something while starting the new round: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while starting a new round: \n${handleError(
+          error
+        )}`
+      );
     }
   }
 
   render() {
     return (
-      
-      
       <Container fluid>
         {!this.state.readyToRender ? (
-        <div>
-        <Row>
-          <Col xs="5" md="3">
-            <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
-          </Col>
-          <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
-            <Row className="d-flex justify-content-end">
-              <Button
-                variant="outline-light"
-                className="outlineWhite-Dashboard"
-                onClick={() => this.setState({ rules: true })}
-              >
-                Rules
-              </Button>
+          <div>
+            <Row>
+              <Col xs="5" md="3">
+                <img
+                  className="logoImgSmall"
+                  src={logo}
+                  alt="Just One Logo"
+                ></img>
+              </Col>
+              <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+                <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ rules: true })}
+                  >
+                    Rules
+                  </Button>
+                </Row>
+              </Col>
             </Row>
-          </Col>
-        </Row>
-        <Modal
-          size="lg"
-          show={this.state.rules}
-          onHide={() => this.setState({ rules: false })}
-          aria-labelledby="rules-dashboard"
-        >
-          <Rules />
-        </Modal>
-        
-          <div style={{ marginTop: "5vw" }}>
-            <div class="row justify-content-center">
-              <Spinner />
+            <Modal
+              size="lg"
+              show={this.state.rules}
+              onHide={() => this.setState({ rules: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Rules />
+            </Modal>
+
+            <div style={{ marginTop: "5vw" }}>
+              <div class="row justify-content-center">
+                <Spinner />
+              </div>
+              <div class="row justify-content-center">
+                <p className="large-Font">Waiting for the guess</p>
+              </div>
             </div>
-            <div class="row justify-content-center">
-              <p className="large-Font">Waiting for the guess</p>
-            </div>
-          </div>
           </div>
         ) : (
-          <div>   
-          <Row>
-          <Col xs="5" md="3">
-            <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
-          </Col>
-          <Col xs={{ span: 6, offset: 1 }} md={{ span: 4, offset: 5 }}>
-            <Row className="d-flex justify-content-end">
-              <Button
-                variant="outline-light"
-                className="outlineWhite-Dashboard"
-                onClick={() => this.setState({ rules: true })}
-              >
-                Rules
-              </Button>
-            </Row>
-            <Row className="d-flex justify-content-end">
-              <p className = "score">
-                Your current score: {this.state.score}
-              </p>
-
-            </Row>
-          </Col>
-        </Row>
-        <Modal
-          size="lg"
-          show={this.state.rules}
-          onHide={() => this.setState({ rules: false })}
-          aria-labelledby="rules-dashboard"
-        >
-          <Rules />
-        </Modal>
           <div>
-            <div class="row justify-content-center">
-              <p className="large-Font" hidden={!this.state.skiped}>
-                The guesser skipped the word
-              </p>
-              <p
-                className="large-Font"
-                style={{ color: this.state.color }}
+            <Row>
+              <Col xs="5" md="3">
+                <img
+                  className="logoImgSmall"
+                  src={logo}
+                  alt="Just One Logo"
+                ></img>
+              </Col>
+              <Col xs={{ span: 6, offset: 1 }} md={{ span: 4, offset: 5 }}>
+                <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ rules: true })}
+                  >
+                    Rules
+                  </Button>
+                </Row>
+                <Row className="d-flex justify-content-end">
+                  <p className="score">
+                    Your current score: {this.state.score}
+                  </p>
+                </Row>
+              </Col>
+            </Row>
+            <Modal
+              size="lg"
+              show={this.state.rules}
+              onHide={() => this.setState({ rules: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Rules />
+            </Modal>
+            <div>
+              <div class="row justify-content-center">
+                <p className="large-Font" hidden={!this.state.skiped}>
+                  The guesser skipped the word
+                </p>
+                <p
+                  className="large-Font"
+                  style={{ color: this.state.color }}
+                  hidden={this.state.skiped}
+                >
+                  The given guess is {this.state.guessCorrect}
+                </p>
+              </div>
+              <div
+                class="row justify-content-center"
+                style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+              >
+                <p className="large-Font">Given word: {this.state.word}</p>
+              </div>
+              <div
+                class="row justify-content-center"
+                style={{ marginTop: "calc(0.5em + 0.5vw)" }}
                 hidden={this.state.skiped}
               >
-                The given guess is {this.state.guessCorrect}
-              </p>
+                <p className="large-Font">Guess: {this.state.guess}</p>
+              </div>
+              <div
+                class="row justify-content-center"
+                style={{ marginTop: "calc(0.5em + 0.5vw)" }}
+              >
+                <p className="medium-Font-grey">
+                  {" "}
+                  New round will start in {this.state.timeNewRound} seconds
+                </p>
+              </div>
             </div>
-            <div
-              class="row justify-content-center"
-              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
-            >
-              <p className="large-Font">Given word: {this.state.word}</p>
-            </div>
-            <div
-              class="row justify-content-center"
-              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
-              hidden={this.state.skiped}
-            >
-              <p className="large-Font">Guess: {this.state.guess}</p>
-            </div>
-            <div
-              class="row justify-content-center"
-              style={{ marginTop: "calc(0.5em + 0.5vw)" }}
-            >
-              <p className="medium-Font-grey">
-                {" "}
-                New round will start in {this.state.timeNewRound} seconds
-              </p>
-            </div>
-            
-          </div>
-           
           </div>
         )}
       </Container>

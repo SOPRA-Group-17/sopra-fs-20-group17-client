@@ -15,36 +15,6 @@ import {
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
-/*
-[
-  {
-    roundId: 1,
-    content: "someHint",
-    token: "abcdef-1",
-    status: "UNKNOWN",
-    marked: "UNKNOWN",
-    similarity: [],
-    reporters: [],
-  },
-  {
-    roundId: 1,
-    content: "someHint2",
-    token: "abcdef-2",
-    status: "UNKNOWN",
-    marked: "UNKNOWN",
-    similarity: [],
-    reporters: [],
-  },
-  {
-    roundId: 1,
-    content: "someHint3",
-    token: "abcdef-3",
-    status: "UNKNOWN",
-    marked: "UNKNOWN",
-    similarity: [],
-    reporters: [],
-  },
-], */
 
 class Validation extends React.Component {
   constructor() {
@@ -61,7 +31,7 @@ class Validation extends React.Component {
       invalid: [],
       readyToRender: null,
       successfull: 0,
-      help: true,
+      help: false,
       rules: false,
     };
 
@@ -75,6 +45,14 @@ class Validation extends React.Component {
       this.state.token = localStorage.getItem("token");
       this.state.gameId = this.props.match.params.gameId;
       const response = await api.get(`/games/${this.state.gameId}/terms`);
+
+      //check if user was on this site before, in same game
+      if (localStorage.getItem("sawHelp") != null) {
+        if (localStorage.getItem("sawHelp") == 0) {
+          localStorage.setItem("sawHelp", 1);
+          this.setState({ help: true });
+        }
+      }
 
       // Get the returned terme and update the state.
       this.setState({ word: response.data.content });
@@ -158,7 +136,7 @@ class Validation extends React.Component {
       this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
       alert(
-        `Something went wrong while submiting your Reports \n${handleError(
+        `Something went wrong while submiting your reports \n${handleError(
           error
         )}`
       );
@@ -202,7 +180,6 @@ class Validation extends React.Component {
 
   unReportSimilar(index1, index2) {
     //deleting similarity index1
-
     let similar1 = this.state.hintsReport[index1].similarity;
     if (similar1.includes(index2)) {
       let newArray1 = this.state.hintsReport;
@@ -216,7 +193,6 @@ class Validation extends React.Component {
     }
 
     //deleting similarity index2
-
     let similar2 = this.state.hintsReport[index2].similarity;
     if (similar2.includes(index1)) {
       let newArray2 = this.state.hintsReport;
@@ -234,7 +210,6 @@ class Validation extends React.Component {
 
   reportSimilar(index1, index2) {
     //updating similarity index1
-
     let similar1 = this.state.hintsReport[index1].similarity;
     if (!similar1.includes(index2)) {
       let newArray1 = this.state.hintsReport;
@@ -255,6 +230,7 @@ class Validation extends React.Component {
     console.log(this.state.hintsReport);
   }
 
+  //creats a card for each hint
   createCards = () => {
     let cards = [];
     let totalNr = this.state.hintsReport.length;
@@ -487,78 +463,5 @@ class Validation extends React.Component {
     );
   }
 }
-
-//d-flex  flex-md-row  flex-column"
-
-/*
-   <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
-          <Col style={{ border: "calc(0.025em + 0.025vw) solid white" }}>
-            <div class="row justify-content-center">
-              <p className="nr">1</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Example</p>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is to similar to:</p>
-            </div>
-            <div class="row justify-content-center">
-              <ButtonGroup size="md">
-                <Button variant="outline-light">1</Button>
-                <Button variant="outline-light">2</Button>
-                <Button variant="outline-light">3</Button>
-                <Button variant="outline-light">4</Button>
-                <Button variant="outline-light">5</Button>
-                <Button variant="outline-light">6</Button>
-              </ButtonGroup>
-            </div>
-            <div class="row justify-content-center">
-              <p className="card-text">Clue is invalid?</p>
-            </div>
-            <div class="row justify-content-center">
-              <Button
-                size="sm"
-                variant="outline-light"
-                className="button-card"
-                style={{ marginBottom: "calc(0.5em + 0.2vw)" }}
-              >
-                Yes
-              </Button>
-            </div>
-          </Col>
-          */
 
 export default withRouter(Validation);
