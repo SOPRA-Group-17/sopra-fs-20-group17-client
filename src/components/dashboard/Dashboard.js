@@ -127,7 +127,6 @@ class Dashboard extends React.Component {
 
       if (response.data.length != 0) {
         this.setState({ games: response.data });
-        console.log(this.state.selectLobby, response.data[1].gameId);
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].gameId == this.state.selectLobby) {
             console.log("found match");
@@ -146,6 +145,10 @@ class Dashboard extends React.Component {
             }
           }
         }
+      }
+      else{
+        this.setState({ games: []});
+        this.setState({ selectLobby: null});
       }
     } catch (error) {
       alert(
