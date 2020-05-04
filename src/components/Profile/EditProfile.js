@@ -4,19 +4,16 @@ import { BaseContainer } from "../../helpers/layout";
 import { api, handleError } from "../../helpers/api";
 import Player from "../../views/Player";
 import { Spinner } from "../../views/design/Spinner";
-import { Button } from "../../views/design/Button";
+import Rules from "../rules/Rules";
 import { withRouter } from "react-router-dom";
 import user from "../shared/models/User";
 import DatePicker from "react-datepicker";
 import formatDate from "react-datepicker";
 import User from "../shared/models/User";
+import { Container, Row, Col, Modal, Button, Badge } from "react-bootstrap";
+import logo from "../styling/JustOne_logo_white.svg";
 
 import "react-datepicker/dist/react-datepicker.css";
-
-const Container = styled(BaseContainer)`
-  color: white;
-  text-align: center;
-`;
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -59,7 +56,7 @@ const InputField = styled.input`
 `;
 const OutputField = styled.input`
   &::placeholder {
-    color: yellow;
+    color: ##1c81d4;
   }
   height: 50px;
   width: 100%;
@@ -85,22 +82,31 @@ class EditProfile extends React.Component {
       user: new user(),
       ID: null,
       newUsername: null,
-      birthDate: null
+      currentPassword: null,
+      birthDate: null,
+      rules: false,
+      passwordScreen: false, //has to be false
+      passwordValidation: false, // has to be false
+      newPassword: null,
+      confirmPassword: null,
+      passwordConfirmationSuccessful: false, //has to be false
     };
   }
 
   async componentDidMount() {
     try {
-      this.state.ID = this.props.match.params.id;
+      this.state.ID = this.props.match.params.userId;
+      console.log(this.state.ID);
       const response = await api.get(`/users/${this.state.ID}`);
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
       // feel free to remove it :)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(response.data);
       // Get the returned users and update the state.
-      this.setState({ user: response.data[0] });
+      this.setState({ user: response.data });
       console.log(this.state.ID);
+      console.log(this.state.user);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -108,21 +114,21 @@ class EditProfile extends React.Component {
     }
   }
 
-  async saveChange() {
+  async saveChangeUsername() {
     try {
       let requestBody;
       if (this.state.newUsername != null && this.state.birthDate != null) {
         requestBody = JSON.stringify({
           username: this.state.newUsername,
-          birthDate: this.state.birthDate.toString().slice(0, 10)
+          birthDate: this.state.birthDate.toString().slice(0, 10),
         });
       } else if (this.state.newUsername != null) {
         requestBody = JSON.stringify({
-          username: this.state.newUsername
+          username: this.state.newUsername,
         });
       } else if (this.state.birthDate != null) {
         requestBody = JSON.stringify({
-          birthDate: this.state.birthDate.toString().slice(4, 16)
+          birthDate: this.state.birthDate.toString().slice(4, 16),
         });
       }
       console.log(requestBody);
@@ -142,6 +148,27 @@ class EditProfile extends React.Component {
       this.props.history.push(`/Register`);
     }
   }
+  async saveChangePassword() {
+    try {
+      //update the password
+      let requestBody;
+      requestBody = JSON.stringify({
+        username: this.state.newUsername,
+        newPassword: this.state.newPassword,
+      });
+      console.log(requestBody);
+      const response = await api.put(`/users/${this.state.ID}`, requestBody);
+
+      // Get the returned user and update a new object.
+      const user = new User(response.data);
+    } catch (error) {
+      alert(
+        `Something went wrong during updating your data: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
 
   dashboard() {
     this.props.history.push("/game/dashboard");
@@ -155,9 +182,9 @@ class EditProfile extends React.Component {
 
   //used a pre build datepicker, so that only correct dates can be selected, need to change format, since i dont want to keep the hours
 
-  handleChange = date => {
+  handleChange = (date) => {
     this.setState({
-      birthDate: date
+      birthDate: date,
     });
     console.log(this.state.birthDate);
   };
@@ -170,74 +197,210 @@ class EditProfile extends React.Component {
     }
   }
 
+  checkPassword() {
+    if (this.state.currentPassword) {
+      //get request to the backend, check if the password is correct
+      //if correct then set passwordValidation true
+      this.setState({
+        passwordValidation: true,
+      });
+    }
+  }
+
+  confirmPassword() {
+    if (this.state.confirmPassword && this.state.newPassword) {
+      if (this.state.confirmPassword === this.state.newPassword) {
+        //update Password
+        //this.saveChangePassword(); //has to be inside, cannot be tested yet
+        this.setState({
+          passwordConfirmationSuccessful: true,
+        });
+      }
+    }
+  }
+
+  editUsername() {
+    this.setState({
+      passwordScreen: false,
+      passwordValidation: false,
+      passwordConfirmationSuccessful: false,
+    });
+  }
+
   render() {
     return (
-      <BaseContainer>
-        <Button
-          width="100%"
-          onClick={() => {
-            this.dashboard();
-          }}
-        >
-          Return to Dashboard
-        </Button>
-        <FormContainer>
-          <Form>
-            <Label>Username</Label>
-            <InputField
-              placeholder={this.state.user.username}
-              onChange={e => {
-                this.handleInputChange("newUsername", e.target.value);
-              }}
-            />
-            <Label>Online Status</Label>
-            <OutputField placeholder={this.state.user.status} />
-            <Label>ID</Label>
-            <OutputField placeholder={this.state.user.id} />
-            <Label>Creation date</Label>
-            <OutputField placeholder={this.state.user.date} />
-            <Label>Birth date</Label>
-            <DatePicker
-              placeholderText={this.getBirthDate()}
-              selected={this.state.birthDate}
-              onChange={this.handleChange}
-            />
-          </Form>
-        </FormContainer>
-        <Button
-          disabled={!this.state.birthDate & !this.state.newUsername}
-          width="100%"
-          onClick={() => {
-            this.saveChange();
-          }}
-        >
-          Save Changes
-        </Button>
-      </BaseContainer>
+      <Container fluid>
+        <div>
+          <Row>
+            <Col xs="5" md="3">
+              <img
+                className="logoImgSmall"
+                src={logo}
+                alt="Just One Logo"
+              ></img>
+            </Col>
+            <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+              <Row className="d-flex justify-content-end">
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => {
+                    this.dashboard();
+                  }}
+                >
+                  Return to Dashboard
+                </Button>
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.setState({ rules: true })}
+                >
+                  Rules
+                </Button>
+              </Row>
+            </Col>
+          </Row>
+          <Modal
+            size="lg"
+            show={this.state.rules}
+            onHide={() => this.setState({ rules: false })}
+            aria-labelledby="rules-dashboard"
+          >
+            <Rules />
+          </Modal>
+
+          {!this.state.passwordScreen ? (
+            <div>
+              <Col
+                xs={{ span: 10, offset: 1 }}
+                md={{ span: 6, offset: 3 }}
+                lg={{ span: 4, offset: 4 }}
+              >
+                <Label>ID</Label>
+                <OutputField placeholder={this.state.user.id} />
+                <Label>Username</Label>
+                <InputField
+                  placeholder={this.state.user.username}
+                  onChange={(e) => {
+                    this.handleInputChange("newUsername", e.target.value);
+                  }}
+                />
+                <Button
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.setState({ passwordScreen: true })}
+                >
+                  Edit password
+                </Button>
+                <Button
+                  disabled={!this.state.newUsername}
+                  variant="outline-light"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => {
+                    this.saveChangeUsername();
+                  }}
+                >
+                  Save username
+                </Button>
+              </Col>
+            </div>
+          ) : (
+            <div>
+              {this.state.passwordValidation ? (
+                <Row style={{ marginTop: "2vw" }} v>
+                  <Col
+                    xs={{ span: 10, offset: 1 }}
+                    md={{ span: 6, offset: 3 }}
+                    lg={{ span: 4, offset: 4 }}
+                  >
+                    <Label>new Password</Label>
+                    <InputField
+                      placeholder={"********"}
+                      onChange={(e) => {
+                        this.handleInputChange("newPassword", e.target.value);
+                      }}
+                    />
+                    <Label>confirm Password</Label>
+                    <InputField
+                      placeholder={"********"}
+                      onChange={(e) => {
+                        this.handleInputChange(
+                          "confirmPassword",
+                          e.target.value
+                        );
+                      }}
+                    />
+                    <Button
+                      variant="outline-light"
+                      className="outlineWhite-Dashboard"
+                      onClick={() => {
+                        this.confirmPassword();
+                      }}
+                    >
+                      confirm new password
+                    </Button>
+                    <Button
+                      variant="outline-light"
+                      className="outlineWhite-Dashboard"
+                      onClick={() => {
+                        this.editUsername();
+                      }}
+                    >
+                      editUsername
+                    </Button>
+                    {this.state.passwordConfirmationSuccessful ? (
+                      <Badge
+                        pill
+                        variant="success"
+                        style={{ marginTop: "1vw" }}
+                      >
+                        the password confirmation was successful
+                      </Badge>
+                    ) : (
+                      <p> </p>
+                    )}
+                  </Col>
+                </Row>
+              ) : (
+                <Col
+                  xs={{ span: 10, offset: 1 }}
+                  md={{ span: 6, offset: 3 }}
+                  lg={{ span: 4, offset: 4 }}
+                >
+                  <Label>current Password</Label>
+                  <InputField
+                    placeholder={"********"}
+                    onChange={(e) => {
+                      this.handleInputChange("currentPassword", e.target.value);
+                    }}
+                  />
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => {
+                      this.checkPassword();
+                    }}
+                  >
+                    check password
+                  </Button>
+
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => {
+                      this.editUsername();
+                    }}
+                  >
+                    editUsername
+                  </Button>
+                </Col>
+              )}
+            </div>
+          )}
+        </div>
+      </Container>
     );
   }
 }
-
-/*
-    <InputField
-        placeholder= {this.getBirthDate()}
-
-        onChange={
-
-            () => {
-                const [startDate, setStartDate] = useState(new Date());
-                return (
-                    <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
-                );
-            }}
-
-            if(this.correctFormat(e.target.value)){
-                this.handleInputChange('newBirthDate', e.target.value);
-            }
-            else{
-                this.handleInputChange('newBirthDate', null);
-            }
-            }}
-     */
 
 export default withRouter(EditProfile);

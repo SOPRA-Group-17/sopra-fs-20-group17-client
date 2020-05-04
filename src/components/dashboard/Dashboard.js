@@ -338,6 +338,14 @@ class Dashboard extends React.Component {
     return table;
   };
 
+editProfile(){
+  clearInterval(this.timer);
+  this.timer = null;
+  clearInterval(this.timerScoarboard);
+  this.timerScoarboard = null;
+  this.props.history.push(`/users/${this.state.userId}`);
+}
+
   /*<Alert variant="info" isOpen={!this.state.alarm} toggle={this.toggle.bind(this)}>
   {this.state.alarm}
   </Alert> */
@@ -382,6 +390,9 @@ class Dashboard extends React.Component {
                   <Button
                     variant="outline-light"
                     className="outlineWhite-Dashboard"
+                    onClick={() => {
+                      this.editProfile();
+                    }}
                   >
                     Edit Profil
                   </Button>

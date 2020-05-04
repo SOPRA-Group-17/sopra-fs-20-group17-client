@@ -9,9 +9,10 @@ import Login from "../../login/Login";
 import Register from "../../Register/Register";
 import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
+import { EditGuard } from "../routeProtectors/EditGuard";
 import Dashboard from "../../dashboard/Dashboard";
 import EnterGuess from "../../game/EnterGuess";
-
+import EditProfile from "../../Profile/EditProfile";
 
 /**
  * Main router of your application.
@@ -71,6 +72,14 @@ class AppRouter extends React.Component {
                 <DashboardGuard>
                   <Dashboard />
                 </DashboardGuard>
+              )}
+            />
+            <Route
+              path="/users/:userId"
+              render={() => (
+                <EditGuard>
+                  <EditProfile />
+                </EditGuard>
               )}
             />
 
