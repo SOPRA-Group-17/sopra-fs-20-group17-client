@@ -90,6 +90,7 @@ class EditProfile extends React.Component {
       newPassword: null,
       confirmPassword: null,
       passwordConfirmationSuccessful: false, //has to be false
+      passwordHidden: true,
     };
   }
 
@@ -227,6 +228,14 @@ class EditProfile extends React.Component {
     });
   }
 
+  showOrHidePassword() {
+    if (this.state.passwordHidden) {
+      this.setState({ passwordHidden: false });
+    } else {
+      this.setState({ passwordHidden: true });
+    }
+  }
+
   render() {
     return (
       <Container fluid>
@@ -309,20 +318,22 @@ class EditProfile extends React.Component {
               {this.state.passwordValidation ? (
                 <Row style={{ marginTop: "2vw" }} v>
                   <Col
-                    xs={{ span: 10, offset: 1 }}
-                    md={{ span: 6, offset: 3 }}
-                    lg={{ span: 4, offset: 4 }}
+                    xs={{ span: 11, offset: 0 }}
+                    md={{ span: 7, offset: 4 }}
+                    lg={{ span: 5, offset: 3 }}
                   >
                     <Label>new Password</Label>
                     <InputField
-                      placeholder={"********"}
+                     type={this.state.passwordHidden ? "password" : "text"}
+                      placeholder={"Enter here..."}
                       onChange={(e) => {
                         this.handleInputChange("newPassword", e.target.value);
                       }}
                     />
                     <Label>confirm Password</Label>
                     <InputField
-                      placeholder={"********"}
+                     type={this.state.passwordHidden ? "password" : "text"}
+                      placeholder={"Enter here..."}
                       onChange={(e) => {
                         this.handleInputChange(
                           "confirmPassword",
@@ -339,6 +350,15 @@ class EditProfile extends React.Component {
                     >
                       confirm new password
                     </Button>
+                    <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => {
+                      this.showOrHidePassword();
+                    }}
+                  >
+                    show Password
+                  </Button>
                     <Button
                       variant="outline-light"
                       className="outlineWhite-Dashboard"
@@ -363,13 +383,14 @@ class EditProfile extends React.Component {
                 </Row>
               ) : (
                 <Col
-                  xs={{ span: 10, offset: 1 }}
-                  md={{ span: 6, offset: 3 }}
-                  lg={{ span: 4, offset: 4 }}
+                  xs={{ span: 11, offset: 0 }}
+                  md={{ span: 7, offset: 2 }}
+                  lg={{ span: 5, offset: 3 }}
                 >
                   <Label>current Password</Label>
                   <InputField
-                    placeholder={"********"}
+                    type={this.state.passwordHidden ? "password" : "text"}
+                    placeholder={"Enter here..."}
                     onChange={(e) => {
                       this.handleInputChange("currentPassword", e.target.value);
                     }}
@@ -392,6 +413,15 @@ class EditProfile extends React.Component {
                     }}
                   >
                     editUsername
+                  </Button>
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => {
+                      this.showOrHidePassword();
+                    }}
+                  >
+                    show Password
                   </Button>
                 </Col>
               )}
