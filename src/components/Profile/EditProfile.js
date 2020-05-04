@@ -52,7 +52,7 @@ const InputField = styled.input`
   border-radius: 50px;
   margin-bottom: 20px;
   background: rgba(255, 255, 255, 0.2);
-  color: red;
+  color: #a363eb;
 `;
 const OutputField = styled.input`
   &::placeholder {
