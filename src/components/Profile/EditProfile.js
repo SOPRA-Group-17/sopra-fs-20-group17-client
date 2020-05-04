@@ -322,7 +322,7 @@ class EditProfile extends React.Component {
                         this.handleInputChange("newPassword", e.target.value);
                       }}
                     />
-                    <Label>confirm Password</Label>
+                    <Label>confirm Password</Label> 
                     <InputField
                       type={this.state.passwordHidden ? "password" : "text"}
                       placeholder={"Enter here..."}
