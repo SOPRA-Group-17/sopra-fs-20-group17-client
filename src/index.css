@@ -129,6 +129,12 @@ body {
 
 /*to test 1366px x 768px */
 @media (min-width: 992px) {
+  .score{
+    margin-right: 0.8vw;
+    margin-top: 1vw;
+    font-size: 2vw;
+  }
+
   .login-Form{
     width: 40vw;
     font-size: 1.3vw;
@@ -177,6 +183,11 @@ body {
 
 /* Medium devices (tablets, 768px and up) to test  990, 556*/
 @media (max-width: 991.98px) {
+  .score{
+    margin-right: 0.8vw;
+    margin-top: 1vw;
+    font-size: 2.2vw;
+  }
   .login-Form{
     width: 50vw;
     font-size: 1.8vw;
@@ -225,6 +236,11 @@ body {
 
 /*phone portrait xs and s*/
 @media (max-width: 767.98px) {
+  .score{
+    margin-right: 0.8vw;
+    margin-top: 1.5vw;
+    font-size: 4.5vw;
+  }
 
   .login-Form{
     width: 80vw;

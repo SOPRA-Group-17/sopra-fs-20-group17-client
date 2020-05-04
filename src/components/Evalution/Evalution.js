@@ -21,6 +21,11 @@ class Evalution extends React.Component {
       color: "white",
       skiped: null,
       rules: false,
+      token:null,
+      id:null,
+      score:null,
+      timerDown: null,
+      timeNewRound: 10
     };
   }
 
@@ -33,6 +38,7 @@ class Evalution extends React.Component {
       this.state.id = localStorage.getItem("Id");
       this.state.token = localStorage.getItem("token");
 
+      this.getScore();
       this.getGuessAndTerm();
 
       this.timer = setInterval(() => this.getGuessAndTerm(), 1000);
@@ -42,6 +48,24 @@ class Evalution extends React.Component {
       );
     }
   }
+
+  async getScore() {
+    try {
+      const players = await api.get(`/games/${this.state.gameId}/players`);
+
+      players.data.forEach(player => {
+        if(this.state.id == player.id){
+          this.setState({score: player.score})
+        }
+      });
+     
+    } catch (error) {
+      alert(
+        `Something went wrong while getting the score: \n${handleError(error)}`
+      );
+    }
+  }
+
   async getGuessAndTerm() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
@@ -82,7 +106,8 @@ class Evalution extends React.Component {
 
         clearInterval(this.timer);
         this.timer = null;
-        this.timer = setInterval(() => this.startNewRound(), 9000);
+        this.timer = setInterval(() => this.startNewRound(), 9800);
+        this.timerDown = setInterval(() => this.decreaseTime(), 1000);
       }
     } catch (error) {
       alert(
@@ -91,11 +116,19 @@ class Evalution extends React.Component {
     }
   }
 
+  decreaseTime(){
+    if(this.state.timeNewRound > 0){
+      this.setState({timeNewRound: this.state.timeNewRound-1  })
+    }
+  }
+
   async startNewRound() {
     try {
       console.log("starting new round");
       clearInterval(this.timer);
       this.timer = null;
+      clearInterval(this.timerDown);
+      this.timerDown = null;
 
       const Player = await api.get(`/games/players/${this.state.id}`);
       console.log(Player.data);
@@ -119,7 +152,11 @@ class Evalution extends React.Component {
 
   render() {
     return (
+      
+      
       <Container fluid>
+        {!this.state.readyToRender ? (
+        <div>
         <Row>
           <Col xs="5" md="3">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
@@ -144,7 +181,7 @@ class Evalution extends React.Component {
         >
           <Rules />
         </Modal>
-        {!this.state.readyToRender ? (
+        
           <div style={{ marginTop: "5vw" }}>
             <div class="row justify-content-center">
               <Spinner />
@@ -153,7 +190,39 @@ class Evalution extends React.Component {
               <p className="large-Font">Waiting for the guess</p>
             </div>
           </div>
+          </div>
         ) : (
+          <div>   
+          <Row>
+          <Col xs="5" md="3">
+            <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
+          </Col>
+          <Col xs={{ span: 6, offset: 1 }} md={{ span: 4, offset: 5 }}>
+            <Row className="d-flex justify-content-end">
+              <Button
+                variant="outline-light"
+                className="outlineWhite-Dashboard"
+                onClick={() => this.setState({ rules: true })}
+              >
+                Rules
+              </Button>
+            </Row>
+            <Row className="d-flex justify-content-end">
+              <p className = "score">
+                Your current score: {this.state.score}
+              </p>
+
+            </Row>
+          </Col>
+        </Row>
+        <Modal
+          size="lg"
+          show={this.state.rules}
+          onHide={() => this.setState({ rules: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Rules />
+        </Modal>
           <div>
             <div class="row justify-content-center">
               <p className="large-Font" hidden={!this.state.skiped}>
@@ -186,9 +255,12 @@ class Evalution extends React.Component {
             >
               <p className="medium-Font-grey">
                 {" "}
-                New round will start in 10 seconds
+                New round will start in {this.state.timeNewRound} seconds
               </p>
             </div>
+            
+          </div>
+           
           </div>
         )}
       </Container>
