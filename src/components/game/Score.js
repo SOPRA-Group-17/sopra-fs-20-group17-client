@@ -114,7 +114,11 @@ class Score extends React.Component {
   correctGuesses() {
     console.log(this.state.game);
     if (this.state.game) {
-      return this.state.game.correctCards;
+      if (this.state.game.correctCards >= 0) {
+        return this.state.game.correctCards;
+      } else {
+        return 0;
+      }
     }
   }
 
@@ -229,7 +233,7 @@ class Score extends React.Component {
             <Col xs="7" md="6">
               <h1>Team Score: {this.teamScore()}</h1>
 
-              <h1># of correct guesses: {this.correctGuesses()} </h1>
+              <h1>Number of correct guesses: {this.correctGuesses()} </h1>
             </Col>
           </Row>
           <Row style={{ marginTop: "6vw" }}>
