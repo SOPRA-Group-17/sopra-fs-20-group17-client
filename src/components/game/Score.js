@@ -112,6 +112,7 @@ class Score extends React.Component {
   }
 
   correctGuesses() {
+    //shows correct guesses
     console.log(this.state.game);
     if (this.state.game) {
       if (this.state.game.correctCards >= 0) {
