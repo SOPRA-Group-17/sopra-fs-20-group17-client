@@ -71,6 +71,7 @@ const OutputField = styled.input`
 `;
 const Label = styled.label`
   color: white;
+
   margin-bottom: 10px;
   text-transform: uppercase;
 `;
@@ -102,7 +103,7 @@ class EditProfile extends React.Component {
       // delays continuous execution of an async operation for 1 second.
       // This is just a fake async call, so that the spinner can be displayed
       // feel free to remove it :)
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      //await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log(response.data);
       // Get the returned users and update the state.
       this.setState({ user: response.data });
@@ -118,18 +119,9 @@ class EditProfile extends React.Component {
   async saveChangeUsername() {
     try {
       let requestBody;
-      if (this.state.newUsername != null && this.state.birthDate != null) {
+      if (this.state.newUsername != null) {
         requestBody = JSON.stringify({
           username: this.state.newUsername,
-          birthDate: this.state.birthDate.toString().slice(0, 10),
-        });
-      } else if (this.state.newUsername != null) {
-        requestBody = JSON.stringify({
-          username: this.state.newUsername,
-        });
-      } else if (this.state.birthDate != null) {
-        requestBody = JSON.stringify({
-          birthDate: this.state.birthDate.toString().slice(4, 16),
         });
       }
       console.log(requestBody);
@@ -319,12 +311,12 @@ class EditProfile extends React.Component {
                 <Row style={{ marginTop: "2vw" }} v>
                   <Col
                     xs={{ span: 11, offset: 0 }}
-                    md={{ span: 7, offset: 4 }}
-                    lg={{ span: 5, offset: 3 }}
+                    md={{ span: 9, offset: 3 }}
+                    lg={{ span: 6, offset: 3 }}
                   >
                     <Label>new Password</Label>
                     <InputField
-                     type={this.state.passwordHidden ? "password" : "text"}
+                      type={this.state.passwordHidden ? "password" : "text"}
                       placeholder={"Enter here..."}
                       onChange={(e) => {
                         this.handleInputChange("newPassword", e.target.value);
@@ -332,7 +324,7 @@ class EditProfile extends React.Component {
                     />
                     <Label>confirm Password</Label>
                     <InputField
-                     type={this.state.passwordHidden ? "password" : "text"}
+                      type={this.state.passwordHidden ? "password" : "text"}
                       placeholder={"Enter here..."}
                       onChange={(e) => {
                         this.handleInputChange(
@@ -351,14 +343,14 @@ class EditProfile extends React.Component {
                       confirm new password
                     </Button>
                     <Button
-                    variant="outline-light"
-                    className="outlineWhite-Dashboard"
-                    onClick={() => {
-                      this.showOrHidePassword();
-                    }}
-                  >
-                    show Password
-                  </Button>
+                      variant="outline-light"
+                      className="outlineWhite-Dashboard"
+                      onClick={() => {
+                        this.showOrHidePassword();
+                      }}
+                    >
+                      show Password
+                    </Button>
                     <Button
                       variant="outline-light"
                       className="outlineWhite-Dashboard"
