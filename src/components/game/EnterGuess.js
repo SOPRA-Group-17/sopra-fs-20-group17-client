@@ -35,7 +35,7 @@ class EnterGuess extends React.Component {
 
   async componentDidMount() {
     try {
-      // set the states
+      // set the states, if change to setState problems
       this.state.playerToken = localStorage.getItem("token");
       this.state.playerId = localStorage.getItem("Id");
       this.state.gameId = this.props.match.params.gameId;
