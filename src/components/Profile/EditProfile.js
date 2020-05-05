@@ -100,10 +100,7 @@ class EditProfile extends React.Component {
       this.state.ID = this.props.match.params.userId;
       console.log(this.state.ID);
       const response = await api.get(`/users/${this.state.ID}`);
-      // delays continuous execution of an async operation for 1 second.
-      // This is just a fake async call, so that the spinner can be displayed
-      // feel free to remove it :)
-      //await new Promise((resolve) => setTimeout(resolve, 1000));
+
       console.log(response.data);
       // Get the returned users and update the state.
       this.setState({ user: response.data });
@@ -126,12 +123,9 @@ class EditProfile extends React.Component {
       }
       console.log(requestBody);
       const response = await api.put(`/users/${this.state.ID}`, requestBody);
-
+      console.log(response.data);
       // Get the returned user and update a new object.
       const user = new User(response.data);
-
-      // edit profile worked --> navigate to the route /game in the GameRouter
-      this.props.history.push(`/game/profile/${this.state.ID}`);
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -146,12 +140,11 @@ class EditProfile extends React.Component {
       //update the password
       let requestBody;
       requestBody = JSON.stringify({
-        username: this.state.newUsername,
         newPassword: this.state.newPassword,
       });
       console.log(requestBody);
       const response = await api.put(`/users/${this.state.ID}`, requestBody);
-
+      console.log(response);
       // Get the returned user and update a new object.
       const user = new User(response.data);
     } catch (error) {
@@ -173,8 +166,6 @@ class EditProfile extends React.Component {
     this.setState({ [key]: value });
   }
 
-  //used a pre build datepicker, so that only correct dates can be selected, need to change format, since i dont want to keep the hours
-
   handleChange = (date) => {
     this.setState({
       birthDate: date,
@@ -190,13 +181,44 @@ class EditProfile extends React.Component {
     }
   }
 
-  checkPassword() {
+  async checkPassword() {
     if (this.state.currentPassword) {
       //get request to the backend, check if the password is correct
       //if correct then set passwordValidation true
-      this.setState({
-        passwordValidation: true,
-      });
+      //post request mit pw im req body
+      //response ? user : null
+      try {
+        let requestBody;
+
+        requestBody = JSON.stringify({
+          password: this.state.currentPassword,
+        });
+
+        console.log(requestBody);
+        const response = await api.post(
+          `/users/${this.state.ID}/password`,
+          requestBody
+        );
+        console.log(response.data);
+        if (response.data) {
+          this.setState({
+            passwordValidation: true,
+          });
+        } else {
+          this.setState({
+            passwordValidation: false,
+          });
+        }
+        // Get the returned user and update a new object.
+        const user = new User(response.data);
+      } catch (error) {
+        alert(
+          `Something went wrong during updating your data: \n${handleError(
+            error
+          )}`
+        );
+        this.props.history.push(`/Register`);
+      }
     }
   }
 
@@ -204,7 +226,7 @@ class EditProfile extends React.Component {
     if (this.state.confirmPassword && this.state.newPassword) {
       if (this.state.confirmPassword === this.state.newPassword) {
         //update Password
-        //this.saveChangePassword(); //has to be inside, cannot be tested yet
+        this.saveChangePassword();
         this.setState({
           passwordConfirmationSuccessful: true,
         });
@@ -322,7 +344,7 @@ class EditProfile extends React.Component {
                         this.handleInputChange("newPassword", e.target.value);
                       }}
                     />
-                    <Label>confirm Password</Label> 
+                    <Label>confirm Password</Label>
                     <InputField
                       type={this.state.passwordHidden ? "password" : "text"}
                       placeholder={"Enter here..."}

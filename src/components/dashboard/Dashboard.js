@@ -394,7 +394,7 @@ editProfile(){
                       this.editProfile();
                     }}
                   >
-                    Edit Profil
+                    Edit Profile
                   </Button>
                 </Row>
                 <Row className="d-flex justify-content-end">
