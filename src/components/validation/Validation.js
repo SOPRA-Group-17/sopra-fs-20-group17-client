@@ -413,8 +413,9 @@ class Validation extends React.Component {
               <Modal.Body className="rules-text">
                 <p className="rules-text-s-title">Report similar</p>
                 <p className="rules-text">
-                  If a word is too similiar to an other word, click on the
-                  corresponding number
+                  The number of a clue is written on the top of the Cluecard. 
+                  If a clue is too similiar to an other clue, click on the number of the similar clue in the numberlist.
+                  E.g. If Clue Nr.1 is similiar to clue Nr. 2. Click on 2 in the numberlist of clue 1.  
                 </p>
 
                 <p className="rules-text-s-title">Decide if valid or invalid</p>
@@ -426,10 +427,33 @@ class Validation extends React.Component {
                   To change the clue back to Valide click on the INVALID button
                   after clicking the button the clue is marked as VALID.
                 </p>
-                <p>
-                  For further informations if a clue is Valid or Invalid have a
-                  look at the rules.
-                </p>
+                <p className="rules-text">
+                Invalid clues:
+              <ul>
+                <li>
+                  The Mystery word but written differently. Example: Shurt is
+                  not allowed when trying to make the player guess Shirt.
+                </li>
+                <li>
+                  The Mystery word written in a foreign language. Example:
+                  Buisson is not allowed if the word to be guessed is Shrub.
+                </li>
+                <li>
+                  A word from the same family as the Mystery word. Example:
+                  Princess is not allowed if the word to be guessed is Prince
+                </li>
+                <li>
+                  An invented word. Example: Swee’ting is not allowed to try to
+                  help someone guess Cake.
+                </li>
+                <li>
+                  A word phonetically identical to the Mystery word, but the
+                  meaning of which is different. Example: Whether is not allowed
+                  to try to get someone to guess Weather.
+                </li>
+              </ul>
+              </p>
+                
               </Modal.Body>
             </Modal>
 
