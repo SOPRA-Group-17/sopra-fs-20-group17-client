@@ -59,7 +59,6 @@ class LobbyHost extends React.Component {
       const response = await api.get(
         `/games/players/${localStorage.getItem("Id")}`
       );
-
       /*
       initial set state of:
       - player
