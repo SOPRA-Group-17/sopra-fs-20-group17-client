@@ -488,8 +488,8 @@ class Dashboard extends React.Component {
                 </Table>
                 <p style={{ color: "red" }}>
                   Dear testing group, we are currently facing issues when we are
-                  getting current requests. <br />
-                  To play the game please make sure, that you not submit yout
+                  getting concurrent requests. <br />
+                  To play the game please make sure, that you do not submit your
                   hints, or validate your hints at the same time.
                   <br />
                   Just send it player after player or you will get stuck. We are
