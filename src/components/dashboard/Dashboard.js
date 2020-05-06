@@ -19,8 +19,8 @@ import Game from "../shared/models/Game";
 import { Spinner } from "../../views/design/Spinner";
 
 class Dashboard extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       // games stores only the games with status
@@ -29,12 +29,12 @@ class Dashboard extends React.Component {
       newGame: null,
       toLong: null,
       selectLobby: null,
-      userId: null,
+      userId: localStorage.getItem("userId"),
       user: null,
       timer: null,
       timerScoarboard: null,
       noLobby: null,
-      token: null,
+      token: localStorage.getItem("token"),
       alarm: null,
       rules: false,
       scoarboard: null,
@@ -56,8 +56,8 @@ class Dashboard extends React.Component {
       localStorage.removeItem("Id");
       localStorage.removeItem("sawHelp");
 
-      this.state.userId = localStorage.getItem("userId");
-      this.state.token = localStorage.getItem("token");
+      //this.state.userId = localStorage.getItem("userId");
+      //this.state.token = localStorage.getItem("token");
 
       const response = await api.get(`/users/${this.state.userId}`);
       console.log(response);

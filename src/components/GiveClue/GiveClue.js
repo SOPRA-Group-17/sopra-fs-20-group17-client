@@ -14,17 +14,20 @@ class GiveClue extends React.Component {
       word: null,
       clue: null,
       gameId: null,
-      token: null,
+      token: localStorage.getItem("token"),
       timer: null,
       rules: false,
+      id: localStorage.getItem("Id"),
+
     };
   }
 
   async componentDidMount() {
     try {
-      this.state.gameId = this.props.match.params.gameId;
-      this.state.id = localStorage.getItem("Id");
-      this.state.token = localStorage.getItem("token");
+      
+      this.setState({gameId : this.props.match.params.gameId});
+      //this.state.id = localStorage.getItem("Id");
+      //this.state.token = localStorage.getItem("token");
 
       this.checkTermAvailible();
       this.timer = setInterval(() => this.checkTermAvailible(), 1000);
@@ -40,13 +43,15 @@ class GiveClue extends React.Component {
   //checks if state of game receiving_Hints
   async checkTermAvailible() {
     try {
-      const response = await api.get(`/games/${this.state.gameId}`);
-      // check if game ready to give hints
-      console.log(response.data.status);
-      if (response.data.status === "RECEIVING_HINTS") {
-        clearInterval(this.timer);
-        this.timer = null;
-        this.getTerme();
+      if(this.state.gameId){
+        const response = await api.get(`/games/${this.state.gameId}`);
+        // check if game ready to give hints
+        console.log(response.data.status);
+        if (response.data.status === "RECEIVING_HINTS") {
+          clearInterval(this.timer);
+          this.timer = null;
+          this.getTerme();
+        }
       }
     } catch (error) {
       alert(

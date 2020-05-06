@@ -21,11 +21,13 @@ class Evalution extends React.Component {
       color: "white",
       skiped: null,
       rules: false,
-      token: null,
-      id: null,
+      token: localStorage.getItem("token"),
+      id: localStorage.getItem("Id"),
       score: null,
       timerDown: null,
       timeNewRound: 10,
+      timerScore: null,
+      hint: null
     };
   }
 
@@ -33,12 +35,14 @@ class Evalution extends React.Component {
     try {
       //remove chosen_nr, then in the next round are no problems with the number screen
       localStorage.removeItem("chosen_nr");
+      this.setState({gameId : this.props.match.params.gameId});
 
-      this.state.gameId = this.props.match.params.gameId;
-      this.state.id = localStorage.getItem("Id");
-      this.state.token = localStorage.getItem("token");
+      //this.state.gameId = this.props.match.params.gameId;
+      //this.state.id = localStorage.getItem("Id");
+      //this.state.token = localStorage.getItem("token");
 
       this.getScore();
+      this.timerScore = setInterval(() => this.getScore(), 1000);
       this.getGuessAndTerm();
 
       this.timer = setInterval(() => this.getGuessAndTerm(), 1000);
@@ -47,15 +51,19 @@ class Evalution extends React.Component {
     }
   }
 
-  //gets the current score of a player
+  //gets the current score of a player, take player per ID
   async getScore() {
     try {
-      const players = await api.get(`/games/${this.state.gameId}/players`);
-      players.data.forEach((player) => {
-        if (this.state.id == player.id) {
-          this.setState({ score: player.score });
-        }
-      });
+      if(this.state.gameId){
+        console.log(this.state.id);
+        const player = await api.get(`/games/players/${this.state.id}`);
+        this.setState({ score: player.data.score });
+        console.log(player);
+
+      }
+      clearInterval(this.timerScore);
+        this.timerScore = null;
+    
     } catch (error) {
       alert(
         `Something went wrong while getting the score: \n${handleError(error)}`
@@ -65,6 +73,7 @@ class Evalution extends React.Component {
 
   async getGuessAndTerm() {
     try {
+      if(this.state.gameId){
       const response = await api.get(`/games/${this.state.gameId}`);
       this.setState({ gameStatus: response.data.status });
       // check if game ready to give hints
@@ -98,6 +107,21 @@ class Evalution extends React.Component {
             this.setState({ guess: response2.data[0].guess.content });
           }
         }
+        //setting if hint was valid
+        const hintlist = response2.data[0].hintList;
+        
+        hintlist.forEach(hint => {
+          if(hint.token == this.state.token){
+            if(hint.status == "VALID"){
+              this.setState({hint: "Valid"})
+            }
+            else{
+              this.setState({hint: "Invalid"})
+            }
+          }
+          
+        });
+
 
         this.setState({ readyToRender: true });
 
@@ -106,6 +130,7 @@ class Evalution extends React.Component {
         this.timer = setInterval(() => this.startNewRound(), 9800);
         this.timerDown = setInterval(() => this.decreaseTime(), 1000);
       }
+    }
     } catch (error) {
       alert(
         `Something went wrong while getting the term and guess: \n${handleError(
@@ -217,8 +242,11 @@ class Evalution extends React.Component {
                   </Button>
                 </Row>
                 <Row className="d-flex justify-content-end">
+                  <p hidden = {!this.state.hint} className="score">
+                      Your clue was {this.state.hint}
+                  </p>
                   <p className="score">
-                    Your current score: {this.state.score}
+                    Current score: {this.state.score}
                   </p>
                 </Row>
               </Col>
