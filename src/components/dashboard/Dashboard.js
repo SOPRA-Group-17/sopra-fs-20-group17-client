@@ -468,7 +468,7 @@ class Dashboard extends React.Component {
                   </Form.Group>
                 </Form.Row>
               </Form>
-
+ 
               <Col
                 xs={{ span: 10, offset: 1 }}
                 md={{ span: 5, offset: 0 }}
