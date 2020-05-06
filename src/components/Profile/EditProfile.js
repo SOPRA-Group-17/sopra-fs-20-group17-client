@@ -1,14 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { BaseContainer } from "../../helpers/layout";
 import { api, handleError } from "../../helpers/api";
-import Player from "../../views/Player";
-import { Spinner } from "../../views/design/Spinner";
 import Rules from "../rules/Rules";
 import { withRouter } from "react-router-dom";
 import user from "../shared/models/User";
-import DatePicker from "react-datepicker";
-import formatDate from "react-datepicker";
 import User from "../shared/models/User";
 import { Container, Row, Col, Modal, Button, Badge } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
@@ -92,6 +87,7 @@ class EditProfile extends React.Component {
       confirmPassword: null,
       passwordConfirmationSuccessful: false, //has to be false
       passwordHidden: true,
+      triedToValidatePasswordUnsuccessful: false,
     };
   }
 
@@ -140,13 +136,12 @@ class EditProfile extends React.Component {
       //update the password
       let requestBody;
       requestBody = JSON.stringify({
-        newPassword: this.state.newPassword,
+        password: this.state.newPassword,
       });
       console.log(requestBody);
       const response = await api.put(`/users/${this.state.ID}`, requestBody);
       console.log(response);
-      // Get the returned user and update a new object.
-      const user = new User(response.data);
+  
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -157,7 +152,7 @@ class EditProfile extends React.Component {
   }
 
   dashboard() {
-    this.props.history.push("/game/dashboard");
+    this.props.history.push("/dashboard");
   }
 
   handleInputChange(key, value) {
@@ -196,17 +191,18 @@ class EditProfile extends React.Component {
 
         console.log(requestBody);
         const response = await api.post(
-          `/users/${this.state.ID}/password`,
+          `/users/${this.state.ID}/passwords`,
           requestBody
         );
-        console.log(response.data);
-        if (response.data) {
+        console.log(response.data.id);
+        if (response.data.id) {
           this.setState({
             passwordValidation: true,
           });
         } else {
           this.setState({
             passwordValidation: false,
+            triedToValidatePasswordUnsuccessful: true
           });
         }
         // Get the returned user and update a new object.
@@ -239,6 +235,7 @@ class EditProfile extends React.Component {
       passwordScreen: false,
       passwordValidation: false,
       passwordConfirmationSuccessful: false,
+      triedToValidatePasswordUnsuccessful: false,
     });
   }
 
@@ -330,7 +327,7 @@ class EditProfile extends React.Component {
           ) : (
             <div>
               {this.state.passwordValidation ? (
-                <Row style={{ marginTop: "2vw" }} v>
+                <Row style={{ marginTop: "2vw" }}>
                   <Col
                     xs={{ span: 11, offset: 0 }}
                     md={{ span: 9, offset: 3 }}
@@ -388,7 +385,7 @@ class EditProfile extends React.Component {
                         variant="success"
                         style={{ marginTop: "1vw" }}
                       >
-                        the password confirmation was successful
+                        the password was changed succesfully
                       </Badge>
                     ) : (
                       <p> </p>
@@ -437,6 +434,17 @@ class EditProfile extends React.Component {
                   >
                     show Password
                   </Button>
+                  {this.state.triedToValidatePasswordUnsuccessful ? (
+                      <Badge
+                        pill
+                        variant="danger"
+                        style={{ marginTop: "1vw" }}
+                      >
+                        the password is wrong try again
+                      </Badge>
+                    ) : (
+                      <p> </p>
+                    )}
                 </Col>
               )}
             </div>
