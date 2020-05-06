@@ -49,7 +49,7 @@ class Number extends React.Component {
       this.setNumberState();
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getGameStatus(), 1000);
+      this.timer = setInterval(() => this.getGameStatus(), 100);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -237,6 +237,66 @@ class Number extends React.Component {
     return localStorage.getItem("chosen_nr").includes(number.toString());
   }
 
+  async exitGame() {
+    /*
+    if a player exits the lobby then:
+    - change status to not ready
+    - delete player from player list in game
+    - redirect to dashboard
+  
+    */
+
+    //change status to not ready
+    this.setState(
+      {
+        ID_game: null,
+        game: null,
+        game_status: null,
+        chosen_number: [],
+        readyToRender: true,
+        readyForNext: false,
+        hide1: false,
+        hide2: false,
+        hide3: false,
+        hide4: false,
+        hide5: false,
+        rules: false,
+      }
+    );
+    //need time to change player status
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      let requestBody;
+
+      //delete player from player list in game
+      requestBody = JSON.stringify({
+        player: this.state.player,
+      });
+      // send request body to the backend
+      console.log(requestBody);
+      await api.delete(
+        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+        requestBody
+      );
+      //change local storage
+      localStorage.removeItem("status");
+      localStorage.removeItem("gameId");
+      localStorage.removeItem("role");
+      localStorage.removeItem("Id");
+
+      clearInterval(this.timer);
+      this.timer = null;
+      this.props.history.push("/dashboard");
+    } catch (error) {
+      alert(
+        `Something went wrong during updating your data: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
   render() {
     return (
       <Container fluid>
@@ -253,6 +313,15 @@ class Number extends React.Component {
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
           <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 8 }}>
+            <Row className="d-flex justify-content-end">
+              <Button
+                variant="outline-light"
+                className="outlineWhite-Dashboard"
+                onClick={() => this.exitGame()}
+              >
+                Exit Game
+              </Button>
+            </Row>
             <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
