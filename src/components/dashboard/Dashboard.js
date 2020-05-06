@@ -79,6 +79,7 @@ class Dashboard extends React.Component {
   }
   async getScoarboard() {
     try {
+      console.log("getScoreboard");
       const response = await api.get(`/users?sort_by=score.desc`);
 
       this.setState({ scoarboard: response.data }, () =>
@@ -116,7 +117,7 @@ class Dashboard extends React.Component {
     try {
       const response = await api.get(`/games`);
       let selectedValid = 0;
-      console.log(this.state.selectLobby, "in get Games");
+      
       // Get the returned users and update the state.
 
       if (response.data.length != 0) {
