@@ -26,7 +26,7 @@ class Validation extends React.Component {
       hints: [],
       hintsReport: [],
       nr: 2,
-      token: null,
+      token: localStorage.getItem("token"),
       similar: true,
       invalid: [],
       readyToRender: null,
@@ -42,9 +42,11 @@ class Validation extends React.Component {
 
   async componentDidMount() {
     try {
-      this.state.token = localStorage.getItem("token");
+      //this.state.token = localStorage.getItem("token");
       this.state.gameId = this.props.match.params.gameId;
-      const response = await api.get(`/games/${this.state.gameId}/terms`);
+      this.setState({gameId : this.props.match.params.gameId});
+      
+      const response = await api.get(`/games/${this.props.match.params.gameId}/terms`);
 
       //check if user was on this site before, in same game
       if (localStorage.getItem("sawHelp") != null) {
@@ -69,7 +71,10 @@ class Validation extends React.Component {
 
   async getHints() {
     try {
-      const response = await api.get(`/games/${this.state.gameId}`);
+
+      if(this.state.gameId){
+
+        const response = await api.get(`/games/${this.state.gameId}`);
 
       // check if game ready to give hints
       console.log(response.data.status);
@@ -82,6 +87,8 @@ class Validation extends React.Component {
           this.creatReportHintArray()
         );
       }
+      }
+      
     } catch (error) {
       alert(
         `Something went wrong while fetching the hints: \n${handleError(error)}`
