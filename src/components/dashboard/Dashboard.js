@@ -486,16 +486,19 @@ class Dashboard extends React.Component {
                   </thead>
                   <tbody>{this.createTable()}</tbody>
                 </Table>
-                <p style={{color: "red"}}>Dear testing group, we are currently facing issues when we are getting current requests. <br />
-          To play the game please make sure, that you not submit yout hints, or validate your hints at the same time.<br />
-          Just send it player after player or you will get stuck. We are working at this issue. Thank you, Group 17
-        </p>
+                <p style={{ color: "red" }}>
+                  Dear testing group, we are currently facing issues when we are
+                  getting current requests. <br />
+                  To play the game please make sure, that you not submit yout
+                  hints, or validate your hints at the same time.
+                  <br />
+                  Just send it player after player or you will get stuck. We are
+                  working at this issue. Thank you, Group 17
+                </p>
               </Col>
-              
             </Row>
           </div>
         )}
-
       </Container>
     );
   }
