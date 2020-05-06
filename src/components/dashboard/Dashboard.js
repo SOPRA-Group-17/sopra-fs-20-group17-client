@@ -490,6 +490,10 @@ class Dashboard extends React.Component {
             </Row>
           </div>
         )}
+        <p>Dear testing group, we are currently facing issues when we are getting current requests. <br />
+          To play the game please make sure, that you not submit yout hints, or validate your hints at the same time.<br />
+          Just send it player after player or you will get stuck. We are working at this issue. Thank you, Group 17
+        </p>
       </Container>
     );
   }
