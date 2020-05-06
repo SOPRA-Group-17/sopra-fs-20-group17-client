@@ -18,12 +18,11 @@ class EnterGuess extends React.Component {
     super();
 
     this.state = {
-      playerToken: null,
-      playerId: null,
+      playerToken: localStorage.getItem("token"),
+      playerId: localStorage.getItem("Id"),
       gameId: null,
       roundId: null,
       hints: null,
-      //hints: [],
       guess: null,
       timer: null,
       readyToRender: null,
@@ -36,10 +35,10 @@ class EnterGuess extends React.Component {
   async componentDidMount() {
     try {
       // set the states, if change to setState problems
-      this.state.playerToken = localStorage.getItem("token");
-      this.state.playerId = localStorage.getItem("Id");
-      this.state.gameId = this.props.match.params.gameId;
-
+      //this.state.playerToken = localStorage.getItem("token");
+      //this.state.playerId = localStorage.getItem("Id");
+      //this.state.gameId = this.props.match.params.gameId;
+      this.setState({gameId : this.props.match.params.gameId});
       // get all the given hints
       this.getHints();
       this.timer = setInterval(() => this.getHints(), 2000);
@@ -54,7 +53,8 @@ class EnterGuess extends React.Component {
 
   async getHints() {
     try {
-      const response = await api.get(`/games/${this.state.gameId}`);
+      if(this.state.gameId){
+        const response = await api.get(`/games/${this.state.gameId}`);
       // check if game ready to give hints
       console.log(response.data.status);
       if (response.data.status === "RECEIVING_GUESS") {
@@ -65,6 +65,9 @@ class EnterGuess extends React.Component {
         this.timer = null;
         this.setState({ readyToRender: true });
       }
+
+      }
+      
     } catch (error) {
       alert(
         `Something went wrong while getting the hints: \n${handleError(error)}`

@@ -131,8 +131,9 @@ body {
 @media (min-width: 992px) {
   .score{
     margin-right: 0.8vw;
-    margin-top: 1vw;
+    margin-top: 0.5vw;
     font-size: 2vw;
+    margin-bottom: 0vw;
   }
 
   .login-Form{
@@ -185,8 +186,9 @@ body {
 @media (max-width: 991.98px) {
   .score{
     margin-right: 0.8vw;
-    margin-top: 1vw;
+    margin-top: 0.4vw;
     font-size: 2.2vw;
+    margin-bottom: 0vw;
   }
   .login-Form{
     width: 50vw;
@@ -238,8 +240,9 @@ body {
 @media (max-width: 767.98px) {
   .score{
     margin-right: 0.8vw;
-    margin-top: 1.5vw;
+    margin-top: 1.2vw;
     font-size: 4.5vw;
+    margin-bottom: 1vw;
   }
 
   .login-Form{
