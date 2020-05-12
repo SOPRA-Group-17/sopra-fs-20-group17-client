@@ -21,7 +21,7 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 80vw;
+  width: 60%;
   height: 320px;
 
   padding-left: 37px;
@@ -203,7 +203,7 @@ class Login extends React.Component {
               to="/register"
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              Register
+              Register here
             </Link>
           </Button>
         </ButtonContainer>

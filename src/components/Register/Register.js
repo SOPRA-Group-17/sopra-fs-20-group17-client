@@ -218,7 +218,7 @@ class Register extends React.Component {
                 paddingRight: "25px",
               }}
             >
-              Login
+              Back to Login
             </Link>
           </Button>
         </ButtonContainer>
