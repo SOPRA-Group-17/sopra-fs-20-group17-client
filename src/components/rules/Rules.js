@@ -141,10 +141,15 @@ class Rules extends React.Component {
             </p>
             <p className="rules-text-s-title">Scoring System</p>
             <p className="rules-text">
-              Whenever the active player makes a correct guess, he is rewarded
-              with points. The number of points varies depending on how fast he
-              submitted the guess. Clue givers also have the opportunity to earn
-              points for their hints.
+            Guesser
+            <br/>
+            Gets plus points for a correct guess and minus points for an incorrect Guess. He gets more plus or less minus points the faster he submits his guess. 
+            Skipping gives 0 points. 
+            <br/>
+            Clue giver
+            <br/>
+            Gets plus points for a valid clue and minus points for an invalid or duplicate clue. He gets more plus or less minus points the faster he submits his clue.
+
             </p>
           </Modal.Body>
        
