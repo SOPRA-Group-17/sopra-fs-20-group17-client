@@ -49,7 +49,7 @@ class Number extends React.Component {
       this.setNumberState();
 
       //poll every 1 seconds all players, search game
-      this.timer = setInterval(() => this.getGameStatus(), 100);
+      this.timer = setInterval(() => this.getGameStatus(), 1000);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
