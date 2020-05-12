@@ -18,28 +18,27 @@ class EnterGuess extends React.Component {
     super();
 
     this.state = {
-      playerToken: null,
-      playerId: null,
+      playerToken: localStorage.getItem("token"),
+      playerId: localStorage.getItem("Id"),
       gameId: null,
       roundId: null,
       hints: null,
-      //hints: [],
       guess: null,
       timer: null,
       readyToRender: null,
       noHintsValid: null,
-      rules: false
+      rules: false,
     };
     this.getHints = this.getHints.bind(this);
   }
 
   async componentDidMount() {
     try {
-      // set the states
-      this.state.playerToken = localStorage.getItem("token");
-      this.state.playerId = localStorage.getItem("Id");
-      this.state.gameId = this.props.match.params.gameId;
-
+      // set the states, if change to setState problems
+      //this.state.playerToken = localStorage.getItem("token");
+      //this.state.playerId = localStorage.getItem("Id");
+      //this.state.gameId = this.props.match.params.gameId;
+      this.setState({gameId : this.props.match.params.gameId});
       // get all the given hints
       this.getHints();
       this.timer = setInterval(() => this.getHints(), 2000);
@@ -54,8 +53,8 @@ class EnterGuess extends React.Component {
 
   async getHints() {
     try {
-      const response = await api.get(`/games/${this.state.gameId}`);
-
+      if(this.state.gameId){
+        const response = await api.get(`/games/${this.state.gameId}`);
       // check if game ready to give hints
       console.log(response.data.status);
       if (response.data.status === "RECEIVING_GUESS") {
@@ -66,6 +65,9 @@ class EnterGuess extends React.Component {
         this.timer = null;
         this.setState({ readyToRender: true });
       }
+
+      }
+      
     } catch (error) {
       alert(
         `Something went wrong while getting the hints: \n${handleError(error)}`
@@ -79,16 +81,11 @@ class EnterGuess extends React.Component {
         content: this.state.guess,
         token: this.state.playerToken,
       });
-
-      console.log(requestBody);
       // TODO: adapt url and request parameters
       const response = await api.post(
         `/games/${this.state.gameId}/guesses`,
         requestBody
       );
-
-      console.log(response);
-      // TODO: what is the url of the page you are directed to?
       this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
       alert(
@@ -105,54 +102,27 @@ class EnterGuess extends React.Component {
       const requestBody = JSON.stringify({
         token: this.state.playerToken,
       });
-
-      // doesnt work but why, because request body not supported
-
       const response = await api.delete(`/games/${this.state.gameId}/guesses`, {
         data: requestBody,
       });
 
-      console.log(response);
-      /*
-      const request =  new HttpRequestMessage{
-        Method = HttpMethod.Delete,
-        RequestUri = `/games/${this.state.gameId}/guesses`,
-        Content = requestBody,
-    };
-
-    var response = await client.SendAsync(request);
-*/
-
-      /*
-        var request = new HttpRequestMessage {
-              Method = HttpMethod.Delete,
-              RequestUri = new Uri("http://mydomain/api/something"),
-              Content = new StringContent(JsonConvert.SerializeObject(myObj), Encoding.UTF8, "application/json")
-          };
-          var response = await client.SendAsync(request);
-
-      */
-
-      // TODO: what is the url of the page you are directed to?
       this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
       alert(`Something went wrong while skipping: \n${handleError(error)}`);
     }
   }
 
-  
   handleInputChange(key, value) {
     // Example: if the key is username, this statement is the equivalent to the following one:
     // this.setState({'username': value});
     this.setState({ [key]: value });
   }
 
+  //creats a table containning all VALID Hints
   createTable = () => {
     let table = [];
     let oneValid = 0;
 
-    //do we have to look at status? or marked?
-    //TODO
     this.state.hints.forEach((hint) => {
       if (hint.status == "VALID") {
         oneValid = 1;
@@ -160,7 +130,6 @@ class EnterGuess extends React.Component {
           <tr class="text-white" class="text-center">
             &bull;{hint.content}
           </tr>
-          
         );
       }
     });
@@ -171,7 +140,6 @@ class EnterGuess extends React.Component {
         </tr>
       );
     }
-
     return table;
   };
 
@@ -221,9 +189,8 @@ class EnterGuess extends React.Component {
                 xs={{ span: 10, offset: 1 }}
                 md={{ span: 6, offset: 3 }}
                 lg={{ span: 4, offset: 4 }}
-                
               >
-                <Table bordered size="sm" className="font-medium" >
+                <Table bordered size="sm" className="font-medium">
                   <thead class="text-white">
                     <tr>
                       <th
@@ -237,7 +204,7 @@ class EnterGuess extends React.Component {
                       </th>
                     </tr>
                   </thead>
-                  <tbody class="text-white" className="font-medium" >
+                  <tbody class="text-white" className="font-medium">
                     {this.createTable()}
                   </tbody>
                 </Table>

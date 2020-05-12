@@ -19,8 +19,8 @@ import Game from "../shared/models/Game";
 import { Spinner } from "../../views/design/Spinner";
 
 class Dashboard extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       // games stores only the games with status
@@ -29,12 +29,12 @@ class Dashboard extends React.Component {
       newGame: null,
       toLong: null,
       selectLobby: null,
-      userId: null,
+      userId: localStorage.getItem("userId"),
       user: null,
       timer: null,
       timerScoarboard: null,
       noLobby: null,
-      token: null,
+      token: localStorage.getItem("token"),
       alarm: null,
       rules: false,
       scoarboard: null,
@@ -54,9 +54,10 @@ class Dashboard extends React.Component {
       localStorage.removeItem("gameId");
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
+      localStorage.removeItem("sawHelp");
 
-      this.state.userId = localStorage.getItem("userId");
-      this.state.token = localStorage.getItem("token");
+      //this.state.userId = localStorage.getItem("userId");
+      //this.state.token = localStorage.getItem("token");
 
       const response = await api.get(`/users/${this.state.userId}`);
       console.log(response);
@@ -64,7 +65,6 @@ class Dashboard extends React.Component {
       this.setState({ user: new User(response.data) });
       console.log(this.state.user.username);
 
-      //decreas timer
       this.getGames();
       this.timer = setInterval(() => this.getGames(), 1000);
 
@@ -75,21 +75,16 @@ class Dashboard extends React.Component {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
       );
-      /*this.setState({alarm: `Something went wrong while fetching the users: \n${handleError(error)}` })
-      console.log(this.state.alarm)
-      */
     }
   }
   async getScoarboard() {
     try {
-      console.log("getting the scoarboard");
+      console.log("getScoreboard");
       const response = await api.get(`/users?sort_by=score.desc`);
 
       this.setState({ scoarboard: response.data }, () =>
         this.creatScoarboardList()
       );
-
-      console.log(response);
     } catch (error) {
       alert(
         `Something went wrong while fetching the scoarboard: \n${handleError(
@@ -122,12 +117,11 @@ class Dashboard extends React.Component {
     try {
       const response = await api.get(`/games`);
       let selectedValid = 0;
-      console.log(this.state.selectLobby, "in get Games");
+      
       // Get the returned users and update the state.
 
       if (response.data.length != 0) {
         this.setState({ games: response.data });
-        console.log(this.state.selectLobby, response.data[1].gameId);
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].gameId == this.state.selectLobby) {
             console.log("found match");
@@ -146,10 +140,13 @@ class Dashboard extends React.Component {
             }
           }
         }
+      } else {
+        this.setState({ games: [] });
+        this.setState({ selectLobby: null });
       }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the data: \n${handleError(error)}`
+        `Something went wrong while fetching the games: \n${handleError(error)}`
       );
     }
   }
@@ -195,6 +192,7 @@ class Dashboard extends React.Component {
       localStorage.setItem("gameId", game.gameId);
       localStorage.setItem("role", "HOST");
       localStorage.setItem("Id", player.data.id);
+      localStorage.setItem("sawHelp", 0);
       clearInterval(this.timer);
       this.timer = null;
       clearInterval(this.timerScoarboard);
@@ -246,22 +244,20 @@ class Dashboard extends React.Component {
 
   async joinLobby() {
     try {
-      console.log("you reached JOIN LOBBY");
-      console.log(this.state.selectLobby);
       const requestBody = JSON.stringify({
         name: this.state.user.username,
         userToken: this.state.token,
       });
-      console.log(requestBody);
+
       const response = await api.post(
         `/games/${this.state.selectLobby}/players`,
         requestBody
       );
       //const game = new Game(response.data);
+      localStorage.setItem("sawHelp", 0);
       localStorage.setItem("gameId", this.state.selectLobby);
       localStorage.setItem("role", "GUEST");
-      console.log(response);
-      console.log(response.data.id);
+
       localStorage.setItem("Id", response.data.id);
       clearInterval(this.timer);
       this.timer = null;
@@ -487,13 +483,22 @@ editProfile(){
                   </Form.Group>
                 </Form.Row>
               </Form>
-
+ 
               <Col
                 xs={{ span: 10, offset: 1 }}
                 md={{ span: 5, offset: 0 }}
                 lg={{ span: 5, offset: 2 }}
                 className="scoarboard"
               >
+                                <p style={{ color: "red" }}>
+                  Dear testing group, we are currently facing issues when we are
+                  getting concurrent requests. <br />
+                  To play the game please make sure, that you do not submit your
+                  hints, or validate your hints at the same time.
+                  <br />
+                  Just send it player after player or you will get stuck. We are
+                  working at this issue. Thank you, Group 17
+                </p>
                 <div style={{ fontSize: "calc(1.5em + 1vw)" }}>Leaderboard</div>
                 <Table striped bordered size="sm">
                   <thead class="text-white">
@@ -505,6 +510,7 @@ editProfile(){
                   </thead>
                   <tbody>{this.createTable()}</tbody>
                 </Table>
+
               </Col>
             </Row>
           </div>

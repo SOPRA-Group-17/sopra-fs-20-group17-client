@@ -8,7 +8,6 @@ import { Button, Row, Col } from "react-bootstrap";
 import Link from "react-router-dom/Link";
 import logo from "../styling/JustOne_logo_white.svg";
 
-
 const FormContainer = styled.div`
   margin-top: 0px;
   display: flex;
@@ -24,7 +23,7 @@ const Form = styled.div`
   justify-content: center;
   width: 80vw;
   height: 320px;
-  
+
   padding-left: 37px;
   padding-right: 37px;
 
@@ -142,34 +141,29 @@ class Login extends React.Component {
     return (
       <BaseContainer>
         <img className="logoImg" src={logo} alt="Just One Logo"></img>
-        <FormContainer >
+        <FormContainer>
           <Form className="login-Form">
             <Label>Username</Label>
             <InputField
-              
               placeholder="Enter here.."
               onChange={(e) => {
                 this.handleInputChange("username", e.target.value);
               }}
             />
             <Label>Password</Label>
-            
-              <InputField
+
+            <InputField
               type={this.state.passwordHidden ? "password" : "text"}
               placeholder="Enter here.."
-              style ={{marginBottom: 0}}
+              style={{ marginBottom: 0 }}
               onChange={(e) => {
                 this.handleInputChange("password", e.target.value);
               }}
             />
-            
-            
-        
             {this.state.passwordHidden ? (
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -181,7 +175,6 @@ class Login extends React.Component {
               <ButtonContainer>
                 <Button
                   variant="outline-info"
-                  
                   onClick={() => {
                     this.showOrHidePassword("passwordHidden");
                   }}
@@ -190,7 +183,7 @@ class Login extends React.Component {
                 </Button>
               </ButtonContainer>
             )}
-            <ButtonContainer style={{marginTop: "calc(0.7em + 0.5vw)"}}>
+            <ButtonContainer style={{ marginTop: "calc(0.7em + 0.5vw)" }}>
               <Button
                 variant="outline-info"
                 style={{ paddingLeft: "25px", paddingRight: "25px" }}
