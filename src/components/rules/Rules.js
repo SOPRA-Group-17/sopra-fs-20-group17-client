@@ -128,8 +128,7 @@ class Rules extends React.Component {
                 </li>
                 <li>
                   Skip: If the active player chooses not to answer and skips
-                  their turn, none of the players gets any plus or minus points.
-                  However, there won't be an additional penalty of removing one
+                  their turn, the guesser gets 0 points and there won't be an additional penalty of removing one
                   round.
                 </li>
               </ul>
