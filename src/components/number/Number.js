@@ -9,13 +9,13 @@ import Rules from "../rules/Rules";
 const bignumbers = {
   fontSize: "18vw",
   textAlign: "center",
-  opacity: 0.2,
+  opacity: 0.4,
   cursor: "pointer",
 };
 const sentence = {
   fontSize: "5vw",
   textAlign: "center",
-  opacity: 0.2,
+  opacity: 0.4,
 };
 
 class Number extends React.Component {
