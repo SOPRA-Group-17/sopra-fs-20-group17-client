@@ -61,8 +61,7 @@ class Evalution extends React.Component {
         console.log(player);
 
       }
-      clearInterval(this.timerScore);
-        this.timerScore = null;
+      
     
     } catch (error) {
       alert(
@@ -153,6 +152,8 @@ class Evalution extends React.Component {
       this.timer = null;
       clearInterval(this.timerDown);
       this.timerDown = null;
+      clearInterval(this.timerScore);
+      this.timerScore = null;
 
       const Player = await api.get(`/games/players/${this.state.id}`);
       console.log(Player.data);
