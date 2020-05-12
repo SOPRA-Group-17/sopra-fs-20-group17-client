@@ -490,15 +490,6 @@ editProfile(){
                 lg={{ span: 5, offset: 2 }}
                 className="scoarboard"
               >
-                                <p style={{ color: "red" }}>
-                  Dear testing group, we are currently facing issues when we are
-                  getting concurrent requests. <br />
-                  To play the game please make sure, that you do not submit your
-                  hints, or validate your hints at the same time.
-                  <br />
-                  Just send it player after player or you will get stuck. We are
-                  working at this issue. Thank you, Group 17
-                </p>
                 <div style={{ fontSize: "calc(1.5em + 1vw)" }}>Leaderboard</div>
                 <Table striped bordered size="sm">
                   <thead class="text-white">
