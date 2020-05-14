@@ -147,7 +147,7 @@ class ReportWord extends React.Component {
   }
   //callback function check if its really needed
   callback() {
-    let b = "this is just for nothing";
+     "this is just for nothing";
   }
   setClicked() {
     //save last word and check with current word, if different then set state clicked to false and update last word

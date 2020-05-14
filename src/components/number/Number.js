@@ -66,6 +66,7 @@ class Number extends React.Component {
           game: get_game.data,
           game_status: get_game.data.status,
         });
+
         //game state changes to RECEIVING GUESS then change the helper states
         if (get_game.data.status === "RECEIVING_GUESS") {
           this.setState({
@@ -149,6 +150,15 @@ class Number extends React.Component {
 
       // Add new data to localStorage Array
       existing.push(number);
+      console.log(existing);
+      //check how many times the player has to take the word again (if five times, then word has to be considered as known and then redirected to the hint screen the others)
+      if (existing) {
+        console.log(existing.length);
+
+        if (existing.length > 4) {
+          this.allKnowTheWord();
+        }
+      }
 
       // Save back to localStorage
       localStorage.setItem("chosen_nr", existing.toString());
@@ -161,6 +171,32 @@ class Number extends React.Component {
           error
         )}`
       );
+    }
+  }
+  async allKnowTheWord() {
+    try {
+      //get all players in the game
+      //set player and playerstatus
+      const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
+      console.log(allPlayers.data);
+      for (let i = 0; i < allPlayers.data.length; i++) {
+        if (allPlayers.data[i].status !== "GUESSER") {
+          console.log(allPlayers.data[i].id);
+          //this player has to know the word
+          let requestBody;
+
+          requestBody = JSON.stringify({
+            playerTermStatus: "KNOWN",
+          });
+
+          await api.put(
+            `/games/${this.state.gameId}/players/${allPlayers.data[i].id}`,
+            requestBody
+          );
+        }
+      }
+    } catch (error) {
+      alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
   }
 
@@ -247,22 +283,20 @@ class Number extends React.Component {
     */
 
     //change status to not ready
-    this.setState(
-      {
-        ID_game: null,
-        game: null,
-        game_status: null,
-        chosen_number: [],
-        readyToRender: true,
-        readyForNext: false,
-        hide1: false,
-        hide2: false,
-        hide3: false,
-        hide4: false,
-        hide5: false,
-        rules: false,
-      }
-    );
+    this.setState({
+      ID_game: null,
+      game: null,
+      game_status: null,
+      chosen_number: [],
+      readyToRender: true,
+      readyForNext: false,
+      hide1: false,
+      hide2: false,
+      hide3: false,
+      hide4: false,
+      hide5: false,
+      rules: false,
+    });
     //need time to change player status
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
