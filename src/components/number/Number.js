@@ -359,7 +359,7 @@ class Number extends React.Component {
       console.log(hints.data[0].content);
       let amountHints;
       console.log(allPlayers.data);
-      let sum = 0;
+      let sum = 0; 
       //-1 because of the guesser
 
       let percentage;
