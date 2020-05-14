@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import { api, handleError } from "../../helpers/api";
 import { Spinner } from "../../views/design/Spinner";
 import Rules from "../rules/Rules";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 const bignumbers = {
   fontSize: "18vw",
@@ -16,6 +17,10 @@ const sentence = {
   fontSize: "5vw",
   textAlign: "center",
   opacity: 0.4,
+};
+
+const progressbar = {
+  width: "22vw",
 };
 
 class Number extends React.Component {
@@ -34,6 +39,7 @@ class Number extends React.Component {
       hide4: false,
       hide5: false,
       rules: false,
+      progressBar: null,
     };
   }
 
@@ -85,6 +91,7 @@ class Number extends React.Component {
             readyToRender: false,
           });
         }
+        this.waitingBar();
       }
       //game is in RECEIVING GUESS status and can be pushed to enter guess
       // deleting timer before going
@@ -331,20 +338,55 @@ class Number extends React.Component {
     }
   }
 
-  waitingSentence(){
-    if(this.state.game_status === "VALIDATING_TERM"){
-      return "the word is getting validated"
+  waitingSentence() {
+    if (this.state.game_status === "VALIDATING_TERM") {
+      return "the word is getting validated";
+    } else if (this.state.game_status === "RECEIVING_HINTS") {
+      return "the hints are getting sent";
+    } else if (this.state.game_status === "VALIDATING_HINTS") {
+      return "the hints are getting validated";
+    } else {
+      return "waiting";
     }
-    else if(this.state.game_status === "RECEIVING_HINTS"){
-      return "the hints are getting sent"
-    }
-    else if(this.state.game_status === "VALIDATING_HINTS"){
-      return "the hints are getting validated"
-    }
-    else{
-      return "waiting"
-    }
+  }
+  async waitingBar() {
+    try {
+      //get all players in the game
+      //set player and playerstatus
+      const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
+      let amountPlayers = allPlayers.data.length - 1;
+      const hints = await api.get(`/games/${this.state.ID_game}/hints`);
+      console.log(hints.data[0].content);
+      let amountHints;
+      console.log(allPlayers.data);
+      let sum = 0;
+      //-1 because of the guesser
 
+      let percentage;
+      for (let i = 0; i < allPlayers.data.length; i++) {
+        if (allPlayers.data[i].status !== "GUESSER") {
+          if (this.state.game_status === "VALIDATING_TERM") {
+            if (allPlayers.data[i].playerTermStatus) {
+              sum++;
+            }
+          } else if (this.state.game_status === "RECEIVING_HINTS") {
+            if (hints.data[i]) {
+              if (hints.data[i].content) {
+                sum++;
+              }
+            }
+          } else if (this.state.game_status === "VALIDATING_HINTS") {
+            sum = amountPlayers
+          }
+        }
+      }
+      percentage = (sum / amountPlayers) * 100;
+      this.setState({
+        progressBar: percentage,
+      });
+    } catch (error) {
+      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+    }
   }
 
   render() {
@@ -362,7 +404,7 @@ class Number extends React.Component {
           <Col xs="5" md="2">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
-          <Col xs={{ span:5, offset: 2 }} md={{ span: 2, offset: 8 }}>
+          <Col xs={{ span: 5, offset: 2 }} md={{ span: 2, offset: 8 }}>
             <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
@@ -396,8 +438,19 @@ class Number extends React.Component {
             <div class="row justify-content-center">
               <Spinner />
             </div>
+
             <div class="row justify-content-center">
               <p className="large-Font">{this.waitingSentence()}</p>
+            </div>
+            <div class="row justify-content-center">
+              <Row>
+                <ProgressBar
+                  style={progressbar}
+                  striped
+                  variant="success"
+                  now={this.state.progressBar}
+                />
+              </Row>
             </div>
           </div>
         ) : (
