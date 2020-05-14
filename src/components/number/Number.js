@@ -367,7 +367,8 @@ class Number extends React.Component {
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
           if (this.state.game_status === "VALIDATING_TERM") {
-            if (allPlayers.data[i].playerTermStatus) {
+            console.log(allPlayers.data[i].playerTermStatus)
+            if (allPlayers.data[i].playerTermStatus !== "NOT_SET") {
               sum++;
             }
           } else if (this.state.game_status === "RECEIVING_HINTS") {
@@ -377,7 +378,8 @@ class Number extends React.Component {
               }
             }
           } else if (this.state.game_status === "VALIDATING_HINTS") {
-            sum = amountPlayers
+            //waiting for the backend, can they give ma a number
+            sum = amountPlayers/(Math.floor(Math.random() * amountPlayers) + 1)  
           }
         }
       }
@@ -440,10 +442,10 @@ class Number extends React.Component {
               <Spinner />
             </div>
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" style={{ marginTop: "2vw" }}>
               <p className="large-Font">{this.waitingSentence()}</p>
             </div>
-            <div class="row justify-content-center">
+            <div class="row justify-content-center" style={{ marginTop: "2vw" }}>
               <Row>
                 <ProgressBar
                   style={progressbar}

@@ -88,6 +88,7 @@ class EditProfile extends React.Component {
       passwordConfirmationSuccessful: false, //has to be false
       passwordHidden: true,
       triedToValidatePasswordUnsuccessful: false,
+      changedUsername: false,
     };
   }
 
@@ -120,6 +121,9 @@ class EditProfile extends React.Component {
       console.log(requestBody);
       const response = await api.put(`/users/${this.state.ID}`, requestBody);
       console.log(response.data);
+      this.setState({
+        changedUsername: true,
+      });
       // Get the returned user and update a new object.
       const user = new User(response.data);
     } catch (error) {
@@ -141,7 +145,6 @@ class EditProfile extends React.Component {
       console.log(requestBody);
       const response = await api.put(`/users/${this.state.ID}`, requestBody);
       console.log(response);
-  
     } catch (error) {
       alert(
         `Something went wrong during updating your data: \n${handleError(
@@ -202,7 +205,7 @@ class EditProfile extends React.Component {
         } else {
           this.setState({
             passwordValidation: false,
-            triedToValidatePasswordUnsuccessful: true
+            triedToValidatePasswordUnsuccessful: true,
           });
         }
         // Get the returned user and update a new object.
@@ -305,6 +308,13 @@ class EditProfile extends React.Component {
                     this.handleInputChange("newUsername", e.target.value);
                   }}
                 />
+                {this.state.changedUsername ? (
+                  <Badge pill variant="success" style={{ marginTop: "1vw" }}>
+                    the username was changed succesfully
+                  </Badge>
+                ) : (
+                  <p> </p>
+                )}
                 <Button
                   variant="outline-light"
                   className="outlineWhite-Dashboard"
@@ -322,6 +332,7 @@ class EditProfile extends React.Component {
                 >
                   Save username
                 </Button>
+                
               </Col>
             </div>
           ) : (
@@ -435,16 +446,12 @@ class EditProfile extends React.Component {
                     show Password
                   </Button>
                   {this.state.triedToValidatePasswordUnsuccessful ? (
-                      <Badge
-                        pill
-                        variant="danger"
-                        style={{ marginTop: "1vw" }}
-                      >
-                        the password is wrong try again
-                      </Badge>
-                    ) : (
-                      <p> </p>
-                    )}
+                    <Badge pill variant="danger" style={{ marginTop: "1vw" }}>
+                      the password is wrong try again
+                    </Badge>
+                  ) : (
+                    <p> </p>
+                  )}
                 </Col>
               )}
             </div>
