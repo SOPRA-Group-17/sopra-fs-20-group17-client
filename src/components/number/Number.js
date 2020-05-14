@@ -378,6 +378,7 @@ class Number extends React.Component {
               }
             }
           } else if (this.state.game_status === "VALIDATING_HINTS") {
+            //waiting for the backend, can they give ma a number
             sum = amountPlayers/(Math.floor(Math.random() * amountPlayers) + 1)  
           }
         }
