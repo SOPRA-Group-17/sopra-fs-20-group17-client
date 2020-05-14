@@ -331,6 +331,22 @@ class Number extends React.Component {
     }
   }
 
+  waitingSentence(){
+    if(this.state.game_status === "VALIDATING_TERM"){
+      return "the word is getting validated"
+    }
+    else if(this.state.game_status === "RECEIVING_HINTS"){
+      return "the hints are getting sent"
+    }
+    else if(this.state.game_status === "VALIDATING_HINTS"){
+      return "the hints are getting validated"
+    }
+    else{
+      return "waiting"
+    }
+
+  }
+
   render() {
     return (
       <Container fluid>
@@ -381,7 +397,7 @@ class Number extends React.Component {
               <Spinner />
             </div>
             <div class="row justify-content-center">
-              <p className="large-Font">Waiting for the hints</p>
+              <p className="large-Font">{this.waitingSentence()}</p>
             </div>
           </div>
         ) : (
