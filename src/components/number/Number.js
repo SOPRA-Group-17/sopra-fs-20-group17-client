@@ -354,13 +354,14 @@ class Number extends React.Component {
       //get all players in the game
       //set player and playerstatus
       const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
+      //-1 because of the guesser
       let amountPlayers = allPlayers.data.length - 1;
       const hints = await api.get(`/games/${this.state.ID_game}/hints`);
       console.log(hints.data[0].content);
       let amountHints;
       console.log(allPlayers.data);
       let sum = 0;
-      //-1 because of the guesser
+      
 
       let percentage;
       for (let i = 0; i < allPlayers.data.length; i++) {

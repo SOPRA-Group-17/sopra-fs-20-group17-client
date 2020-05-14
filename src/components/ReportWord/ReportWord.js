@@ -336,7 +336,7 @@ class ReportWord extends React.Component {
                   <Spinner />
                 </div>
                 <div class="row justify-content-center">
-                  <p className="large-Font">waiting for the others</p>
+                  <p className="large-Font">waiting for the others to validate the word</p>
                 </div>
               </div>
             )}
