@@ -357,7 +357,7 @@ class Number extends React.Component {
       //-1 because of the guesser
       let amountPlayers = allPlayers.data.length - 1;
       const hints = await api.get(`/games/${this.state.ID_game}/hints`);
-      console.log(hints.data[0].content);
+    
       let amountHints;
       console.log(allPlayers.data);
       let sum = 0;
