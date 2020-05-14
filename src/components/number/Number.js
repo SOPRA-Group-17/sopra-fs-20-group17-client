@@ -346,7 +346,7 @@ class Number extends React.Component {
           <Col xs="5" md="2">
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
-          <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 8 }}>
+          <Col xs={{ span:5, offset: 2 }} md={{ span: 2, offset: 8 }}>
             <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"

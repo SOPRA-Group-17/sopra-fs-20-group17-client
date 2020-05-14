@@ -14,13 +14,13 @@ const word = {
 };
 
 const question = {
-  fontSize: "3vw",
+  fontSize: "5vw",
   textAlign: "center",
   opacity: 0.2,
 };
 
 const sentence = {
-  fontSize: "2vw",
+  fontSize: "3vw",
   textAlign: "center",
   opacity: 0.2,
 };
@@ -299,10 +299,11 @@ class ReportWord extends React.Component {
                 </Row>
                 <Row>
                   <Col
-                    xs={{ span: 3, offset: 4 }}
+                    xs={{ span: 9, offset: 3 }}
                     md={{ span: 0, offset: 0 }}
                   ></Col>
-                  <Col xs="5" md="6">
+                  <Col xs="10" md="11">
+                  <div class="row justify-content-center">
                     <Button
                       variant="outline-success"
                       style={bigbutton}
@@ -323,7 +324,9 @@ class ReportWord extends React.Component {
                       }}
                     >
                       <h2>NO</h2>
-                    </Button>
+                     
+                    </Button> 
+                    </div>
                   </Col>
                 </Row>
               </div>

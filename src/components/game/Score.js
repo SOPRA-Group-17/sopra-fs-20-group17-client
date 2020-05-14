@@ -5,6 +5,12 @@ import { Container, Row, Col, Button, Table, Modal } from "react-bootstrap";
 import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 
+const sentence = {
+  fontSize: "4vw",
+
+
+};
+
 class Score extends React.Component {
   constructor() {
     super();
@@ -197,10 +203,10 @@ class Score extends React.Component {
                 alt="Just One Logo"
               ></img>
             </Col>
-            <Col xs={{ span: 3, offset: 0 }} md={{ span: 2, offset: 2 }}>
+            <Col xs={{ span: 1, offset: 0 }} md={{ span: 2, offset: 2 }}>
               <Row></Row>
             </Col>
-            <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 3 }}>
+            <Col xs={{ span: 6, offset: 0 }} md={{ span: 2, offset: 3 }}>
               <Row className="d-flex justify-content-end">
                 <Button
                   variant="outline-light"
@@ -231,13 +237,13 @@ class Score extends React.Component {
           </Modal>
           <Row>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 2 }}></Col>
-            <Col xs="7" md="6">
-              <h1>Team Score: {this.teamScore()}</h1>
+            <Col xs="12" md="8">
+              <p style={sentence}>Team Score: {this.teamScore()}</p>
 
-              <h1>Number of correct guesses: {this.correctGuesses()} </h1>
+              <p style={sentence}>Nr. of correct guesses: {this.correctGuesses()} </p>
             </Col>
           </Row>
-          <Row style={{ marginTop: "6vw" }}>
+          <Row style={{ marginTop: "5vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 2 }}></Col>
             <Col xs="7" md="3">
               <Table striped bordered hover size="sm">

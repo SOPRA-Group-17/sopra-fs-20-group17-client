@@ -443,7 +443,7 @@ class LobbyHost extends React.Component {
 
           <Row style={{ marginTop: "4vw" }}>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 0 }}></Col>
-            <Col xs="7" md="4">
+            <Col xs="10" md="4">
               <Table striped bordered hover size="sm">
                 <thead class="text-white">
                   <tr>
