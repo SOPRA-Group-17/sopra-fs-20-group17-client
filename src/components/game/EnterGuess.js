@@ -6,12 +6,15 @@ import { Container, Row, Col, Button, Table, Modal } from "react-bootstrap";
 import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
+import ProgressBar from "react-bootstrap/ProgressBar";
 
 const bigbutton = {
   padding: "0.5vw 1.5vw 0.5vw 1.5vw",
   fontSize: "calc(0.5em, 0.5vw)",
   //top right bottom left
 };
+
+
 
 class EnterGuess extends React.Component {
   constructor() {
@@ -28,6 +31,7 @@ class EnterGuess extends React.Component {
       readyToRender: null,
       noHintsValid: null,
       rules: false,
+
     };
     this.getHints = this.getHints.bind(this);
   }
@@ -38,7 +42,7 @@ class EnterGuess extends React.Component {
       //this.state.playerToken = localStorage.getItem("token");
       //this.state.playerId = localStorage.getItem("Id");
       //this.state.gameId = this.props.match.params.gameId;
-      this.setState({gameId : this.props.match.params.gameId});
+      this.setState({ gameId: this.props.match.params.gameId });
       // get all the given hints
       this.getHints();
       this.timer = setInterval(() => this.getHints(), 2000);
@@ -53,21 +57,19 @@ class EnterGuess extends React.Component {
 
   async getHints() {
     try {
-      if(this.state.gameId){
+      if (this.state.gameId) {
         const response = await api.get(`/games/${this.state.gameId}`);
-      // check if game ready to give hints
-      console.log(response.data.status);
-      if (response.data.status === "RECEIVING_GUESS") {
-        const response = await api.get(`/games/${this.state.gameId}/hints`);
-        console.log(response.data);
-        this.setState({ hints: response.data });
-        clearInterval(this.timer);
-        this.timer = null;
-        this.setState({ readyToRender: true });
+        // check if game ready to give hints
+        console.log(response.data.status);
+        if (response.data.status === "RECEIVING_GUESS") {
+          const response = await api.get(`/games/${this.state.gameId}/hints`);
+          console.log(response.data);
+          this.setState({ hints: response.data });
+          clearInterval(this.timer);
+          this.timer = null;
+          this.setState({ readyToRender: true });
+        }
       }
-
-      }
-      
     } catch (error) {
       alert(
         `Something went wrong while getting the hints: \n${handleError(error)}`
@@ -178,9 +180,13 @@ class EnterGuess extends React.Component {
             >
               <Spinner />
             </div>
-            <div class="row justify-content-center">
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "2vw" }}
+            >
               <p className="large-Font">Waiting for the hints</p>
             </div>
+
           </div>
         ) : (
           <div>

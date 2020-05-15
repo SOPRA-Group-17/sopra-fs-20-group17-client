@@ -358,8 +358,8 @@ class Number extends React.Component {
       let amountPlayers = allPlayers.data.length - 1;
       const hints = await api.get(`/games/${this.state.ID_game}/hints`);
 
-      let amountHints = amountPlayers ^ 2;
-      console.log(allPlayers.data);
+      let amountHints = amountPlayers * amountPlayers;
+      console.log(amountHints);
       let sum = 0;
 
       let percentage;
@@ -381,10 +381,13 @@ class Number extends React.Component {
           } else if (this.state.game_status === "VALIDATING_HINTS") {
             if (hints.data[i]) {
               if (hints.data[i].reporters) {
+                console.log(hints.data[i].reporters.length)
                 sum += hints.data[i].reporters.length;
+                console.log(sum)
               }
             }
             percentage = (sum / amountHints) * 100;
+            console.log(percentage)
           }
         }
       }

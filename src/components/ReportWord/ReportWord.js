@@ -25,6 +25,12 @@ const sentence = {
   opacity: 0.2,
 };
 
+const sentenceWaiting = {
+  fontSize: "5vw",
+  textAlign: "center",
+};
+
+
 const bigbutton = {
   //top right bottom left
   padding: "2vw 3vw 2vw 3vw",
@@ -336,7 +342,7 @@ class ReportWord extends React.Component {
                   <Spinner />
                 </div>
                 <div class="row justify-content-center">
-                  <p className="large-Font">waiting for the others to validate the word</p>
+                  <p style ={sentenceWaiting}>">waiting for the others to validate the word</p>
                 </div>
               </div>
             )}
