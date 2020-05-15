@@ -18,6 +18,8 @@ class GiveClue extends React.Component {
       timer: null,
       rules: false,
       id: localStorage.getItem("Id"),
+      endGame: false,
+      timerGameEnded: null
 
     };
   }
@@ -31,6 +33,8 @@ class GiveClue extends React.Component {
 
       this.checkTermAvailible();
       this.timer = setInterval(() => this.checkTermAvailible(), 1000);
+      
+      this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
     } catch (error) {
       alert(
         `Something went wrong while setting up the page: \n${handleError(
@@ -40,10 +44,39 @@ class GiveClue extends React.Component {
     }
   }
 
-  //checks if state of game receiving_Hints
+  async checkGameEnded() {
+    try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      
+    } catch (error) {
+      alert(
+        `Something went wrong while checking if the game has ended: \n${handleError(error)}`
+      );
+    }
+  }
+
+  
+
+  //checks if state of game receiving_Hints, if yes it calls getTerm which gets the term of the round
   async checkTermAvailible() {
     try {
       if(this.state.gameId){
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      else{
         const response = await api.get(`/games/${this.state.gameId}`);
         // check if game ready to give hints
         console.log(response.data.status);
@@ -53,6 +86,7 @@ class GiveClue extends React.Component {
           this.getTerme();
         }
       }
+    }
     } catch (error) {
       alert(
         `Something went wrong while checking the game status: \n${handleError(
@@ -64,10 +98,18 @@ class GiveClue extends React.Component {
 
   async getTerme() {
     try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      else{
       const response = await api.get(`/games/${this.state.gameId}/terms`);
 
       // Get the returned terme and update the state.
       this.setState({ word: response.data.content });
+      }
     } catch (error) {
       alert(
         `Something went wrong while getting the term: \n${handleError(error)}`
@@ -77,6 +119,13 @@ class GiveClue extends React.Component {
 
   async submitClue() {
     try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      else{
       const requestBody = JSON.stringify({
         content: this.state.clue,
         token: this.state.token,
@@ -86,7 +135,10 @@ class GiveClue extends React.Component {
         `/games/${this.state.gameId}/hints`,
         requestBody
       );
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
       this.props.history.push(`/game/${this.state.gameId}/validation`);
+      }
     } catch (error) {
       alert(
         `Something went wrong while submiting the clue \n${handleError(error)}`
@@ -97,6 +149,27 @@ class GiveClue extends React.Component {
   handleInputChange(key, value) {
     this.setState({ [key]: value });
   }
+
+  async endGame() {
+    try{
+      const requestBody = JSON.stringify({
+        status: "FINISHED"
+      });
+      await api.put(`/games/${this.state.gameId}`, requestBody);
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
+    }
+    catch (error) {
+    alert(
+      `Something went wrong while trying to end the game: \n${handleError(
+        error
+      )}`
+    );
+  }
+}
 
   render() {
     return (
@@ -114,7 +187,17 @@ class GiveClue extends React.Component {
               >
                 Rules
               </Button>
-            </Row>
+              </Row>
+              <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
+            
           </Col>
         </Row>
         <Modal
@@ -125,6 +208,36 @@ class GiveClue extends React.Component {
         >
           <Rules />
         </Modal>
+        <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGame()}
+                  
+                >
+                  YES
+                </Button>
+              </Modal.Body>
+            </Modal>
         {!this.state.word ? (
           <div style={{ marginTop: "5vw" }}>
             <div class="row justify-content-center">

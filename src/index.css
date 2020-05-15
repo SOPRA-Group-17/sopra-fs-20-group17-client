@@ -59,6 +59,7 @@ body {
   margin-top: 0.8vw;
 }
 
+
 .DashboardForm {
   margin-left: 10vw;
   margin-top: 5vw;
@@ -153,6 +154,11 @@ body {
     margin-top: 1vw;
     font-size: 1.2vw;
   }
+  .outlineWhite-Validation {
+    margin-top: 0.3vw;
+    margin-bottom: 0.2vw;
+    font-size: 1.2vw;
+  }
   .outlineWhite-Guess {
     margin-top: 1.5vw;
     font-size: 1.5vw;
@@ -205,6 +211,11 @@ body {
   .outlineWhite-Dashboard {
     margin-top: 1vw;
     font-size: 1.5vw;
+  }
+  .outlineWhite-Validation {
+    margin-top: 0.5vw;
+    font-size: 1.5vw;
+    margin-bottom: 0.6vw;
   }
   .outlineWhite-Guess {
     margin-top: 2vw;
@@ -262,6 +273,11 @@ body {
   .outlineWhite-Dashboard {
     margin-top: 2vw;
     font-size: 4vw;
+  }
+  .outlineWhite-Validation {
+    margin-top: 1.2vw;
+    font-size: 4vw;
+    margin-bottom: 1vw;
   }
   .outlineWhite-Guess {
     margin-top: 5vw;
