@@ -4,10 +4,7 @@ import { Redirect, useParams} from "react-router-dom";
 
 /**
  * checks if a player is a ClueGiver or not
- */
-export const ClueGiverGuard = props => {
-  
-  if (localStorage.getItem("role") == "ClueGiver" ) {
+ *  if (localStorage.getItem("role") == "ClueGiver" ) {
     return props.children;
   }
   else if(localStorage.getItem("token")){
@@ -15,5 +12,9 @@ export const ClueGiverGuard = props => {
 
   }
   return <Redirect to={"/login"} />;
+ */
+export const ClueGiverGuard = props => {
+  return props.children;
+ 
   
 };
