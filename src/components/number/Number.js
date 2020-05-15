@@ -372,22 +372,18 @@ class Number extends React.Component {
             }
             percentage = (sum / amountPlayers) * 100;
           } else if (this.state.game_status === "RECEIVING_HINTS") {
-            if (hints.data[i]) {
-              if (hints.data[i].content) {
-                sum++;
-              }
-            }
+            sum = hints.data.length;
             percentage = (sum / amountPlayers) * 100;
           } else if (this.state.game_status === "VALIDATING_HINTS") {
             if (hints.data[i]) {
               if (hints.data[i].reporters) {
-                console.log(hints.data[i].reporters.length)
+                console.log(hints.data[i].reporters.length);
                 sum += hints.data[i].reporters.length;
-                console.log(sum)
+                console.log(sum);
               }
             }
             percentage = (sum / amountHints) * 100;
-            console.log(percentage)
+            console.log(percentage);
           }
         }
       }

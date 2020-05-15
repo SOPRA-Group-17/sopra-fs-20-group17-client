@@ -26,7 +26,7 @@ const sentence = {
 };
 
 const sentenceWaiting = {
-  fontSize: "5vw",
+  fontSize: "3vw",
   textAlign: "center",
 };
 
@@ -341,8 +341,9 @@ class ReportWord extends React.Component {
                 <div class="row justify-content-center">
                   <Spinner />
                 </div>
-                <div class="row justify-content-center">
-                  <p style ={sentenceWaiting}>">waiting for the others to validate the word</p>
+                <div class="row justify-content-center"
+                style={{ marginTop: "1vw" }}>
+                  <p style ={sentenceWaiting}>waiting for the others to validate the word</p>
                 </div>
               </div>
             )}

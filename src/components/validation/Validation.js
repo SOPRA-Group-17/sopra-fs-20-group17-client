@@ -12,9 +12,14 @@ import {
   ToggleButtonGroup,
   Form,
   Modal,
+  ProgressBar,
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
+
+const progressbar = {
+  width: "22vw",
+};
 
 class Validation extends React.Component {
   constructor() {
@@ -33,6 +38,7 @@ class Validation extends React.Component {
       successfull: 0,
       help: false,
       rules: false,
+      progressBar: null,
     };
 
     this.creatReportHintArray = this.creatReportHintArray.bind(this);
@@ -44,9 +50,11 @@ class Validation extends React.Component {
     try {
       //this.state.token = localStorage.getItem("token");
       this.state.gameId = this.props.match.params.gameId;
-      this.setState({gameId : this.props.match.params.gameId});
-      
-      const response = await api.get(`/games/${this.props.match.params.gameId}/terms`);
+      this.setState({ gameId: this.props.match.params.gameId });
+
+      const response = await api.get(
+        `/games/${this.props.match.params.gameId}/terms`
+      );
 
       //check if user was on this site before, in same game
       if (localStorage.getItem("sawHelp") != null) {
@@ -71,24 +79,22 @@ class Validation extends React.Component {
 
   async getHints() {
     try {
-
-      if(this.state.gameId){
-
+      if (this.state.gameId) {
         const response = await api.get(`/games/${this.state.gameId}`);
 
-      // check if game ready to give hints
-      console.log(response.data.status);
-      if (response.data.status === "VALIDATING_HINTS") {
-        const response2 = await api.get(`/games/${this.state.gameId}/hints`);
-        console.log(response2.data);
-        clearInterval(this.timer);
-        this.timer = null;
-        this.setState({ hints: response2.data }, () =>
-          this.creatReportHintArray()
-        );
+        // check if game ready to give hints
+        console.log(response.data.status);
+        if (response.data.status === "VALIDATING_HINTS") {
+          const response2 = await api.get(`/games/${this.state.gameId}/hints`);
+          console.log(response2.data);
+          clearInterval(this.timer);
+          this.timer = null;
+          this.setState({ hints: response2.data }, () =>
+            this.creatReportHintArray()
+          );
+        }
+        this.waitingBar();
       }
-      }
-      
     } catch (error) {
       alert(
         `Something went wrong while fetching the hints: \n${handleError(error)}`
@@ -315,6 +321,36 @@ class Validation extends React.Component {
     return cards;
   };
 
+  async waitingBar() {
+    try {
+      //get all players in the game
+      //set player and playerstatus
+      const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
+      console.log(allPlayers.data);
+      //-1 because of the guesser
+      let amountPlayers = allPlayers.data.length - 1;
+      console.log(amountPlayers);
+      //get all hints to check afterwards
+      const hints = await api.get(`/games/${this.state.gameId}/hints`);
+
+      //get the game to check the game state
+      const gameStatus = await api.get(`/games/${this.state.gameId}`);
+
+      let sum = 0;
+
+      let percentage;
+      if (gameStatus.data.status === "RECEIVING_HINTS") {
+        sum = hints.data.length;
+        percentage = (sum / amountPlayers) * 100;
+      }
+      this.setState({
+        progressBar: percentage,
+      });
+    } catch (error) {
+      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+    }
+  }
+
   render() {
     return (
       <Container fluid>
@@ -355,8 +391,24 @@ class Validation extends React.Component {
             >
               <Spinner />
             </div>
-            <div class="row justify-content-center">
-              <p className="large-Font">Waiting for clues to validate</p>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "2vw" }}
+            >
+              <p className="large-Font">Waiting for the other clues</p>
+            </div>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "2vw" }}
+            >
+              <Row>
+                <ProgressBar
+                  style={progressbar}
+                  striped
+                  variant="success"
+                  now={this.state.progressBar}
+                />
+              </Row>
             </div>
           </div>
         ) : (
@@ -420,9 +472,11 @@ class Validation extends React.Component {
               <Modal.Body className="rules-text">
                 <p className="rules-text-s-title">Report similar</p>
                 <p className="rules-text">
-                  The number of a clue is written on the top of the Cluecard. 
-                  If a clue is too similiar to an other clue, click on the number of the similar clue in the numberlist.
-                  E.g. If Clue Nr.1 is similiar to clue Nr. 2. Click on 2 in the numberlist of clue 1.  
+                  The number of a clue is written on the top of the Cluecard. If
+                  a clue is too similiar to an other clue, click on the number
+                  of the similar clue in the numberlist. E.g. If Clue Nr.1 is
+                  similiar to clue Nr. 2. Click on 2 in the numberlist of clue
+                  1.
                 </p>
 
                 <p className="rules-text-s-title">Decide if valid or invalid</p>
@@ -435,32 +489,32 @@ class Validation extends React.Component {
                   after clicking the button the clue is marked as VALID.
                 </p>
                 <p className="rules-text">
-                Invalid clues:
-              <ul>
-                <li>
-                  The Mystery word but written differently. Example: Shurt is
-                  not allowed when trying to make the player guess Shirt.
-                </li>
-                <li>
-                  The Mystery word written in a foreign language. Example:
-                  Buisson is not allowed if the word to be guessed is Shrub.
-                </li>
-                <li>
-                  A word from the same family as the Mystery word. Example:
-                  Princess is not allowed if the word to be guessed is Prince
-                </li>
-                <li>
-                  An invented word. Example: Swee’ting is not allowed to try to
-                  help someone guess Cake.
-                </li>
-                <li>
-                  A word phonetically identical to the Mystery word, but the
-                  meaning of which is different. Example: Whether is not allowed
-                  to try to get someone to guess Weather.
-                </li>
-              </ul>
-              </p>
-                
+                  Invalid clues:
+                  <ul>
+                    <li>
+                      The Mystery word but written differently. Example: Shurt
+                      is not allowed when trying to make the player guess Shirt.
+                    </li>
+                    <li>
+                      The Mystery word written in a foreign language. Example:
+                      Buisson is not allowed if the word to be guessed is Shrub.
+                    </li>
+                    <li>
+                      A word from the same family as the Mystery word. Example:
+                      Princess is not allowed if the word to be guessed is
+                      Prince
+                    </li>
+                    <li>
+                      An invented word. Example: Swee’ting is not allowed to try
+                      to help someone guess Cake.
+                    </li>
+                    <li>
+                      A word phonetically identical to the Mystery word, but the
+                      meaning of which is different. Example: Whether is not
+                      allowed to try to get someone to guess Weather.
+                    </li>
+                  </ul>
+                </p>
               </Modal.Body>
             </Modal>
 
