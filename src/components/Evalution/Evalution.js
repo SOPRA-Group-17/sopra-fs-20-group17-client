@@ -27,7 +27,7 @@ class Evalution extends React.Component {
       timerDown: null,
       timeNewRound: 10,
       timerScore: null,
-      hint: null
+      hint: null,
     };
   }
 
@@ -35,7 +35,7 @@ class Evalution extends React.Component {
     try {
       //remove chosen_nr, then in the next round are no problems with the number screen
       localStorage.removeItem("chosen_nr");
-      this.setState({gameId : this.props.match.params.gameId});
+      this.setState({ gameId: this.props.match.params.gameId });
 
       //this.state.gameId = this.props.match.params.gameId;
       //this.state.id = localStorage.getItem("Id");
@@ -54,15 +54,12 @@ class Evalution extends React.Component {
   //gets the current score of a player, take player per ID
   async getScore() {
     try {
-      if(this.state.gameId){
+      if (this.state.gameId) {
         console.log(this.state.id);
         const player = await api.get(`/games/players/${this.state.id}`);
         this.setState({ score: player.data.score });
         console.log(player);
-
       }
-      
-    
     } catch (error) {
       alert(
         `Something went wrong while getting the score: \n${handleError(error)}`
@@ -72,64 +69,61 @@ class Evalution extends React.Component {
 
   async getGuessAndTerm() {
     try {
-      if(this.state.gameId){
-      const response = await api.get(`/games/${this.state.gameId}`);
-      this.setState({ gameStatus: response.data.status });
-      // check if game ready to give hints
-      console.log(response.data.status);
-      if (
-        response.data.status === "FINISHED" ||
-        response.data.status === "RECEIVING_TERM"
-      ) {
-        const response2 = await api.get(
-          `/games/${this.state.gameId}/rounds?lastRound=true`
-        );
+      if (this.state.gameId) {
+        const response = await api.get(`/games/${this.state.gameId}`);
+        this.setState({ gameStatus: response.data.status });
+        // check if game ready to give hints
+        console.log(response.data.status);
+        if (
+          response.data.status === "FINISHED" ||
+          response.data.status === "RECEIVING_TERM"
+        ) {
+          const response2 = await api.get(
+            `/games/${this.state.gameId}/rounds?lastRound=true`
+          );
 
-        //setting term
-        this.setState({ word: response2.data[0].term.content });
+          //setting term
+          this.setState({ word: response2.data[0].term.content });
 
-        //setting if guess was correct or not
-        //checking if guess null, happens if guesser skipped
-        if (!response2.data[0].guess) {
-          this.setState({ skiped: true });
-          console.log("Skiped");
-        } else {
-          if (response2.data[0].guess.status == "VALID") {
-            this.setState({ guessCorrect: "correct" });
-            this.setState({ color: "green" });
-            //setting guess
-            this.setState({ guess: response2.data[0].guess.content });
-          } else if (response2.data[0].guess.status == "INVALID") {
-            this.setState({ guessCorrect: "incorrect" });
-            this.setState({ color: "red" });
-            //setting guess
-            this.setState({ guess: response2.data[0].guess.content });
+          //setting if guess was correct or not
+          //checking if guess null, happens if guesser skipped
+          if (!response2.data[0].guess) {
+            this.setState({ skiped: true });
+            console.log("Skiped");
+          } else {
+            if (response2.data[0].guess.status == "VALID") {
+              this.setState({ guessCorrect: "correct" });
+              this.setState({ color: "green" });
+              //setting guess
+              this.setState({ guess: response2.data[0].guess.content });
+            } else if (response2.data[0].guess.status == "INVALID") {
+              this.setState({ guessCorrect: "incorrect" });
+              this.setState({ color: "red" });
+              //setting guess
+              this.setState({ guess: response2.data[0].guess.content });
+            }
           }
+          //setting if hint was valid
+          const hintlist = response2.data[0].hintList;
+
+          hintlist.forEach((hint) => {
+            if (hint.token == this.state.token) {
+              if (hint.status == "VALID") {
+                this.setState({ hint: "Valid" });
+              } else {
+                this.setState({ hint: "Invalid" });
+              }
+            }
+          });
+
+          this.setState({ readyToRender: true });
+
+          clearInterval(this.timer);
+          this.timer = null;
+          this.timer = setInterval(() => this.startNewRound(), 9800);
+          this.timerDown = setInterval(() => this.decreaseTime(), 1000);
         }
-        //setting if hint was valid
-        const hintlist = response2.data[0].hintList;
-        
-        hintlist.forEach(hint => {
-          if(hint.token == this.state.token){
-            if(hint.status == "VALID"){
-              this.setState({hint: "Valid"})
-            }
-            else{
-              this.setState({hint: "Invalid"})
-            }
-          }
-          
-        });
-
-
-        this.setState({ readyToRender: true });
-
-        clearInterval(this.timer);
-        this.timer = null;
-        this.timer = setInterval(() => this.startNewRound(), 9800);
-        this.timerDown = setInterval(() => this.decreaseTime(), 1000);
       }
-    }
     } catch (error) {
       alert(
         `Something went wrong while getting the term and guess: \n${handleError(
@@ -157,13 +151,14 @@ class Evalution extends React.Component {
 
       const Player = await api.get(`/games/players/${this.state.id}`);
       console.log(Player.data);
-      if (this.state.gameStatus == "RECEIVING_TERM") {
+      //check both because it could be that one gets redirected before the others
+      if (this.state.gameStatus == "RECEIVING_TERM" || this.state.gameStatus == "VALIDATING_TERM" ) {
         console.log(Player.data.status);
         if (Player.data.status === "GUESSER") {
-          localStorage.setItem("status", "GUESSER");
+          localStorage.setItem("role", "Guesser");
           this.props.history.push(`/game/${this.state.gameId}/number`);
         } else if (Player.data.status === "CLUE_GIVER") {
-          localStorage.setItem("status", "CLUE_GIVER");
+          localStorage.setItem("role", "ClueGiver");
           this.props.history.push(`/game/${this.state.gameId}/reportWord`);
         }
       } //check if this works, is Finished the correct state
@@ -243,12 +238,10 @@ class Evalution extends React.Component {
                   </Button>
                 </Row>
                 <Row className="d-flex justify-content-end">
-                  <p hidden = {!this.state.hint} className="score">
-                      Your clue was {this.state.hint}
+                  <p hidden={!this.state.hint} className="score">
+                    Your clue was {this.state.hint}
                   </p>
-                  <p className="score">
-                    Current score: {this.state.score}
-                  </p>
+                  <p className="score">Current score: {this.state.score}</p>
                 </Row>
               </Col>
             </Row>

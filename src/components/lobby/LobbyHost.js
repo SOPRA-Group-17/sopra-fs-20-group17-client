@@ -302,10 +302,12 @@ class LobbyHost extends React.Component {
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
         this.timer = null;
+        localStorage.setItem("role", "Guesser");
         this.props.history.push(`/game/${this.state.ID_game}/number`);
       } else if (this.state.player.status === "CLUE_GIVER") {
         clearInterval(this.timer);
         this.timer = null;
+        localStorage.setItem("role", "ClueGiver");
         this.props.history.push(`/game/${this.state.ID_game}/reportWord`);
       }
     }
