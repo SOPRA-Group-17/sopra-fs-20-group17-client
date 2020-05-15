@@ -357,33 +357,38 @@ class Number extends React.Component {
       //-1 because of the guesser
       let amountPlayers = allPlayers.data.length - 1;
       const hints = await api.get(`/games/${this.state.ID_game}/hints`);
-    
-      let amountHints;
+
+      let amountHints = amountPlayers ^ 2;
       console.log(allPlayers.data);
       let sum = 0;
-      
 
       let percentage;
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
           if (this.state.game_status === "VALIDATING_TERM") {
-            console.log(allPlayers.data[i].playerTermStatus)
+            console.log(allPlayers.data[i].playerTermStatus);
             if (allPlayers.data[i].playerTermStatus !== "NOT_SET") {
               sum++;
             }
+            percentage = (sum / amountPlayers) * 100;
           } else if (this.state.game_status === "RECEIVING_HINTS") {
             if (hints.data[i]) {
               if (hints.data[i].content) {
                 sum++;
               }
             }
+            percentage = (sum / amountPlayers) * 100;
           } else if (this.state.game_status === "VALIDATING_HINTS") {
-            //waiting for the backend, can they give ma a number
-            sum = amountPlayers/(Math.floor(Math.random() * amountPlayers) + 1)  
+            if (hints.data[i]) {
+              if (hints.data[i].reporters) {
+                sum += hints.data[i].reporters.length;
+              }
+            }
+            percentage = (sum / amountHints) * 100;
           }
         }
       }
-      percentage = (sum / amountPlayers) * 100;
+
       this.setState({
         progressBar: percentage,
       });
@@ -442,10 +447,16 @@ class Number extends React.Component {
               <Spinner />
             </div>
 
-            <div class="row justify-content-center" style={{ marginTop: "2vw" }}>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "2vw" }}
+            >
               <p className="large-Font">{this.waitingSentence()}</p>
             </div>
-            <div class="row justify-content-center" style={{ marginTop: "2vw" }}>
+            <div
+              class="row justify-content-center"
+              style={{ marginTop: "2vw" }}
+            >
               <Row>
                 <ProgressBar
                   style={progressbar}
