@@ -73,7 +73,6 @@ class Validation extends React.Component {
     try {
 
       if(this.state.gameId){
-
         const response = await api.get(`/games/${this.state.gameId}`);
 
       // check if game ready to give hints
