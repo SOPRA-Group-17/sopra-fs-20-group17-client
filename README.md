@@ -3,22 +3,25 @@ SoPra Group 17 - Client
 
 ## Introduction
 
-The goal of our project was to implement Just One as a web application. Just One is a cooperative game. In each round there is one player - he is
-called the active player - who needs to guess a mystery word. He
-gets some clues from the other players which help him guessing the correct answer.
+The Project aim is to provide the client side infrastrucute for our Just One Web Application. It provides user Interface so that the user can play the Just One Game. Communication with the backend is achieved by REST-API calls. 
 
 ## Technologies
 
-The project was implemented with the React library and the syntax extension JSX which extends JavaScript. For styling we used Bootstrap and some CSS attributes. As a package manager we used npm. For our iteration planning we used Jira where we created UserStories and Tasks. For team communication we used Slack, Discord and Notion. 
+The project was implemented with the React library and the syntax extension JSX which extends JavaScript. For styling we used Bootstrap and some CSS attributes. As a package manager we used npm. For our iteration planning we used Jira where we created UserStories and Tasks. 
 
 ## High-level components
 
-game router
-
+### Game router and Game Guard
+The game router is used for routing, so that users get redirected to the correct page during an active Game. The gameGuard assures that users can only view the pages of the game that there are currenctly playing. 
+> - [Game router](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/blob/master/src/components/shared/routers/GameRouter.js)
+> - [Game guard](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/blob/master/src/components/shared/routeProtectors/GameGuard.js)
+ 
 Dashboard
 
 
 Validation
+
+Gives the user the option to decide if a given Clue is Valid or not. He can also report if word are similar to each other. 
 
 
 
@@ -61,7 +64,7 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### Releases
-?????
+A new release of the application can be published using Github [here](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/releases)
 
 ## Illustrations of the main user flows
 
@@ -76,20 +79,20 @@ Lobbyhost image
 During one round of the game the user is either the guesser or one of the clue givers. 
 
 ### Flow of the guesser:
-**Pick a number:** The user must choose a number between 1 and 5.
+* **Pick a number:** The user must choose a number between 1 and 5.
 
-**Enter guess**: He can see all given clues which are valid. He can either make a guess or skip if he doesn’t want to guess. 
+* **Enter guess**: He can see all given clues which are valid. He can either make a guess or skip if he doesn’t want to guess. 
 
-**Evaluation**: On this screen the user can evaluate if he guessed correct or not and see his current score. 
+* **Evaluation**: On this screen the user can evaluate if he guessed correct or not and see his current score. 
 
 ### Flow of the clue giver:
-**Report Word:** The user must decide if he knows the term or not.
+* **Report Word:** The user must decide if he knows the term or not.
 
-**Give clue:** User must give a clue for the displayed term.
+* **Give clue:** User must give a clue for the displayed term.
 
-**Validation:** The user must validate if the given clues are Valid or Invalid and which clues are similar to each other. 
+* **Validation:** The user must validate if the given clues are Valid or Invalid and which clues are similar to each other. 
 
-**Evaluation:** On this screen the user can evaluate if the guesser guessed correct or not and see his current score as well as if the clue he gave was valid. 
+* **Evaluation:** On this screen the user can evaluate if the guesser guessed correct or not and see his current score as well as if the clue he gave was valid. 
 
 After evaluation a new round starts if the game is not finished yet else the user gets redirected to the End screen.
 
@@ -97,17 +100,30 @@ End screen image
 
 ## Roadmap
 
-Add a chat function, so that user can communicate whith each other.
-Add the option to add bots to the game so that the game can be played if there are to few people. 
+* Add a chat function, so that user can communicate whith each other.
+* Add the option to add bots to the game so that the game can be played if there are to few people. 
 
 ## Authors and acknoledgments
 
-The client was implemented by Lennart Jung, Jonas Zürcher, Markus Butscher. 
+The client was implemented by 
+* Lennart Lou Jung, BSc Student University of Zurich
+* Jonas Zürcher, BSc Student University of Zurich
+* Markus Burtscher , BSc Student University of Zurich
+
 Big thanks to Nik Zaugg for assisting our group during the project aswell as Roy Rutishauser and Alex Scheitlin for the setup of the template. 
 
 ## License
 
-This project is licensed under the GNU General Public License v3. Click [here](https://www.gnu.org/licenses/gpl-3.0.de.html) for more details. 
+This project is licensed under the MIT liscence. 
+
+Copyright (c) [2020] [Jonas Zürcher, Lennart Jung]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 
 
 
