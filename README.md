@@ -26,7 +26,6 @@ This file includes CSS classes that are used to style our application. It is use
 > - [Style Sheet](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/blob/master/src/index.css)
 
 
-
 ## Launch and Deployment 
 
 For your local development environment you'll need Node.js >= 8.10. You can download it [here](https://nodejs.org).
@@ -76,7 +75,7 @@ After login the user gets redirected to the dashboard. Her he can create or join
 Dashboard image
 
  If a user joined or created a lobby he gets redirected to the Lobby-screen, here he can set his status to ready, ff all players are ready the game starts.  If he created the lobby, he can also kick players out of the lobby. 
- 
+
 Lobbyhost image
 
 During one round of the game the user is either the guesser or one of the clue givers. 
