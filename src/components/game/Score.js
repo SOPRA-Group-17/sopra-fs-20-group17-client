@@ -7,8 +7,6 @@ import logo from "../styling/JustOne_logo_white.svg";
 
 const sentence = {
   fontSize: "4vw",
-
-
 };
 
 class Score extends React.Component {
@@ -22,6 +20,7 @@ class Score extends React.Component {
       game: null,
       players: null,
       rules: false,
+      endedNormal: true,
     };
   }
 
@@ -60,6 +59,17 @@ class Score extends React.Component {
         status: current_player.data.status,
         game: get_game.data,
       });
+
+      //check if the game has ended normal, if not then show a modal with this information
+      if (localStorage.getItem("endedNormal")) {
+        this.setState({
+          endedNormal: true,
+        });
+      } else {
+        this.setState({
+          endedNormal: false,
+        });
+      }
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -235,12 +245,37 @@ class Score extends React.Component {
           >
             <Rules />
           </Modal>
+          <Modal
+            size="lg"
+            show={!this.state.endedNormal}
+            aria-labelledby="fast-ending-dashboard"
+          >
+            <Modal.Header closeButton className="fast-ending-header">
+              <Modal.Title
+                id="fast-dashboard-title"
+                className="fast-ending-header"
+              >
+                Game finished
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="rules-text">
+              <p className="rules-text-title">fast ending</p>
+              <p className="rules-text">
+                A player has ended the game early. <br></br>
+                Afterwards you will receive your early game evaluation.{" "}
+                <br></br>
+                Thanks for playing the game
+              </p>
+            </Modal.Body>
+          </Modal>
           <Row>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 2 }}></Col>
             <Col xs="12" md="8">
               <p style={sentence}>Team Score: {this.teamScore()}</p>
 
-              <p style={sentence}>Nr. of correct guesses: {this.correctGuesses()} </p>
+              <p style={sentence}>
+                Nr. of correct guesses: {this.correctGuesses()}{" "}
+              </p>
             </Col>
           </Row>
           <Row style={{ marginTop: "5vw" }}>

@@ -55,6 +55,7 @@ class Dashboard extends React.Component {
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
       localStorage.removeItem("sawHelp");
+      localStorage.removeItem("endedNormal");
 
       //this.state.userId = localStorage.getItem("userId");
       //this.state.token = localStorage.getItem("token");

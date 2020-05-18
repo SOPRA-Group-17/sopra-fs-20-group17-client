@@ -30,7 +30,6 @@ const sentenceWaiting = {
   textAlign: "center",
 };
 
-
 const bigbutton = {
   //top right bottom left
   padding: "2vw 3vw 2vw 3vw",
@@ -59,6 +58,7 @@ class ReportWord extends React.Component {
       clicked: false,
       last_time: null,
       rules: false,
+      endGame: false,
     };
   }
 
@@ -96,6 +96,7 @@ class ReportWord extends React.Component {
       });
 
       this.timer = setInterval(() => this.getPlayerTermStatus(), 1000);
+      this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
     } catch (error) {
       alert(
         `Something went wrong while getting the word which has to be guessed: \n${handleError(
@@ -153,7 +154,7 @@ class ReportWord extends React.Component {
   }
   //callback function check if its really needed
   callback() {
-     "this is just for nothing";
+    "this is just for nothing";
   }
   setClicked() {
     //save last word and check with current word, if different then set state clicked to false and update last word
@@ -230,23 +231,45 @@ class ReportWord extends React.Component {
       });
     }
   }
-  /*
-  calculatingBarPositive() {
-    {
-      let count = 0;
-      let number_of_players = this.state.players.length;
 
-      for (let i = 0; i < number_of_players; i++) {
-        if (this.state.players[i].playerTermStatus === "KNOWN") {
-          count++;
-        }
-        this.setState({
-          perCentPositive: (count / (number_of_players - 1)) * 100,
-        });
-      }
+  async endGame() {
+    try {
+      const requestBody = JSON.stringify({
+        status: "FINISHED",
+      });
+      await api.put(`/games/${this.state.gameId}`, requestBody);
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
+    } catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
     }
   }
-  */
+
+  async checkGameEnded() {
+    try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if (response.data.status === "FINISHED") {
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+    } catch (error) {
+      alert(
+        `Something went wrong while checking if the game has ended: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
 
   render() {
     return (
@@ -256,6 +279,15 @@ class ReportWord extends React.Component {
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
           <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+            <Row className="d-flex justify-content-end">
+              <Button
+                variant="outline-danger"
+                className="outlineWhite-Dashboard"
+                onClick={() => this.setState({ endGame: true })}
+              >
+                End Game
+              </Button>
+            </Row>
             <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
@@ -274,6 +306,32 @@ class ReportWord extends React.Component {
           aria-labelledby="rules-dashboard"
         >
           <Rules />
+        </Modal>
+        <Modal
+          size="lg"
+          show={this.state.endGame}
+          onHide={() => this.setState({ endGame: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Modal.Header closeButton className="rules-header">
+            <Modal.Title id="rules-dashboard-title" className="rules-header">
+              End Game
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="rules-text">
+            <p className="rules-text">
+              Are you sure that you want to end the game? This will end the game
+              for all players.
+            </p>
+            <Button
+              variant="outline-danger"
+              size="lg"
+              className="outlineWhite-Dashboard"
+              onClick={() => this.endGame()}
+            >
+              YES
+            </Button>
+          </Modal.Body>
         </Modal>
 
         {!this.state.word ? (
@@ -309,29 +367,28 @@ class ReportWord extends React.Component {
                     md={{ span: 0, offset: 0 }}
                   ></Col>
                   <Col xs="10" md="11">
-                  <div class="row justify-content-center">
-                    <Button
-                      variant="outline-success"
-                      style={bigbutton}
-                      disabled={this.state.pressed}
-                      onClick={() => {
-                        this.yes();
-                      }}
-                    >
-                      <h2>YES</h2>
-                    </Button>
+                    <div class="row justify-content-center">
+                      <Button
+                        variant="outline-success"
+                        style={bigbutton}
+                        disabled={this.state.pressed}
+                        onClick={() => {
+                          this.yes();
+                        }}
+                      >
+                        <h2>YES</h2>
+                      </Button>
 
-                    <Button
-                      variant="outline-danger"
-                      style={bigbutton}
-                      disabled={this.state.pressed}
-                      onClick={() => {
-                        this.no();
-                      }}
-                    >
-                      <h2>NO</h2>
-                     
-                    </Button> 
+                      <Button
+                        variant="outline-danger"
+                        style={bigbutton}
+                        disabled={this.state.pressed}
+                        onClick={() => {
+                          this.no();
+                        }}
+                      >
+                        <h2>NO</h2>
+                      </Button>
                     </div>
                   </Col>
                 </Row>
@@ -341,9 +398,13 @@ class ReportWord extends React.Component {
                 <div class="row justify-content-center">
                   <Spinner />
                 </div>
-                <div class="row justify-content-center"
-                style={{ marginTop: "1vw" }}>
-                  <p style ={sentenceWaiting}>waiting for the others to validate the word</p>
+                <div
+                  class="row justify-content-center"
+                  style={{ marginTop: "1vw" }}
+                >
+                  <p style={sentenceWaiting}>
+                    waiting for the others to validate the word
+                  </p>
                 </div>
               </div>
             )}

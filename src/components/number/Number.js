@@ -40,6 +40,7 @@ class Number extends React.Component {
       hide5: false,
       rules: false,
       progressBar: null,
+      endGame: false,
     };
   }
 
@@ -56,6 +57,7 @@ class Number extends React.Component {
 
       //poll every 1 seconds all players, search game
       this.timer = setInterval(() => this.getGameStatus(), 1000);
+      this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -396,16 +398,52 @@ class Number extends React.Component {
     }
   }
 
+  async endGame() {
+    try{
+      const requestBody = JSON.stringify({
+        status: "FINISHED"
+      });
+      await api.put(`/games/${this.state.ID_game}`, requestBody);
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.ID_game}/Score`);
+    }
+    catch (error) {
+    alert(
+      `Something went wrong while trying to end the game: \n${handleError(
+        error
+      )}`
+    );
+  }
+}
+async checkGameEnded() {
+  try {
+    const response = await api.get(`/games/${this.state.ID_game}`);
+    if(response.data.status === "FINISHED"){
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.ID_game}/Score`);
+    }
+    
+  } catch (error) {
+    alert(
+      `Something went wrong while checking if the game has ended: \n${handleError(error)}`
+    );
+  }
+}
+
+
   render() {
     return (
       <Container fluid>
         {this.getGameStatus}
-        {console.log("this is the game status")}
+
         {console.log(this.state.game_status)}
-        {console.log(
-          "checks if we are ready to render if we are not then spinner"
-        )}
-        {console.log(this.state.readyToRender)}
+
         <Row>
           {" "}
           <Col xs="5" md="2">
@@ -414,11 +452,11 @@ class Number extends React.Component {
           <Col xs={{ span: 5, offset: 2 }} md={{ span: 2, offset: 8 }}>
             <Row className="d-flex justify-content-end">
               <Button
-                variant="outline-light"
+                variant="outline-danger"
                 className="outlineWhite-Dashboard"
-                onClick={() => this.exitGame()}
+                onClick={() => this.setState({ endGame: true })}
               >
-                Exit Game
+                End Game
               </Button>
             </Row>
             <Row className="d-flex justify-content-end">
@@ -440,6 +478,36 @@ class Number extends React.Component {
         >
           <Rules />
         </Modal>
+        <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGame()}
+
+                >
+                  YES
+                </Button>
+              </Modal.Body>
+            </Modal>
         {!this.state.readyToRender ? (
           <div style={{ marginTop: "8vw" }}>
             <div class="row justify-content-center">
