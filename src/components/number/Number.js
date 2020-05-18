@@ -47,7 +47,6 @@ class Number extends React.Component {
   async componentDidMount() {
     try {
       //console.log(localStorage);
-      // Nik: always use this.setState don't set the state directly
       //id aus url
       this.setState({
         gameId: this.props.match.params.gameId,
@@ -112,7 +111,7 @@ class Number extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // Nik:
+    //just as a reminder - not used yet
     // gets called every time the component changes (also state changes)
     // you could also compare the prevState with the current state
     // and then save it if something changed
@@ -125,7 +124,7 @@ class Number extends React.Component {
         chosenNumber: number,
         readyToRender: false,
       },
-      this.saveChange //Nik: pass a function as callback (gets executed AFTER state change)
+      this.saveChange
     );
     this.saveChangeAlternative(number);
   }
@@ -136,7 +135,7 @@ class Number extends React.Component {
       chosenNumber: number,
       readyToRender: false,
     });
-    this.saveChangeAlternative(number); //Nik: call the save function with the received number
+    this.saveChangeAlternative(number);
   }
 
   //save the change and send the wordId chosen to the backend
@@ -220,8 +219,6 @@ class Number extends React.Component {
   //change the number state with another method
   async handleNumberClick(number) {
     this.checkGameEnded();
-    // Nik:
-    // number is available here, so use it directly if you want to call the backend
 
     this.setState({ chosenNumber: number });
 

@@ -79,6 +79,7 @@ class Score extends React.Component {
     }
   }
 
+  //create scoring table
   createTable() {
     let table = [];
     // Outer loop to create parent
@@ -130,7 +131,7 @@ class Score extends React.Component {
   }
 
   correctGuesses() {
-    //shows correct guesses
+    //shows amount of correct guesses
     console.log(this.state.game);
     if (this.state.game) {
       if (this.state.game.correctCards >= 0) {

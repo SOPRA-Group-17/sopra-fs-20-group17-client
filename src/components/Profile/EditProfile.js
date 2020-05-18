@@ -8,33 +8,6 @@ import User from "../shared/models/User";
 import { Container, Row, Col, Modal, Button, Badge } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 
-import "react-datepicker/dist/react-datepicker.css";
-
-const FormContainer = styled.div`
-  margin-top: 2em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 300px;
-  justify-content: center;
-`;
-
-const Form = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  height: 400px;
-  font-size: 16px;
-  font-weight: 300;
-  padding-left: 37px;
-  padding-right: 37px;
-  border-radius: 5px;
-  margin-button: 20px;
-  background: linear-gradient(rgb(27, 124, 186), rgb(2, 46, 101));
-  transition: opacity 0.5s ease, transform 0.5s ease;
-`;
-
 const InputField = styled.input`
   &::placeholder {
     color: white;
@@ -96,6 +69,7 @@ class EditProfile extends React.Component {
     try {
       this.state.ID = this.props.match.params.userId;
       console.log(this.state.ID);
+      //get the user
       const response = await api.get(`/users/${this.state.ID}`);
 
       console.log(response.data);
@@ -110,6 +84,7 @@ class EditProfile extends React.Component {
     }
   }
 
+  //save the new username
   async saveChangeUsername() {
     try {
       let requestBody;
@@ -135,6 +110,8 @@ class EditProfile extends React.Component {
       this.props.history.push(`/Register`);
     }
   }
+
+  //change the password to the new password
   async saveChangePassword() {
     try {
       //update the password
@@ -154,6 +131,7 @@ class EditProfile extends React.Component {
     }
   }
 
+  //push to dashboard
   dashboard() {
     this.props.history.push("/dashboard");
   }
@@ -164,20 +142,6 @@ class EditProfile extends React.Component {
     this.setState({ [key]: value });
   }
 
-  handleChange = (date) => {
-    this.setState({
-      birthDate: date,
-    });
-    console.log(this.state.birthDate);
-  };
-
-  getBirthDate() {
-    if (this.state.user.birthDate == null) {
-      return "Birth date is not set";
-    } else {
-      return this.state.user.birthDate;
-    }
-  }
 
   async checkPassword() {
     if (this.state.currentPassword) {
@@ -233,6 +197,7 @@ class EditProfile extends React.Component {
     }
   }
 
+  //when editing the username the passwordscreen should not be displayed
   editUsername() {
     this.setState({
       passwordScreen: false,
