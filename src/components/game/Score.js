@@ -248,9 +248,10 @@ class Score extends React.Component {
           <Modal
             size="lg"
             show={!this.state.endedNormal}
-            aria-labelledby="fast-ending-dashboard"
+            onHide={() => this.setState({ endedNormal: true })}
+            aria-labelledby="rules-dashboard"
           >
-            <Modal.Header closeButton className="fast-ending-header">
+            <Modal.Header closeButton className="rules-header">
               <Modal.Title
                 id="fast-dashboard-title"
                 className="fast-ending-header"
@@ -263,6 +264,7 @@ class Score extends React.Component {
               <p className="rules-text">
                 A player has ended the game early. <br></br>
                 Afterwards you will receive your early game evaluation.{" "}
+                <br></br>
                 <br></br>
                 Thanks for playing the game
               </p>

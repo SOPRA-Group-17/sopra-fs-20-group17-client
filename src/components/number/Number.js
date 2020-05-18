@@ -66,6 +66,7 @@ class Number extends React.Component {
   }
   async getGameStatus() {
     try {
+      this.checkGameEnded()
       //if the game is not ready for the next page then we are waiting and ask for the state again
       if (!this.state.readyForNext) {
         //get the game and its status
@@ -141,6 +142,7 @@ class Number extends React.Component {
   //save the change and send the wordId chosen to the backend
   async saveChangeAlternative(number) {
     try {
+      this.checkGameEnded()
       let requestBody;
 
       requestBody = JSON.stringify({
@@ -184,6 +186,7 @@ class Number extends React.Component {
   }
   async allKnowTheWord() {
     try {
+      this.checkGameEnded()
       //get all players in the game
       //set player and playerstatus
       const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
@@ -211,6 +214,7 @@ class Number extends React.Component {
 
   //change the number state with another method
   async handleNumberClick(number) {
+    this.checkGameEnded()
     // Nik:
     // number is available here, so use it directly if you want to call the backend
 
@@ -282,63 +286,7 @@ class Number extends React.Component {
     return localStorage.getItem("chosen_nr").includes(number.toString());
   }
 
-  async exitGame() {
-    /*
-    if a player exits the lobby then:
-    - change status to not ready
-    - delete player from player list in game
-    - redirect to dashboard
   
-    */
-
-    //change status to not ready
-    this.setState({
-      ID_game: null,
-      game: null,
-      game_status: null,
-      chosen_number: [],
-      readyToRender: true,
-      readyForNext: false,
-      hide1: false,
-      hide2: false,
-      hide3: false,
-      hide4: false,
-      hide5: false,
-      rules: false,
-    });
-    //need time to change player status
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      let requestBody;
-
-      //delete player from player list in game
-      requestBody = JSON.stringify({
-        player: this.state.player,
-      });
-      // send request body to the backend
-      console.log(requestBody);
-      await api.delete(
-        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
-        requestBody
-      );
-      //change local storage
-      localStorage.removeItem("status");
-      localStorage.removeItem("gameId");
-      localStorage.removeItem("role");
-      localStorage.removeItem("Id");
-
-      clearInterval(this.timer);
-      this.timer = null;
-      this.props.history.push("/dashboard");
-    } catch (error) {
-      alert(
-        `Something went wrong during updating your data: \n${handleError(
-          error
-        )}`
-      );
-    }
-  }
 
   waitingSentence() {
     if (this.state.game_status === "VALIDATING_TERM") {
@@ -353,6 +301,7 @@ class Number extends React.Component {
   }
   async waitingBar() {
     try {
+      this.checkGameEnded()
       //get all players in the game
       //set player and playerstatus
       const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
