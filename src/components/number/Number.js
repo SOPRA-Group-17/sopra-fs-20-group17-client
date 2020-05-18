@@ -66,7 +66,7 @@ class Number extends React.Component {
   }
   async getGameStatus() {
     try {
-      this.checkGameEnded()
+      this.checkGameEnded();
       //if the game is not ready for the next page then we are waiting and ask for the state again
       if (!this.state.readyForNext) {
         //get the game and its status
@@ -142,7 +142,7 @@ class Number extends React.Component {
   //save the change and send the wordId chosen to the backend
   async saveChangeAlternative(number) {
     try {
-      this.checkGameEnded()
+      this.checkGameEnded();
       let requestBody;
 
       requestBody = JSON.stringify({
@@ -186,7 +186,7 @@ class Number extends React.Component {
   }
   async allKnowTheWord() {
     try {
-      this.checkGameEnded()
+      this.checkGameEnded();
       //get all players in the game
       //set player and playerstatus
       const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
@@ -214,7 +214,7 @@ class Number extends React.Component {
 
   //change the number state with another method
   async handleNumberClick(number) {
-    this.checkGameEnded()
+    this.checkGameEnded();
     // Nik:
     // number is available here, so use it directly if you want to call the backend
 
@@ -286,8 +286,6 @@ class Number extends React.Component {
     return localStorage.getItem("chosen_nr").includes(number.toString());
   }
 
-  
-
   waitingSentence() {
     if (this.state.game_status === "VALIDATING_TERM") {
       return "the word is getting validated";
@@ -301,7 +299,7 @@ class Number extends React.Component {
   }
   async waitingBar() {
     try {
-      this.checkGameEnded()
+      this.checkGameEnded();
       //get all players in the game
       //set player and playerstatus
       const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
@@ -348,9 +346,9 @@ class Number extends React.Component {
   }
 
   async endGame() {
-    try{
+    try {
       const requestBody = JSON.stringify({
-        status: "FINISHED"
+        status: "FINISHED",
       });
       await api.put(`/games/${this.state.ID_game}`, requestBody);
       clearInterval(this.timer);
@@ -358,33 +356,32 @@ class Number extends React.Component {
       clearInterval(this.timerGameEnded);
       this.timerGameEnded = null;
       this.props.history.push(`/game/${this.state.ID_game}/Score`);
+    } catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
     }
-    catch (error) {
-    alert(
-      `Something went wrong while trying to end the game: \n${handleError(
-        error
-      )}`
-    );
   }
-}
-async checkGameEnded() {
-  try {
-    const response = await api.get(`/games/${this.state.ID_game}`);
-    if(response.data.status === "FINISHED"){
-      clearInterval(this.timer);
-      this.timer = null;
-      clearInterval(this.timerGameEnded);
-      this.timerGameEnded = null;
-      this.props.history.push(`/game/${this.state.ID_game}/Score`);
+  async checkGameEnded() {
+    try {
+      const response = await api.get(`/games/${this.state.ID_game}`);
+      if (response.data.status === "FINISHED") {
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.ID_game}/Score`);
+      }
+    } catch (error) {
+      alert(
+        `Something went wrong while checking if the game has ended: \n${handleError(
+          error
+        )}`
+      );
     }
-    
-  } catch (error) {
-    alert(
-      `Something went wrong while checking if the game has ended: \n${handleError(error)}`
-    );
   }
-}
-
 
   render() {
     return (
@@ -428,35 +425,31 @@ async checkGameEnded() {
           <Rules />
         </Modal>
         <Modal
+          size="lg"
+          show={this.state.endGame}
+          onHide={() => this.setState({ endGame: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Modal.Header closeButton className="rules-header">
+            <Modal.Title id="rules-dashboard-title" className="rules-header">
+              End Game
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="rules-text">
+            <p className="rules-text">
+              Are you sure that you want to end the game? This will end the game
+              for all players.
+            </p>
+            <Button
+              variant="outline-danger"
               size="lg"
-              show={this.state.endGame}
-              onHide={() => this.setState({ endGame: false })}
-              aria-labelledby="rules-dashboard"
+              className="outlineWhite-Dashboard"
+              onClick={() => this.endGame()}
             >
-              <Modal.Header closeButton className="rules-header">
-                <Modal.Title
-                  id="rules-dashboard-title"
-                  className="rules-header"
-                >
-                  End Game
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body className="rules-text">
-                <p className="rules-text">
-                  Are you sure that you want to end the game? This will end the
-                  game for all players.
-                </p>
-                <Button
-                  variant="outline-danger"
-                  size="lg"
-                  className="outlineWhite-Dashboard"
-                  onClick={() => this.endGame()}
-
-                >
-                  YES
-                </Button>
-              </Modal.Body>
-            </Modal>
+              YES
+            </Button>
+          </Modal.Body>
+        </Modal>
         {!this.state.readyToRender ? (
           <div style={{ marginTop: "8vw" }}>
             <div class="row justify-content-center">

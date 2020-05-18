@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Redirect, Route } from "react-router-dom";
-import { LobbyGuard } from "../routeProtectors/LobbyGuard";
+import { Route } from "react-router-dom";
 import { LobbyHostGuard } from "../routeProtectors/LobbyHostGuard";
 import { LobbyGuestGuard } from "../routeProtectors/LobbyGuestGuard";
 import Lobby from "../../lobby/Lobby";

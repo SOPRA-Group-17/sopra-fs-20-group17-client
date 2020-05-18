@@ -108,7 +108,7 @@ class ReportWord extends React.Component {
   //get the word and set it to the internal state
   async getPlayerTermStatus() {
     try {
-      this.checkGameEnded()
+      this.checkGameEnded();
       //get word
       let requestBody;
 
@@ -182,7 +182,7 @@ class ReportWord extends React.Component {
   //internal set clicked to true
   async yes() {
     try {
-      this.checkGameEnded()
+      this.checkGameEnded();
       let requestBody;
 
       requestBody = JSON.stringify({
@@ -204,7 +204,7 @@ class ReportWord extends React.Component {
   //internal set clicked to true
   async no() {
     try {
-      this.checkGameEnded()
+      this.checkGameEnded();
       let requestBody;
 
       requestBody = JSON.stringify({

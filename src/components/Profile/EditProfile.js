@@ -209,7 +209,7 @@ class EditProfile extends React.Component {
           });
         }
         // Get the returned user and update a new object.
-        const user = new User(response.data);
+        new User(response.data);
       } catch (error) {
         alert(
           `Something went wrong during updating your data: \n${handleError(
@@ -332,7 +332,6 @@ class EditProfile extends React.Component {
                 >
                   Save username
                 </Button>
-                
               </Col>
             </div>
           ) : (
