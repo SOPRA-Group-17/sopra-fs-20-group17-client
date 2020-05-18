@@ -1,7 +1,7 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 import Rules from "../rules/Rules";
@@ -130,8 +130,8 @@ class GiveClue extends React.Component {
         content: this.state.clue,
         token: this.state.token,
       });
-      console.log(this.state.newGame);
-      const response = await api.post(
+      
+      await api.post(
         `/games/${this.state.gameId}/hints`,
         requestBody
       );

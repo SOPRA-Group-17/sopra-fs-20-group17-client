@@ -7,7 +7,7 @@ import { Redirect, useParams} from "react-router-dom";
  */
 export const GuesserGuard = props => {
   
-  if (localStorage.getItem("role") == "Guesser") {
+  if (localStorage.getItem("status") == "GUESSER") {
     return props.children;
   }
   else if(localStorage.getItem("token")){

@@ -9,12 +9,10 @@ import {
   Col,
   Button,
   Form,
-  Alert,
   Modal,
   Table,
 } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
-import aLobby from "../../views/aLobby";
 import Game from "../shared/models/Game";
 import { Spinner } from "../../views/design/Spinner";
 
@@ -212,10 +210,7 @@ class Dashboard extends React.Component {
       });
       // Get the returned user and update a new object.
 
-      const response = await api.put("/logout", requestBody);
-
-      //gets igonred
-      const user = new User(response.data);
+     await api.put("/logout", requestBody);
 
       localStorage.removeItem("token");
       clearInterval(this.timer);

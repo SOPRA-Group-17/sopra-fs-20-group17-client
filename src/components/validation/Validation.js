@@ -1,6 +1,6 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
-import { withRouter, useParams } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Rules from "../rules/Rules";
 
 import {
@@ -10,7 +10,6 @@ import {
   Button,
   ToggleButton,
   ToggleButtonGroup,
-  Form,
   Modal,
   ProgressBar,
 } from "react-bootstrap";
@@ -185,7 +184,7 @@ class Validation extends React.Component {
       else{
         for (let i = 0; i < this.state.hintsReport.length; i++) {
           let requestBody = listRequestBody[i];
-          const response = await api.put(
+          await api.put(
             `/games/${this.state.gameId}/hints`,
             requestBody
           );
@@ -255,8 +254,7 @@ class Validation extends React.Component {
             {i}
           </ToggleButton>
         );
-      } else {
-      }
+      } 
     }
     return Buttons;
   }

@@ -172,15 +172,16 @@ class Evalution extends React.Component {
       const response = await api.get(`/games/${this.state.gameId}`);
       if(response.data.status == "FINISHED"){
         this.props.history.push(`/game/${this.state.gameId}/Score`);
+        localStorage.setItem(endedNormal, "true");
       }
       else{
         const Player = await api.get(`/games/players/${this.state.id}`);
         console.log(Player.data.status);
         if (Player.data.status === "GUESSER") {
-          localStorage.setItem("role", "Guesser");
+          localStorage.setItem("status", "GUESSER");
           this.props.history.push(`/game/${this.state.gameId}/number`);
         } else if (Player.data.status === "CLUE_GIVER") {
-          localStorage.setItem("role", "ClueGiver");
+          localStorage.setItem("status", "CLUE_GIVER");
           this.props.history.push(`/game/${this.state.gameId}/reportWord`);
         }
       }
