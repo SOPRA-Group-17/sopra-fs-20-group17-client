@@ -5,6 +5,7 @@ import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
+import EndGame from "../../helpers/EndGame";
 
 class Evalution extends React.Component {
   constructor() {
@@ -28,6 +29,7 @@ class Evalution extends React.Component {
       timeNewRound: 10,
       timerScore: null,
       hint: null,
+      endGame: false,
     };
   }
 
@@ -46,6 +48,7 @@ class Evalution extends React.Component {
       this.getGuessAndTerm();
 
       this.timer = setInterval(() => this.getGuessAndTerm(), 1000);
+      
     } catch (error) {
       alert(`Something went wrong while mounting: \n${handleError(error)}`);
     }
@@ -139,6 +142,23 @@ class Evalution extends React.Component {
     }
   }
 
+  async endGame() {
+      try{
+        const requestBody = JSON.stringify({
+          status: "FINISHED"
+        });
+        await api.put(`/games/${this.state.gameId}`, requestBody);
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
   async startNewRound() {
     try {
       console.log("starting new round");
@@ -149,22 +169,23 @@ class Evalution extends React.Component {
       clearInterval(this.timerScore);
       this.timerScore = null;
 
-      const Player = await api.get(`/games/players/${this.state.id}`);
-      console.log(Player.data);
-      //check both because it could be that one gets redirected before the others
-      if (this.state.gameStatus == "RECEIVING_TERM" || this.state.gameStatus == "VALIDATING_TERM" ) {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+        localStorage.setItem(endedNormal, "true");
+      }
+      else{
+        const Player = await api.get(`/games/players/${this.state.id}`);
         console.log(Player.data.status);
         if (Player.data.status === "GUESSER") {
-          localStorage.setItem("role", "Guesser");
+          localStorage.setItem("status", "GUESSER");
           this.props.history.push(`/game/${this.state.gameId}/number`);
         } else if (Player.data.status === "CLUE_GIVER") {
-          localStorage.setItem("role", "ClueGiver");
+          localStorage.setItem("status", "CLUE_GIVER");
           this.props.history.push(`/game/${this.state.gameId}/reportWord`);
         }
-      } //check if this works, is Finished the correct state
-      else if (this.state.gameStatus == "FINISHED") {
-        this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
+      
     } catch (error) {
       alert(
         `Something went wrong while starting a new round: \n${handleError(
@@ -197,6 +218,15 @@ class Evalution extends React.Component {
                     Rules
                   </Button>
                 </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
               </Col>
             </Row>
             <Modal
@@ -206,6 +236,37 @@ class Evalution extends React.Component {
               aria-labelledby="rules-dashboard"
             >
               <Rules />
+            </Modal>
+
+            <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGame()}
+                  
+                >
+                  YES
+                </Button>
+              </Modal.Body>
             </Modal>
 
             <div style={{ marginTop: "5vw" }}>
@@ -238,6 +299,15 @@ class Evalution extends React.Component {
                   </Button>
                 </Row>
                 <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
+                <Row className="d-flex justify-content-end">
                   <p hidden={!this.state.hint} className="score">
                     Your clue was {this.state.hint}
                   </p>
@@ -252,6 +322,36 @@ class Evalution extends React.Component {
               aria-labelledby="rules-dashboard"
             >
               <Rules />
+            </Modal>
+            <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGame()}
+                  
+                >
+                  YES
+                </Button>
+              </Modal.Body>
             </Modal>
             <div>
               <div class="row justify-content-center">
