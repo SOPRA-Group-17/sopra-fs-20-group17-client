@@ -3,6 +3,7 @@ import { Redirect} from "react-router-dom";
 
 
 /**
+ * 
  * checks if a player is a Guesser or not
  */
 export const GuesserGuard = props => {
