@@ -172,7 +172,7 @@ class Evalution extends React.Component {
       const response = await api.get(`/games/${this.state.gameId}`);
       if(response.data.status == "FINISHED"){
         this.props.history.push(`/game/${this.state.gameId}/Score`);
-        localStorage.setItem(endedNormal, "true");
+        localStorage.setItem("endedNormal", "true");
       }
       else{
         const Player = await api.get(`/games/players/${this.state.id}`);
