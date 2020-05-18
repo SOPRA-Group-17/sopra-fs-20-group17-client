@@ -54,8 +54,15 @@ class Dashboard extends React.Component {
       localStorage.removeItem("gameId");
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
-      localStorage.removeItem("sawHelp");
-      localStorage.removeItem("endedNormal");
+      if (localStorage.getItem("sawHelp")) {
+        localStorage.removeItem("sawHelp");
+      }
+      if (localStorage.getItem("chosen_nr")) {
+        localStorage.removeItem("chosen_nr");
+      }
+      if (localStorage.getItem("endedNormal")) {
+        localStorage.removeItem("endedNormal");
+      }
 
       //this.state.userId = localStorage.getItem("userId");
       //this.state.token = localStorage.getItem("token");
