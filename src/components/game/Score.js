@@ -13,8 +13,8 @@ class Score extends React.Component {
   constructor() {
     super();
     this.state = {
-      ID_game: null,
-      ID_player: null,
+      gameId: null,
+      playerId: null,
       player: null,
       status: null,
       game: null,
@@ -27,24 +27,24 @@ class Score extends React.Component {
   async componentDidMount() {
     try {
       //id aus url
-      this.state.ID_game = this.props.match.params.gameId;
+      this.state.gameId = this.props.match.params.gameId;
 
       //player id aus local storage, set in dahboard
-      this.state.ID_player = localStorage.getItem("Id");
+      this.state.playerId = localStorage.getItem("Id");
 
       //current player
       //set player and playerstatus
       const current_player = await api.get(
-        `/games/players/${this.state.ID_player}`
+        `/games/players/${this.state.playerId}`
       );
 
       //get all players sorted descendend
       const all_players = await api.get(
-        `/games/${this.state.ID_game}/players?sort_by=score.desc`
+        `/games/${this.state.gameId}/players?sort_by=score.desc`
       );
 
       //get the game and its status
-      const get_game = await api.get(`/games/${this.state.ID_game}`);
+      const get_game = await api.get(`/games/${this.state.gameId}`);
 
       /*
             set and update state of:
@@ -72,7 +72,9 @@ class Score extends React.Component {
       }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while getting the players or getting the game: \n${handleError(
+          error
+        )}`
       );
     }
   }
@@ -159,7 +161,7 @@ class Score extends React.Component {
       // send request body to the backend
       console.log(requestBody);
       await api.delete(
-        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+        `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
       //change local storage
@@ -172,7 +174,7 @@ class Score extends React.Component {
       //TODO: who is resetting the game state
     } catch (error) {
       alert(
-        `Something went wrong during updating your data: \n${handleError(
+        `Something went wrong while exiting the screen: \n${handleError(
           error
         )}`
       );
@@ -189,7 +191,7 @@ class Score extends React.Component {
 
       // send request body to the backend
       await api.put(
-        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+        `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
     } catch (error) {

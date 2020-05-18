@@ -81,11 +81,11 @@ class EditProfile extends React.Component {
       currentPassword: null,
       birthDate: null,
       rules: false,
-      passwordScreen: false, //has to be false
-      passwordValidation: false, // has to be false
+      passwordScreen: false,
+      passwordValidation: false,
       newPassword: null,
       confirmPassword: null,
-      passwordConfirmationSuccessful: false, //has to be false
+      passwordConfirmationSuccessful: false,
       passwordHidden: true,
       triedToValidatePasswordUnsuccessful: false,
       changedUsername: false,
@@ -125,10 +125,10 @@ class EditProfile extends React.Component {
         changedUsername: true,
       });
       // Get the returned user and update a new object.
-      const user = new User(response.data);
+      new User(response.data);
     } catch (error) {
       alert(
-        `Something went wrong during updating your data: \n${handleError(
+        `Something went wrong during updating the username: \n${handleError(
           error
         )}`
       );
@@ -147,7 +147,7 @@ class EditProfile extends React.Component {
       console.log(response);
     } catch (error) {
       alert(
-        `Something went wrong during updating your data: \n${handleError(
+        `Something went wrong during updating your password: \n${handleError(
           error
         )}`
       );
@@ -212,7 +212,7 @@ class EditProfile extends React.Component {
         new User(response.data);
       } catch (error) {
         alert(
-          `Something went wrong during updating your data: \n${handleError(
+          `Something went wrong while checking the password: \n${handleError(
             error
           )}`
         );

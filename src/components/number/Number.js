@@ -27,10 +27,10 @@ class Number extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID_game: null,
+      gameId: null,
       game: null,
-      game_status: null,
-      chosen_number: [],
+      gameStatus: null,
+      chosenNumber: [],
       readyToRender: true,
       readyForNext: false,
       hide1: false,
@@ -50,7 +50,7 @@ class Number extends React.Component {
       // Nik: always use this.setState don't set the state directly
       //id aus url
       this.setState({
-        ID_game: this.props.match.params.gameId,
+        gameId: this.props.match.params.gameId,
       });
 
       this.setNumberState();
@@ -60,7 +60,7 @@ class Number extends React.Component {
       this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while componentDidMount: \n${handleError(error)}`
       );
     }
   }
@@ -70,10 +70,10 @@ class Number extends React.Component {
       //if the game is not ready for the next page then we are waiting and ask for the state again
       if (!this.state.readyForNext) {
         //get the game and its status
-        const get_game = await api.get(`/games/${this.state.ID_game}`);
+        const get_game = await api.get(`/games/${this.state.gameId}`);
         this.setState({
           game: get_game.data,
-          game_status: get_game.data.status,
+          gameStatus: get_game.data.status,
         });
 
         //game state changes to RECEIVING GUESS then change the helper states
@@ -102,11 +102,11 @@ class Number extends React.Component {
         //clear timer and push to enter guess
         clearInterval(this.timer);
         this.timer = null;
-        this.props.history.push(`/game/${this.state.ID_game}/enterguess`);
+        this.props.history.push(`/game/${this.state.gameId}/enterguess`);
       }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the data: \n${handleError(error)}`
+        `Something went wrong while getting the game: \n${handleError(error)}`
       );
     }
   }
@@ -122,7 +122,7 @@ class Number extends React.Component {
   changeNumberState(number) {
     this.setState(
       {
-        chosen_number: number,
+        chosenNumber: number,
         readyToRender: false,
       },
       this.saveChange //Nik: pass a function as callback (gets executed AFTER state change)
@@ -133,7 +133,7 @@ class Number extends React.Component {
   //change the number state with another method
   handleNumberClickAlternative(number) {
     this.setState({
-      chosen_number: number,
+      chosenNumber: number,
       readyToRender: false,
     });
     this.saveChangeAlternative(number); //Nik: call the save function with the received number
@@ -150,7 +150,7 @@ class Number extends React.Component {
         token: localStorage.getItem("token"),
       });
 
-      await api.post(`/games/${this.state.ID_game}/terms`, requestBody);
+      await api.post(`/games/${this.state.gameId}/terms`, requestBody);
 
       // Get the existing data
       var existing = localStorage.getItem("chosen_nr");
@@ -178,18 +178,19 @@ class Number extends React.Component {
       this.setNumberState(number);
     } catch (error) {
       alert(
-        `Something went wrong during updating your data: \n${handleError(
-          error
-        )}`
+        `Something went wrong while setting the term: \n${handleError(error)}`
       );
     }
   }
+
+  //when all possibilities of the card are gone, then the last word on the card should be taken. The users do not have the possibility to report this word.
+  //if all know the word the game state automatically updates
   async allKnowTheWord() {
     try {
       this.checkGameEnded();
       //get all players in the game
       //set player and playerstatus
-      const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
+      const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
       console.log(allPlayers.data);
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
@@ -208,7 +209,11 @@ class Number extends React.Component {
         }
       }
     } catch (error) {
-      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while updating the player: \n${handleError(
+          error
+        )}`
+      );
     }
   }
 
@@ -218,7 +223,7 @@ class Number extends React.Component {
     // Nik:
     // number is available here, so use it directly if you want to call the backend
 
-    this.setState({ chosen_number: number });
+    this.setState({ chosenNumber: number });
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate backend call delay of 1second
@@ -287,11 +292,11 @@ class Number extends React.Component {
   }
 
   waitingSentence() {
-    if (this.state.game_status === "VALIDATING_TERM") {
+    if (this.state.gameStatus === "VALIDATING_TERM") {
       return "the word is getting validated";
-    } else if (this.state.game_status === "RECEIVING_HINTS") {
+    } else if (this.state.gameStatus === "RECEIVING_HINTS") {
       return "the hints are getting sent";
-    } else if (this.state.game_status === "VALIDATING_HINTS") {
+    } else if (this.state.gameStatus === "VALIDATING_HINTS") {
       return "the hints are getting validated";
     } else {
       return "waiting";
@@ -302,10 +307,10 @@ class Number extends React.Component {
       this.checkGameEnded();
       //get all players in the game
       //set player and playerstatus
-      const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
+      const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
       //-1 because of the guesser
       let amountPlayers = allPlayers.data.length - 1;
-      const hints = await api.get(`/games/${this.state.ID_game}/hints`);
+      const hints = await api.get(`/games/${this.state.gameId}/hints`);
 
       let amountHints = amountPlayers * amountPlayers;
       console.log(amountHints);
@@ -314,16 +319,16 @@ class Number extends React.Component {
       let percentage;
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
-          if (this.state.game_status === "VALIDATING_TERM") {
+          if (this.state.gameStatus === "VALIDATING_TERM") {
             console.log(allPlayers.data[i].playerTermStatus);
             if (allPlayers.data[i].playerTermStatus !== "NOT_SET") {
               sum++;
             }
             percentage = (sum / amountPlayers) * 100;
-          } else if (this.state.game_status === "RECEIVING_HINTS") {
+          } else if (this.state.gameStatus === "RECEIVING_HINTS") {
             sum = hints.data.length;
             percentage = (sum / amountPlayers) * 100;
-          } else if (this.state.game_status === "VALIDATING_HINTS") {
+          } else if (this.state.gameStatus === "VALIDATING_HINTS") {
             if (hints.data[i]) {
               if (hints.data[i].reporters) {
                 console.log(hints.data[i].reporters.length);
@@ -341,7 +346,11 @@ class Number extends React.Component {
         progressBar: percentage,
       });
     } catch (error) {
-      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while getting hints or players: \n${handleError(
+          error
+        )}`
+      );
     }
   }
 
@@ -350,12 +359,12 @@ class Number extends React.Component {
       const requestBody = JSON.stringify({
         status: "FINISHED",
       });
-      await api.put(`/games/${this.state.ID_game}`, requestBody);
+      await api.put(`/games/${this.state.gameId}`, requestBody);
       clearInterval(this.timer);
       this.timer = null;
       clearInterval(this.timerGameEnded);
       this.timerGameEnded = null;
-      this.props.history.push(`/game/${this.state.ID_game}/Score`);
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
     } catch (error) {
       alert(
         `Something went wrong while trying to end the game: \n${handleError(
@@ -366,13 +375,13 @@ class Number extends React.Component {
   }
   async checkGameEnded() {
     try {
-      const response = await api.get(`/games/${this.state.ID_game}`);
+      const response = await api.get(`/games/${this.state.gameId}`);
       if (response.data.status === "FINISHED") {
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
-        this.props.history.push(`/game/${this.state.ID_game}/Score`);
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
     } catch (error) {
       alert(
@@ -388,7 +397,7 @@ class Number extends React.Component {
       <Container fluid>
         {this.getGameStatus}
 
-        {console.log(this.state.game_status)}
+        {console.log(this.state.gameStatus)}
 
         <Row>
           {" "}

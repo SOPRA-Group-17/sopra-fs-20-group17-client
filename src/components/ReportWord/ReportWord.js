@@ -51,12 +51,10 @@ class ReportWord extends React.Component {
       players: null,
       gameId: null,
       word: null,
-      last_word: null,
+      lastWord: null,
       perCentPositive: null,
       perCentNegative: null,
       readyToGo: false,
-      clicked: false,
-      last_time: null,
       rules: false,
       endGame: false,
     };
@@ -149,7 +147,9 @@ class ReportWord extends React.Component {
       }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the data: \n${handleError(error)}`
+        `Something went wrong while getting the game, players: \n${handleError(
+          error
+        )}`
       );
     }
   }
@@ -159,9 +159,9 @@ class ReportWord extends React.Component {
   }
   setClicked() {
     //save last word and check with current word, if different then set state clicked to false and update last word
-    if (this.state.last_word !== this.state.word) {
+    if (this.state.lastWord !== this.state.word) {
       this.setState({
-        last_word: this.state.word,
+        lastWord: this.state.word,
         clicked: false,
       });
     }
@@ -196,7 +196,11 @@ class ReportWord extends React.Component {
         clicked: true,
       });
     } catch (error) {
-      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while updating the player to "Known": \n${handleError(
+          error
+        )}`
+      );
     }
   }
 
@@ -218,7 +222,11 @@ class ReportWord extends React.Component {
         clicked: true,
       });
     } catch (error) {
-      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while updating the player to "UNKNOWN": \n${handleError(
+          error
+        )}`
+      );
     }
   }
   //calculating the result for the progess bar
