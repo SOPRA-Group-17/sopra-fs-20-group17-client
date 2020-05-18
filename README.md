@@ -12,16 +12,18 @@ The project was implemented with the React library and the syntax extension JSX 
 ## High-level components
 
 ### Game router and Game Guard
-The game router is used for routing, so that users get redirected to the correct page during an active Game. The gameGuard assures that users can only view the pages of the game that there are currenctly playing. 
+The game router is used for routing, so that users get redirected to the correct page during an active Game. The gameGuard assures that users can only view the pages of the game that there are currenctly playing. To pass the Game guard a user must be an active player of the game, this gets checked by comparing the gameId off the game with the gameId of the game the user currenctly plays. After passing the game guard the user get redirected to the correct page by using the game router. 
 > - [Game router](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/blob/master/src/components/shared/routers/GameRouter.js)
 > - [Game guard](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/blob/master/src/components/shared/routeProtectors/GameGuard.js)
  
-Dashboard
+### Dashboard
+The dashboard is the main screen of the application, where the user can see the scoreboard and join or create games. The data for the availible games and the scoreboard gets fetched periodically from the backend. A main challenge was that the list of avaible games gets updated even if the user already selected a Lobby, without losing the information which lobby he has selected. 
+> - [Dashboard](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/blob/master/src/components/dashboard/Dashboard.js)
 
 
-Validation
-
-Gives the user the option to decide if a given Clue is Valid or not. He can also report if word are similar to each other. 
+### Cascading Style Sheet
+This file includes CSS classes that are used to style our application. It is used by all screens to achieve a consistent layout. Further it defines breakpoints for the diffrent screensizes, to achieve a responsive page layout. 
+> - [Style Sheet](https://github.com/SOPRA-Group-17/sopra-fs-20-group17-client/blob/master/src/index.css)
 
 
 
@@ -74,6 +76,7 @@ After login the user gets redirected to the dashboard. Her he can create or join
 Dashboard image
 
  If a user joined or created a lobby he gets redirected to the Lobby-screen, here he can set his status to ready, ff all players are ready the game starts.  If he created the lobby, he can also kick players out of the lobby. 
+ 
 Lobbyhost image
 
 During one round of the game the user is either the guesser or one of the clue givers. 
