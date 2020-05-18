@@ -11,16 +11,16 @@ import { Redirect } from "react-router-dom";
  * If the user isn't authenticated, the components redirects to the /login screen
  * @Guard
  * @param props
- * 
- * add this 
- * 
- * 
+ *
+ * add this
+ *
+ *
  * */
- 
-export const NumberGuard = props => {
+
+export const NumberGuard = (props) => {
   if (localStorage.getItem("token")) {
     return props.children;
   }
-  
+
   return <Redirect to={"/login"} />;
 };

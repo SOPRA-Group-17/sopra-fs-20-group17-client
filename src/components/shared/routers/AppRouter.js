@@ -11,7 +11,6 @@ import { LobbyGuard } from "../routeProtectors/LobbyGuard";
 import { DashboardGuard } from "../routeProtectors/DashboardGuard";
 import { EditGuard } from "../routeProtectors/EditGuard";
 import Dashboard from "../../dashboard/Dashboard";
-import EnterGuess from "../../game/EnterGuess";
 import EditProfile from "../../Profile/EditProfile";
 
 /**

@@ -10,9 +10,9 @@ import { Redirect } from "react-router-dom";
  * @Guard
  * @param props
  */
-export const EditGuard = props => {
-    if (localStorage.getItem("token")) {
-        return props.children;
-    }
-    return <Redirect to={"/dashboard"} />;
+export const EditGuard = (props) => {
+  if (localStorage.getItem("token")) {
+    return props.children;
+  }
+  return <Redirect to={"/dashboard"} />;
 };

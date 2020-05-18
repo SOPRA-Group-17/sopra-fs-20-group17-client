@@ -10,9 +10,9 @@ import { Redirect } from "react-router-dom";
  * @Guard
  * @param props
  */
-export const ProfileGuard = props => {
-    if (localStorage.getItem("token")) {
-        return props.children;
-    }
-    return <Redirect to={"/login"} />;
+export const ProfileGuard = (props) => {
+  if (localStorage.getItem("token")) {
+    return props.children;
+  }
+  return <Redirect to={"/login"} />;
 };

@@ -27,10 +27,10 @@ class Number extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID_game: null,
+      gameId: null,
       game: null,
-      game_status: null,
-      chosen_number: [],
+      gameStatus: null,
+      chosenNumber: [],
       readyToRender: true,
       readyForNext: false,
       hide1: false,
@@ -40,37 +40,39 @@ class Number extends React.Component {
       hide5: false,
       rules: false,
       progressBar: null,
+      endGame: false,
     };
   }
 
   async componentDidMount() {
     try {
       //console.log(localStorage);
-      // Nik: always use this.setState don't set the state directly
       //id aus url
       this.setState({
-        ID_game: this.props.match.params.gameId,
+        gameId: this.props.match.params.gameId,
       });
 
       this.setNumberState();
 
       //poll every 1 seconds all players, search game
       this.timer = setInterval(() => this.getGameStatus(), 1000);
+      this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while componentDidMount: \n${handleError(error)}`
       );
     }
   }
   async getGameStatus() {
     try {
+      this.checkGameEnded();
       //if the game is not ready for the next page then we are waiting and ask for the state again
       if (!this.state.readyForNext) {
         //get the game and its status
-        const get_game = await api.get(`/games/${this.state.ID_game}`);
+        const get_game = await api.get(`/games/${this.state.gameId}`);
         this.setState({
           game: get_game.data,
-          game_status: get_game.data.status,
+          gameStatus: get_game.data.status,
         });
 
         //game state changes to RECEIVING GUESS then change the helper states
@@ -99,17 +101,17 @@ class Number extends React.Component {
         //clear timer and push to enter guess
         clearInterval(this.timer);
         this.timer = null;
-        this.props.history.push(`/game/${this.state.ID_game}/enterguess`);
+        this.props.history.push(`/game/${this.state.gameId}/enterguess`);
       }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the data: \n${handleError(error)}`
+        `Something went wrong while getting the game: \n${handleError(error)}`
       );
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // Nik:
+    //just as a reminder - not used yet
     // gets called every time the component changes (also state changes)
     // you could also compare the prevState with the current state
     // and then save it if something changed
@@ -119,10 +121,10 @@ class Number extends React.Component {
   changeNumberState(number) {
     this.setState(
       {
-        chosen_number: number,
+        chosenNumber: number,
         readyToRender: false,
       },
-      this.saveChange //Nik: pass a function as callback (gets executed AFTER state change)
+      this.saveChange
     );
     this.saveChangeAlternative(number);
   }
@@ -130,15 +132,16 @@ class Number extends React.Component {
   //change the number state with another method
   handleNumberClickAlternative(number) {
     this.setState({
-      chosen_number: number,
+      chosenNumber: number,
       readyToRender: false,
     });
-    this.saveChangeAlternative(number); //Nik: call the save function with the received number
+    this.saveChangeAlternative(number);
   }
 
   //save the change and send the wordId chosen to the backend
   async saveChangeAlternative(number) {
     try {
+      this.checkGameEnded();
       let requestBody;
 
       requestBody = JSON.stringify({
@@ -146,7 +149,7 @@ class Number extends React.Component {
         token: localStorage.getItem("token"),
       });
 
-      await api.post(`/games/${this.state.ID_game}/terms`, requestBody);
+      await api.post(`/games/${this.state.gameId}/terms`, requestBody);
 
       // Get the existing data
       var existing = localStorage.getItem("chosen_nr");
@@ -174,17 +177,19 @@ class Number extends React.Component {
       this.setNumberState(number);
     } catch (error) {
       alert(
-        `Something went wrong during updating your data: \n${handleError(
-          error
-        )}`
+        `Something went wrong while setting the term: \n${handleError(error)}`
       );
     }
   }
+
+  //when all possibilities of the card are gone, then the last word on the card should be taken. The users do not have the possibility to report this word.
+  //if all know the word the game state automatically updates
   async allKnowTheWord() {
     try {
+      this.checkGameEnded();
       //get all players in the game
       //set player and playerstatus
-      const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
+      const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
       console.log(allPlayers.data);
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
@@ -203,16 +208,19 @@ class Number extends React.Component {
         }
       }
     } catch (error) {
-      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while updating the player: \n${handleError(
+          error
+        )}`
+      );
     }
   }
 
   //change the number state with another method
   async handleNumberClick(number) {
-    // Nik:
-    // number is available here, so use it directly if you want to call the backend
+    this.checkGameEnded();
 
-    this.setState({ chosen_number: number });
+    this.setState({ chosenNumber: number });
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate backend call delay of 1second
@@ -280,70 +288,12 @@ class Number extends React.Component {
     return localStorage.getItem("chosen_nr").includes(number.toString());
   }
 
-  async exitGame() {
-    /*
-    if a player exits the lobby then:
-    - change status to not ready
-    - delete player from player list in game
-    - redirect to dashboard
-  
-    */
-
-    //change status to not ready
-    this.setState({
-      ID_game: null,
-      game: null,
-      game_status: null,
-      chosen_number: [],
-      readyToRender: true,
-      readyForNext: false,
-      hide1: false,
-      hide2: false,
-      hide3: false,
-      hide4: false,
-      hide5: false,
-      rules: false,
-    });
-    //need time to change player status
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      let requestBody;
-
-      //delete player from player list in game
-      requestBody = JSON.stringify({
-        player: this.state.player,
-      });
-      // send request body to the backend
-      console.log(requestBody);
-      await api.delete(
-        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
-        requestBody
-      );
-      //change local storage
-      localStorage.removeItem("status");
-      localStorage.removeItem("gameId");
-      localStorage.removeItem("role");
-      localStorage.removeItem("Id");
-
-      clearInterval(this.timer);
-      this.timer = null;
-      this.props.history.push("/dashboard");
-    } catch (error) {
-      alert(
-        `Something went wrong during updating your data: \n${handleError(
-          error
-        )}`
-      );
-    }
-  }
-
   waitingSentence() {
-    if (this.state.game_status === "VALIDATING_TERM") {
+    if (this.state.gameStatus === "VALIDATING_TERM") {
       return "the word is getting validated";
-    } else if (this.state.game_status === "RECEIVING_HINTS") {
+    } else if (this.state.gameStatus === "RECEIVING_HINTS") {
       return "the hints are getting sent";
-    } else if (this.state.game_status === "VALIDATING_HINTS") {
+    } else if (this.state.gameStatus === "VALIDATING_HINTS") {
       return "the hints are getting validated";
     } else {
       return "waiting";
@@ -351,12 +301,13 @@ class Number extends React.Component {
   }
   async waitingBar() {
     try {
+      this.checkGameEnded();
       //get all players in the game
       //set player and playerstatus
-      const allPlayers = await api.get(`/games/${this.state.ID_game}/players`);
+      const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
       //-1 because of the guesser
       let amountPlayers = allPlayers.data.length - 1;
-      const hints = await api.get(`/games/${this.state.ID_game}/hints`);
+      const hints = await api.get(`/games/${this.state.gameId}/hints`);
 
       let amountHints = amountPlayers * amountPlayers;
       console.log(amountHints);
@@ -365,16 +316,16 @@ class Number extends React.Component {
       let percentage;
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
-          if (this.state.game_status === "VALIDATING_TERM") {
+          if (this.state.gameStatus === "VALIDATING_TERM") {
             console.log(allPlayers.data[i].playerTermStatus);
             if (allPlayers.data[i].playerTermStatus !== "NOT_SET") {
               sum++;
             }
             percentage = (sum / amountPlayers) * 100;
-          } else if (this.state.game_status === "RECEIVING_HINTS") {
+          } else if (this.state.gameStatus === "RECEIVING_HINTS") {
             sum = hints.data.length;
             percentage = (sum / amountPlayers) * 100;
-          } else if (this.state.game_status === "VALIDATING_HINTS") {
+          } else if (this.state.gameStatus === "VALIDATING_HINTS") {
             if (hints.data[i]) {
               if (hints.data[i].reporters) {
                 console.log(hints.data[i].reporters.length);
@@ -392,7 +343,49 @@ class Number extends React.Component {
         progressBar: percentage,
       });
     } catch (error) {
-      alert(`Something went wrong while reporting: \n${handleError(error)}`);
+      alert(
+        `Something went wrong while getting hints or players: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
+  async endGame() {
+    try {
+      const requestBody = JSON.stringify({
+        status: "FINISHED",
+      });
+      await api.put(`/games/${this.state.gameId}`, requestBody);
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
+    } catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+  async checkGameEnded() {
+    try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if (response.data.status === "FINISHED") {
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+    } catch (error) {
+      alert(
+        `Something went wrong while checking if the game has ended: \n${handleError(
+          error
+        )}`
+      );
     }
   }
 
@@ -400,12 +393,9 @@ class Number extends React.Component {
     return (
       <Container fluid>
         {this.getGameStatus}
-        {console.log("this is the game status")}
-        {console.log(this.state.game_status)}
-        {console.log(
-          "checks if we are ready to render if we are not then spinner"
-        )}
-        {console.log(this.state.readyToRender)}
+
+        {console.log(this.state.gameStatus)}
+
         <Row>
           {" "}
           <Col xs="5" md="2">
@@ -414,11 +404,11 @@ class Number extends React.Component {
           <Col xs={{ span: 5, offset: 2 }} md={{ span: 2, offset: 8 }}>
             <Row className="d-flex justify-content-end">
               <Button
-                variant="outline-light"
+                variant="outline-danger"
                 className="outlineWhite-Dashboard"
-                onClick={() => this.exitGame()}
+                onClick={() => this.setState({ endGame: true })}
               >
-                Exit Game
+                End Game
               </Button>
             </Row>
             <Row className="d-flex justify-content-end">
@@ -439,6 +429,32 @@ class Number extends React.Component {
           aria-labelledby="rules-dashboard"
         >
           <Rules />
+        </Modal>
+        <Modal
+          size="lg"
+          show={this.state.endGame}
+          onHide={() => this.setState({ endGame: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Modal.Header closeButton className="rules-header">
+            <Modal.Title id="rules-dashboard-title" className="rules-header">
+              End Game
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="rules-text">
+            <p className="rules-text">
+              Are you sure that you want to end the game? This will end the game
+              for all players.
+            </p>
+            <Button
+              variant="outline-danger"
+              size="lg"
+              className="outlineWhite-Dashboard"
+              onClick={() => this.endGame()}
+            >
+              YES
+            </Button>
+          </Modal.Body>
         </Modal>
         {!this.state.readyToRender ? (
           <div style={{ marginTop: "8vw" }}>

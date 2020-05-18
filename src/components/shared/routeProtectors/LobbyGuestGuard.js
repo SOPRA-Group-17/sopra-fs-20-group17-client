@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, useParams } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 //TODO: ask how to do the lobbyguard
 
@@ -15,12 +15,9 @@ import { Redirect, useParams } from "react-router-dom";
  *
  */
 export const LobbyGuestGuard = (props) => {
-  if (
-    localStorage.getItem("role") === "GUEST"
-  ) {
+  if (localStorage.getItem("role") === "GUEST") {
     return props.children;
   } else if (localStorage.getItem("token")) {
     return <Redirect to={`/lobby/${localStorage.getItem("gameId")}/host`} />;
   }
-
 };

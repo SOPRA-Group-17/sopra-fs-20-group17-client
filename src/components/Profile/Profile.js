@@ -1,17 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { BaseContainer } from '../../helpers/layout';
-import { api, handleError } from '../../helpers/api';
-import Player from '../../views/Player';
-import { Spinner } from '../../views/design/Spinner';
-import { Button } from '../../views/design/Button';
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { BaseContainer } from "../../helpers/layout";
+import { api, handleError } from "../../helpers/api";
+import { Button } from "../../views/design/Button";
+import { withRouter } from "react-router-dom";
 import user from "../shared/models/User";
-
-const Container = styled(BaseContainer)`
-  color: white;
-  text-align: center;
-`;
 
 const FormContainer = styled.div`
   margin-top: 2em;
@@ -50,7 +43,7 @@ const InputField = styled.input`
   margin-bottom: 20px;
   background: rgba(255, 255, 255, 0.2);
   color: white;
-  pointer-events:none;
+  pointer-events: none;
 `;
 const Label = styled.label`
   color: white;
@@ -59,112 +52,93 @@ const Label = styled.label`
 `;
 
 class Profile extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            user: new user(),
-            ID: null,
-            tokenMatch: null
-        };
+  constructor() {
+    super();
+    this.state = {
+      user: new user(),
+      ID: null,
+      tokenMatch: null,
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      this.state.ID = this.props.match.params.id;
+      const response = await api.get(`/users/${this.state.ID}`);
+      // delays continuous execution of an async operation for 1 second.
+      // This is just a fake async call, so that the spinner can be displayed
+      // feel free to remove it :)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Get the returned users and update the state.
+      this.setState({ user: response.data[0] });
+      console.log(this.state.tokenMatch);
+      if (localStorage.getItem("token") === this.state.user.token) {
+        this.setState({ tokenMatch: "true" });
+        console.log(this.state.tokenMatch);
+      }
+    } catch (error) {
+      alert(
+        `Something went wrong while fetching the users: \n${handleError(error)}`
+      );
     }
+  }
 
-    async componentDidMount() {
-        try {
-            this.state.ID = this.props.match.params.id;
-            const response = await api.get(`/users/${this.state.ID}`);
-            // delays continuous execution of an async operation for 1 second.
-            // This is just a fake async call, so that the spinner can be displayed
-            // feel free to remove it :)
-            await new Promise(resolve => setTimeout(resolve, 1000));
+  dashboard() {
+    this.props.history.push("/game/dashboard");
+  }
 
-            // Get the returned users and update the state.
-            this.setState({ user: response.data[0] });
-            console.log(this.state.tokenMatch);
-            if(localStorage.getItem('token') === this.state.user.token){
-                this.setState({tokenMatch : "true"});
-                console.log(this.state.tokenMatch);
-            }
-
-
-
-        } catch (error) {
-            alert(`Something went wrong while fetching the users: \n${handleError(error)}`);
-        }
+  //this method is used to format the saved BirthDate into a nice format ;)
+  getBirthDate() {
+    if (this.state.user.birthDate == null) {
+      return "Birth date is not set";
+    } else {
+      console.log(this.state.user.birthDate);
+      return this.state.user.birthDate;
     }
+  }
+  editProfile() {
+    this.props.history.push(`/game/editProfile/${this.state.user.id}`);
+  }
 
-    dashboard(){
-        this.props.history.push('/game/dashboard');
-    }
-
-    //this method is used to format the saved BirthDate into a nice format ;)
-    getBirthDate(){
-        if(this.state.user.birthDate == null){
-            return "Birth date is not set"
-        }
-        else{
-            console.log(this.state.user.birthDate);
-            return this.state.user.birthDate
-        }
-    }
-    editProfile(){
-        this.props.history.push(`/game/editProfile/${this.state.user.id}`);
-    }
-
-
-
-    render() {
-        return (
-            <BaseContainer>
-                <Button
-                    disabled={!this.state.tokenMatch}
-                    width="100%"
-                    onClick={() => {
-                        this.editProfile();
-                    }}
-                >
-                    Edit Profile
-                </Button>
-                <FormContainer>
-                    <Form>
-                        <Label>Username</Label>
-                        <InputField
-                            placeholder={this.state.user.username}
-                            />
-                        <Label>Online Status</Label>
-                        <InputField
-                            placeholder={this.state.user.status}
-                        />
-                        <Label>ID</Label>
-                        <InputField
-                            placeholder={this.state.user.id}
-                        />
-                        <Label>Creation date</Label>
-                        <InputField
-                            placeholder={this.state.user.date}
-                        />
-                        <Label>Birth date</Label>
-                        <InputField
-
-                            placeholder= {this.getBirthDate()}
-                        />
-
-                    </Form>
-                </FormContainer>
-                <Button
-                    width="100%"
-                    margin-top="100px"
-                    onClick={() => {
-                        this.dashboard();
-                    }}
-                >
-                    Return to Dashboard
-                </Button>
-
-            </BaseContainer>
-
-
-        );
-    }
+  render() {
+    return (
+      <BaseContainer>
+        <Button
+          disabled={!this.state.tokenMatch}
+          width="100%"
+          onClick={() => {
+            this.editProfile();
+          }}
+        >
+          Edit Profile
+        </Button>
+        <FormContainer>
+          <Form>
+            <Label>Username</Label>
+            <InputField placeholder={this.state.user.username} />
+            <Label>Online Status</Label>
+            <InputField placeholder={this.state.user.status} />
+            <Label>ID</Label>
+            <InputField placeholder={this.state.user.id} />
+            <Label>Creation date</Label>
+            <InputField placeholder={this.state.user.date} />
+            <Label>Birth date</Label>
+            <InputField placeholder={this.getBirthDate()} />
+          </Form>
+        </FormContainer>
+        <Button
+          width="100%"
+          margin-top="100px"
+          onClick={() => {
+            this.dashboard();
+          }}
+        >
+          Return to Dashboard
+        </Button>
+      </BaseContainer>
+    );
+  }
 }
 
 export default withRouter(Profile);

@@ -1,20 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
 import { Container, Row, Col, Button, Table, Modal } from "react-bootstrap";
 import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
-import ProgressBar from "react-bootstrap/ProgressBar";
-
-const bigbutton = {
-  padding: "0.5vw 1.5vw 0.5vw 1.5vw",
-  fontSize: "calc(0.5em, 0.5vw)",
-  //top right bottom left
-};
-
-
 
 class EnterGuess extends React.Component {
   constructor() {
@@ -31,7 +21,6 @@ class EnterGuess extends React.Component {
       readyToRender: null,
       noHintsValid: null,
       rules: false,
-
     };
     this.getHints = this.getHints.bind(this);
   }
@@ -104,7 +93,7 @@ class EnterGuess extends React.Component {
       const requestBody = JSON.stringify({
         token: this.state.playerToken,
       });
-      const response = await api.delete(`/games/${this.state.gameId}/guesses`, {
+      await api.delete(`/games/${this.state.gameId}/guesses`, {
         data: requestBody,
       });
 
@@ -186,7 +175,6 @@ class EnterGuess extends React.Component {
             >
               <p className="large-Font">Waiting for the hints</p>
             </div>
-
           </div>
         ) : (
           <div>

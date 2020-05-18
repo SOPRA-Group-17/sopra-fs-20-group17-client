@@ -7,45 +7,44 @@ import logo from "../styling/JustOne_logo_white.svg";
 
 const sentence = {
   fontSize: "4vw",
-
-
 };
 
 class Score extends React.Component {
   constructor() {
     super();
     this.state = {
-      ID_game: null,
-      ID_player: null,
+      gameId: null,
+      playerId: null,
       player: null,
       status: null,
       game: null,
       players: null,
       rules: false,
+      endedNormal: true,
     };
   }
 
   async componentDidMount() {
     try {
       //id aus url
-      this.state.ID_game = this.props.match.params.gameId;
+      this.state.gameId = this.props.match.params.gameId;
 
       //player id aus local storage, set in dahboard
-      this.state.ID_player = localStorage.getItem("Id");
+      this.state.playerId = localStorage.getItem("Id");
 
       //current player
       //set player and playerstatus
       const current_player = await api.get(
-        `/games/players/${this.state.ID_player}`
+        `/games/players/${this.state.playerId}`
       );
 
       //get all players sorted descendend
       const all_players = await api.get(
-        `/games/${this.state.ID_game}/players?sort_by=score.desc`
+        `/games/${this.state.gameId}/players?sort_by=score.desc`
       );
 
       //get the game and its status
-      const get_game = await api.get(`/games/${this.state.ID_game}`);
+      const get_game = await api.get(`/games/${this.state.gameId}`);
 
       /*
             set and update state of:
@@ -60,13 +59,27 @@ class Score extends React.Component {
         status: current_player.data.status,
         game: get_game.data,
       });
+
+      //check if the game has ended normal, if not then show a modal with this information
+      if (localStorage.getItem("endedNormal")) {
+        this.setState({
+          endedNormal: true,
+        });
+      } else {
+        this.setState({
+          endedNormal: false,
+        });
+      }
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while getting the players or getting the game: \n${handleError(
+          error
+        )}`
       );
     }
   }
 
+  //create scoring table
   createTable() {
     let table = [];
     // Outer loop to create parent
@@ -118,7 +131,7 @@ class Score extends React.Component {
   }
 
   correctGuesses() {
-    //shows correct guesses
+    //shows amount of correct guesses
     console.log(this.state.game);
     if (this.state.game) {
       if (this.state.game.correctCards >= 0) {
@@ -149,7 +162,7 @@ class Score extends React.Component {
       // send request body to the backend
       console.log(requestBody);
       await api.delete(
-        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+        `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
       //change local storage
@@ -162,7 +175,7 @@ class Score extends React.Component {
       //TODO: who is resetting the game state
     } catch (error) {
       alert(
-        `Something went wrong during updating your data: \n${handleError(
+        `Something went wrong while exiting the screen: \n${handleError(
           error
         )}`
       );
@@ -179,7 +192,7 @@ class Score extends React.Component {
 
       // send request body to the backend
       await api.put(
-        `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
+        `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody
       );
     } catch (error) {
@@ -235,12 +248,39 @@ class Score extends React.Component {
           >
             <Rules />
           </Modal>
+          <Modal
+            size="lg"
+            show={!this.state.endedNormal}
+            onHide={() => this.setState({ endedNormal: true })}
+            aria-labelledby="rules-dashboard"
+          >
+            <Modal.Header closeButton className="rules-header">
+              <Modal.Title
+                id="fast-dashboard-title"
+                className="fast-ending-header"
+              >
+                Game finished
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="rules-text">
+              <p className="rules-text-title">fast ending</p>
+              <p className="rules-text">
+                A player has ended the game early. <br></br>
+                Afterwards you will receive your early game evaluation.{" "}
+                <br></br>
+                <br></br>
+                Thanks for playing the game
+              </p>
+            </Modal.Body>
+          </Modal>
           <Row>
             <Col xs={{ span: 0, offset: 0 }} md={{ span: 2, offset: 2 }}></Col>
             <Col xs="12" md="8">
               <p style={sentence}>Team Score: {this.teamScore()}</p>
 
-              <p style={sentence}>Nr. of correct guesses: {this.correctGuesses()} </p>
+              <p style={sentence}>
+                Nr. of correct guesses: {this.correctGuesses()}{" "}
+              </p>
             </Col>
           </Row>
           <Row style={{ marginTop: "5vw" }}>

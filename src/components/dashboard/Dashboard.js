@@ -54,9 +54,15 @@ class Dashboard extends React.Component {
       localStorage.removeItem("gameId");
       localStorage.removeItem("role");
       localStorage.removeItem("Id");
-      localStorage.removeItem("sawHelp");
-      
-      
+      if (localStorage.getItem("sawHelp")) {
+        localStorage.removeItem("sawHelp");
+      }
+      if (localStorage.getItem("chosen_nr")) {
+        localStorage.removeItem("chosen_nr");
+      }
+      if (localStorage.getItem("endedNormal")) {
+        localStorage.removeItem("endedNormal");
+      }
 
       //this.state.userId = localStorage.getItem("userId");
       //this.state.token = localStorage.getItem("token");
@@ -119,7 +125,7 @@ class Dashboard extends React.Component {
     try {
       const response = await api.get(`/games`);
       let selectedValid = 0;
-      
+
       // Get the returned users and update the state.
 
       if (response.data.length != 0) {
@@ -336,13 +342,13 @@ class Dashboard extends React.Component {
     return table;
   };
 
-editProfile(){
-  clearInterval(this.timer);
-  this.timer = null;
-  clearInterval(this.timerScoarboard);
-  this.timerScoarboard = null;
-  this.props.history.push(`/users/${this.state.userId}`);
-}
+  editProfile() {
+    clearInterval(this.timer);
+    this.timer = null;
+    clearInterval(this.timerScoarboard);
+    this.timerScoarboard = null;
+    this.props.history.push(`/users/${this.state.userId}`);
+  }
 
   /*<Alert variant="info" isOpen={!this.state.alarm} toggle={this.toggle.bind(this)}>
   {this.state.alarm}
@@ -485,7 +491,7 @@ editProfile(){
                   </Form.Group>
                 </Form.Row>
               </Form>
- 
+
               <Col
                 xs={{ span: 10, offset: 1 }}
                 md={{ span: 5, offset: 0 }}
@@ -503,7 +509,6 @@ editProfile(){
                   </thead>
                   <tbody>{this.createTable()}</tbody>
                 </Table>
-
               </Col>
             </Row>
           </div>

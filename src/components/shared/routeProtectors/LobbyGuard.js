@@ -14,15 +14,14 @@ import { Redirect, useParams } from "react-router-dom";
  *
  *
  */
-export const LobbyGuard = props => {
-  
-    
-    if (localStorage.getItem("token") && localStorage.getItem("gameId") === useParams().gameId  ) {
-      return props.children;
-    }
-    else if(localStorage.getItem("token")){
-      return <Redirect to={"/dashboard"} />;
-  
-    }
-    return <Redirect to={"/login"} />;
+export const LobbyGuard = (props) => {
+  if (
+    localStorage.getItem("token") &&
+    localStorage.getItem("gameId") === useParams().gameId
+  ) {
+    return props.children;
+  } else if (localStorage.getItem("token")) {
+    return <Redirect to={"/dashboard"} />;
+  }
+  return <Redirect to={"/login"} />;
 };

@@ -171,7 +171,7 @@ class LobbyHost extends React.Component {
       });
 
       // send request body to the backend
-      const response = await api.put(
+      await api.put(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
       );
@@ -431,7 +431,8 @@ class LobbyHost extends React.Component {
                 - there are at least three players in the Lobby
                 <br />
                 - there are maximum seven players in the Lobby
-                <br />- all players in the lobby are ready (change your state with the big button in the middle of the screen)
+                <br />- all players in the lobby are ready (change your state
+                with the big button in the middle of the screen)
               </p>
 
               <p className="rules-text-s-title">additional information</p>

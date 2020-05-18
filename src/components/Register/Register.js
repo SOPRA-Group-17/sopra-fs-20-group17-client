@@ -16,8 +16,6 @@ const FormContainer = styled.div`
   justify-content: center;
 `;
 
-const ButtonSize = { width: "8neptvw", height: "2vw" };
-
 const Form = styled.div`
   display: flex;
   flex-direction: column;
@@ -93,10 +91,10 @@ class Register extends React.Component {
     try {
       // checks whether password and confirmedPassword are matching and if so, sets passwordMatch to true
       var passwordMatch =
-        this.state.password == this.state.confirmedPassword ? true : false;
+        this.state.password === this.state.confirmedPassword ? true : false;
 
       // post request is only done if the passwords are matching
-      if (passwordMatch == true) {
+      if (passwordMatch === true) {
         const requestBody = JSON.stringify({
           username: this.state.username,
           password: this.state.password,
@@ -104,7 +102,7 @@ class Register extends React.Component {
         const response = await api.post("/users", requestBody);
 
         // Get the returned user and update a new object.
-        const user = new User(response.data);
+        new User(response.data);
 
         // Login successfully worked --> navigate to the route /game in the GameRouter, why doesnt this work
         this.props.history.push(`/Login`);
