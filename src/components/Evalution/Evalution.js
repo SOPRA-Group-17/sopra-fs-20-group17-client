@@ -5,7 +5,7 @@ import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
-import EndGame from "../../helpers/EndGame";
+
 
 class Evalution extends React.Component {
   constructor() {
@@ -30,6 +30,7 @@ class Evalution extends React.Component {
       timerScore: null,
       hint: null,
       endGame: false,
+      gameFinished: null
     };
   }
 
@@ -81,6 +82,10 @@ class Evalution extends React.Component {
           response.data.status === "FINISHED" ||
           response.data.status === "RECEIVING_TERM"
         ) {
+          if(response.data.status === "FINISHED"){
+            localStorage.setItem("endedNormal", "true");
+            this.setState({gameFinished: true})
+          }
           const response2 = await api.get(
             `/games/${this.state.gameId}/rounds?lastRound=true`
           );
@@ -144,11 +149,16 @@ class Evalution extends React.Component {
 
   async endGame() {
       try{
-        const requestBody = JSON.stringify({
-          status: "FINISHED"
-        });
-        await api.put(`/games/${this.state.gameId}`, requestBody);
-        this.props.history.push(`/game/${this.state.gameId}/Score`);
+        if (this.state.gameId) {
+          const response = await api.get(`/games/${this.state.gameId}`);
+          if( response.data.status != "FINISHED"){
+            const requestBody = JSON.stringify({
+              status: "FINISHED"
+            });
+            await api.put(`/games/${this.state.gameId}`, requestBody);
+            this.props.history.push(`/game/${this.state.gameId}/Score`);
+          }
+      }
       }
       catch (error) {
       alert(
@@ -171,7 +181,7 @@ class Evalution extends React.Component {
 
       const response = await api.get(`/games/${this.state.gameId}`);
       if(response.data.status == "FINISHED"){
-        localStorage.setItem("endedNormal", "true");
+        
         this.props.history.push(`/game/${this.state.gameId}/Score`);
         
       }
@@ -223,6 +233,7 @@ class Evalution extends React.Component {
                   <Button
                     variant="outline-danger"
                     className="outlineWhite-Dashboard"
+                    hidden={this.state.gameFinished}
                     onClick={() => this.setState({ endGame: true })}
                   >
                     End Game
@@ -303,6 +314,7 @@ class Evalution extends React.Component {
                   <Button
                     variant="outline-danger"
                     className="outlineWhite-Dashboard"
+                    hidden={this.state.gameFinished}
                     onClick={() => this.setState({ endGame: true })}
                   >
                     End Game
