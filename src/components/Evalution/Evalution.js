@@ -149,7 +149,7 @@ class Evalution extends React.Component {
     }
   }
 
-  async endGame() {
+  async endGameF() {
       try{
         if (this.state.gameId) {
           const response = await api.get(`/games/${this.state.gameId}`);
@@ -275,7 +275,7 @@ class Evalution extends React.Component {
                   variant="outline-danger"
                   size="lg"
                   className="outlineWhite-Dashboard"
-                  onClick={() => this.endGame()}
+                  onClick={() => this.endGameF()}
                   
                 >
                   YES
@@ -361,7 +361,7 @@ class Evalution extends React.Component {
                   variant="outline-danger"
                   size="lg"
                   className="outlineWhite-Dashboard"
-                  onClick={() => this.endGame()}
+                  onClick={() => this.endGameF()}
                   
                 >
                   YES
