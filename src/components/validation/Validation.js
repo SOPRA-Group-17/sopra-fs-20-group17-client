@@ -64,7 +64,7 @@ class Validation extends React.Component {
 
         //check if user was on this site before, in same game
         if (localStorage.getItem("sawHelp") != null) {
-          if (localStorage.getItem("sawHelp") == 0) {
+          if (localStorage.getItem("sawHelp") === 0) {
             localStorage.setItem("sawHelp", 1);
             this.setState({ help: true });
           }
@@ -92,7 +92,7 @@ class Validation extends React.Component {
     try {
       console.log("validation timer");
       const response = await api.get(`/games/${this.state.gameId}`);
-      if (response.data.status == "FINISHED") {
+      if (response.data.status === "FINISHED") {
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);
@@ -114,7 +114,7 @@ class Validation extends React.Component {
         const response = await api.get(`/games/${this.state.gameId}`);
 
         // check if game ready to give hints
-        if (response.data.status == "FINISHED") {
+        if (response.data.status === "FINISHED") {
           clearInterval(this.timer);
           this.timer = null;
           clearInterval(this.timerGameEnded);
@@ -142,7 +142,7 @@ class Validation extends React.Component {
     console.log(this.state.hints);
     this.state.hints.forEach((hint) => {
       let marked = "VALID";
-      if (hint.status == "INVALID") {
+      if (hint.status === "INVALID") {
         marked = "INVALID";
       }
       this.state.hintsReport.push({
@@ -176,7 +176,7 @@ class Validation extends React.Component {
   async submitReportPut(listRequestBody) {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if (response.data.status == "FINISHED") {
+      if (response.data.status === "FINISHED") {
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
@@ -229,7 +229,7 @@ class Validation extends React.Component {
     let Buttons = [];
 
     for (let i = 1; i <= x; i++) {
-      if (nr != i) {
+      if (nr !== i) {
         Buttons.push(
           <ToggleButton
             variant="outline-light"
@@ -271,7 +271,7 @@ class Validation extends React.Component {
     let similar2 = this.state.hintsReport[index2].similarity;
     if (similar2.includes(index1)) {
       let newArray2 = this.state.hintsReport;
-      for (var i = 0; i < similar2.length; i++) {
+      for (i = 0; i < similar2.length; i++) {
         if (similar2[i] === index1) {
           similar2.splice(i, 1);
         }
@@ -386,7 +386,7 @@ class Validation extends React.Component {
   async waitingBar() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if (response.data.status == "FINISHED") {
+      if (response.data.status === "FINISHED") {
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);

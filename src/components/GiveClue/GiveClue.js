@@ -46,7 +46,7 @@ class GiveClue extends React.Component {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
       console.log("giveClue timer");
-      if (response.data.status == "FINISHED") {
+      if (response.data.status === "FINISHED") {
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);
@@ -67,7 +67,7 @@ class GiveClue extends React.Component {
     try {
       if (this.state.gameId) {
         const response = await api.get(`/games/${this.state.gameId}`);
-        if (response.data.status == "FINISHED") {
+        if (response.data.status === "FINISHED") {
           clearInterval(this.timer);
           this.timer = null;
           clearInterval(this.timerGameEnded);
@@ -96,7 +96,7 @@ class GiveClue extends React.Component {
   async getTerme() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if (response.data.status == "FINISHED") {
+      if (response.data.status === "FINISHED") {
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
@@ -116,7 +116,7 @@ class GiveClue extends React.Component {
   async submitClue() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if (response.data.status == "FINISHED") {
+      if (response.data.status === "FINISHED") {
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
