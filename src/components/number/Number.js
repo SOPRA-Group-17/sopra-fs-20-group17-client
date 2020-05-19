@@ -66,6 +66,7 @@ class Number extends React.Component {
   async getGameStatus() {
     try {
       this.checkGameEnded();
+      console.log("number timer");
       //if the game is not ready for the next page then we are waiting and ask for the state again
       if (!this.state.readyForNext) {
         //get the game and its status

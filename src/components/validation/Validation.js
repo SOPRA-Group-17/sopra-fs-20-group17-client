@@ -90,6 +90,7 @@ class Validation extends React.Component {
 
   async checkGameEnded() {
     try {
+      console.log("validation timer");
       const response = await api.get(`/games/${this.state.gameId}`);
       if (response.data.status == "FINISHED") {
         clearInterval(this.timer);

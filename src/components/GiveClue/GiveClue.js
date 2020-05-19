@@ -45,6 +45,7 @@ class GiveClue extends React.Component {
   async checkGameEnded() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
+      console.log("giveClue timer");
       if (response.data.status == "FINISHED") {
         clearInterval(this.timer);
         this.timer = null;
