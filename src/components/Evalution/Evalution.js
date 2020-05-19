@@ -124,6 +124,7 @@ class Evalution extends React.Component {
               }
             }
           });
+          
 
           this.setState({ readyToRender: true });
 
