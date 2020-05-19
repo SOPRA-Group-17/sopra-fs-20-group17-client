@@ -80,7 +80,8 @@ class Evalution extends React.Component {
         console.log(response.data.status);
         if (
           response.data.status === "FINISHED" ||
-          response.data.status === "RECEIVING_TERM"
+          response.data.status === "RECEIVING_TERM" ||
+          response.data.status === "VALIDATING_TERM"
         ) {
           if(response.data.status === "FINISHED"){
             localStorage.setItem("endedNormal", "true");
