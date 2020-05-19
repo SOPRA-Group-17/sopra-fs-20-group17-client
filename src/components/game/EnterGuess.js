@@ -51,6 +51,7 @@ class EnterGuess extends React.Component {
 
   async checkGameEnded() {
     try {
+      console.log("game ended enterguess")
       const response = await api.get(`/games/${this.state.gameId}`);
       console.log("enterguess timer");
       if(response.data.status === "FINISHED"){
@@ -110,6 +111,9 @@ class EnterGuess extends React.Component {
         this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
       else{
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+
         const requestBody = JSON.stringify({
           content: this.state.guess,
           token: this.state.playerToken,
@@ -119,8 +123,8 @@ class EnterGuess extends React.Component {
           `/games/${this.state.gameId}/guesses`,
           requestBody
         );
-        clearInterval(this.timerGameEnded);
-        this.timerGameEnded = null;
+        //is clearing the interval here okay?
+        
         this.props.history.push(`/game/${this.state.gameId}/evalution`);
 
 
@@ -128,6 +132,7 @@ class EnterGuess extends React.Component {
       
       
     } catch (error) {
+      this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
       alert(
         `Something went wrong while submitting the guess: \n${handleError(
           error
