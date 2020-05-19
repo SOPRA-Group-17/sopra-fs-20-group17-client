@@ -8,8 +8,6 @@ import EnterGuess from "../../game/EnterGuess";
 import Score from "../../game/Score";
 import Number from "../../number/Number";
 import ReportWord from "../../ReportWord/ReportWord";
-import {ClueGiverGuard} from "../routeProtectors/ClueGiverGuard";
-import {GuesserGuard} from "../routeProtectors/GuesserGuard";
 
 const Container = styled.div`
   display: flex;
@@ -38,29 +36,17 @@ class GameRouter extends React.Component {
         <Route
           exact
           path={`${this.props.base}/giveClue`}
-          render={() => (
-            <ClueGiverGuard>
-              <GiveClue />
-            </ClueGiverGuard>
-          )}
+          render={() => <GiveClue />}
         />
         <Route
           exact
           path={`${this.props.base}/enterGuess`}
-          render={() => (
-            <GuesserGuard>
-              <EnterGuess />
-            </GuesserGuard>
-          )}
+          render={() => <EnterGuess />}
         />
         <Route
           exact
           path={`${this.props.base}/reportWord`}
-          render={() => (
-            <ClueGiverGuard>
-              <ReportWord />
-            </ClueGiverGuard>
-          )}
+          render={() => <ReportWord />}
         />
         <Route
           exact
@@ -70,22 +56,13 @@ class GameRouter extends React.Component {
         <Route
           exact
           path={`${this.props.base}/validation`}
-          render={() => (
-            <ClueGiverGuard>
-              <Validation />
-            </ClueGiverGuard>
-          )}
-         
+          render={() => <Validation />}
         />
 
         <Route
           exact
           path={`${this.props.base}/number`}
-          render={() => (
-            <GuesserGuard>
-              <Number />
-            </GuesserGuard>
-          )}
+          render={() => <Number />}
         />
 
         <Route
