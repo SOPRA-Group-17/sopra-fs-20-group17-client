@@ -106,7 +106,6 @@ class ReportWord extends React.Component {
   //get the word and set it to the internal state
   async getPlayerTermStatus() {
     try {
-      this.checkGameEnded();
       //get word
       let requestBody;
 
@@ -143,6 +142,8 @@ class ReportWord extends React.Component {
         //clear timer and push
         clearInterval(this.timer);
         this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/giveClue`);
       }
     } catch (error) {

@@ -102,6 +102,8 @@ class Number extends React.Component {
         //clear timer and push to enter guess
         clearInterval(this.timer);
         this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/enterguess`);
       }
     } catch (error) {
