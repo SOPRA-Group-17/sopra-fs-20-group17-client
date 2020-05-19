@@ -53,7 +53,7 @@ class EnterGuess extends React.Component {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
       console.log("enterguess timer");
-      if(response.data.status == "FINISHED"){
+      if(response.data.status === "FINISHED"){
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);
@@ -73,7 +73,7 @@ class EnterGuess extends React.Component {
     try {
       if (this.state.gameId) {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if(response.data.status == "FINISHED"){
+      if(response.data.status === "FINISHED"){
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);
@@ -104,7 +104,7 @@ class EnterGuess extends React.Component {
   async submit() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if(response.data.status == "FINISHED"){
+      if(response.data.status === "FINISHED"){
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
@@ -139,7 +139,7 @@ class EnterGuess extends React.Component {
   async skip() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if(response.data.status == "FINISHED"){
+      if(response.data.status === "FINISHED"){
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
@@ -193,7 +193,7 @@ class EnterGuess extends React.Component {
     let oneValid = 0;
 
     this.state.hints.forEach((hint) => {
-      if (hint.status == "VALID") {
+      if (hint.status === "VALID") {
         oneValid = 1;
         table.push(
           <tr class="text-white" class="text-center">
@@ -202,7 +202,7 @@ class EnterGuess extends React.Component {
         );
       }
     });
-    if (oneValid == 0) {
+    if (oneValid === 0) {
       table.push(
         <tr class="text-white" class="text-center" style={{ color: "red" }}>
           All given hints are invalid

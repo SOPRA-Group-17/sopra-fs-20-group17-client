@@ -1,7 +1,7 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
+import { Container, Row, Col, Button,  Modal } from "react-bootstrap";
 import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
@@ -98,14 +98,14 @@ class Evalution extends React.Component {
           //checking if guess null, happens if guesser skipped
           if (!response2.data[0].guess) {
             this.setState({ skiped: true });
-            console.log("Skiped");
+            console.log("Skipped");
           } else {
-            if (response2.data[0].guess.status == "VALID") {
+            if (response2.data[0].guess.status === "VALID") {
               this.setState({ guessCorrect: "correct" });
               this.setState({ color: "green" });
               //setting guess
               this.setState({ guess: response2.data[0].guess.content });
-            } else if (response2.data[0].guess.status == "INVALID") {
+            } else if (response2.data[0].guess.status === "INVALID") {
               this.setState({ guessCorrect: "incorrect" });
               this.setState({ color: "red" });
               //setting guess
@@ -116,8 +116,8 @@ class Evalution extends React.Component {
           const hintlist = response2.data[0].hintList;
 
           hintlist.forEach((hint) => {
-            if (hint.token == this.state.token) {
-              if (hint.status == "VALID") {
+            if (hint.token === this.state.token) {
+              if (hint.status === "VALID") {
                 this.setState({ hint: "Valid" });
               } else {
                 this.setState({ hint: "Invalid" });
@@ -154,7 +154,7 @@ class Evalution extends React.Component {
       try{
         if (this.state.gameId) {
           const response = await api.get(`/games/${this.state.gameId}`);
-          if( response.data.status != "FINISHED"){
+          if( response.data.status !== "FINISHED"){
             const requestBody = JSON.stringify({
               status: "FINISHED"
             });
@@ -183,7 +183,7 @@ class Evalution extends React.Component {
       this.timerScore = null;
 
       const response = await api.get(`/games/${this.state.gameId}`);
-      if(response.data.status == "FINISHED"){
+      if(response.data.status === "FINISHED"){
         
         this.props.history.push(`/game/${this.state.gameId}/Score`);
         
