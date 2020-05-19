@@ -76,7 +76,7 @@ class Evalution extends React.Component {
       if (this.state.gameId) {
         const response = await api.get(`/games/${this.state.gameId}`);
         this.setState({ gameStatus: response.data.status });
-        // check if game ready to give hints
+        // check if game ready to get guess, add Validating_Hints
         console.log(response.data.status);
         if (
           response.data.status === "FINISHED" ||
