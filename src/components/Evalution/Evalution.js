@@ -141,6 +141,7 @@ class Evalution extends React.Component {
     }
   }
 
+  
   decreaseTime() {
     if (this.state.timeNewRound > 0) {
       this.setState({ timeNewRound: this.state.timeNewRound - 1 });
