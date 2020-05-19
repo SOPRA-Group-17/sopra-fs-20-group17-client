@@ -222,16 +222,7 @@ class Evalution extends React.Component {
                 ></img>
               </Col>
               <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
-                <Row className="d-flex justify-content-end">
-                  <Button
-                    variant="outline-light"
-                    className="outlineWhite-Dashboard"
-                    onClick={() => this.setState({ rules: true })}
-                  >
-                    Rules
-                  </Button>
-                </Row>
-                <Row className="d-flex justify-content-end">
+              <Row className="d-flex justify-content-end">
                   <Button
                     variant="outline-danger"
                     className="outlineWhite-Dashboard"
@@ -241,6 +232,16 @@ class Evalution extends React.Component {
                     End Game
                   </Button>
                 </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ rules: true })}
+                  >
+                    Rules
+                  </Button>
+                </Row>
+                
               </Col>
             </Row>
             <Modal
@@ -303,16 +304,7 @@ class Evalution extends React.Component {
                 ></img>
               </Col>
               <Col xs={{ span: 6, offset: 1 }} md={{ span: 4, offset: 5 }}>
-                <Row className="d-flex justify-content-end">
-                  <Button
-                    variant="outline-light"
-                    className="outlineWhite-Dashboard"
-                    onClick={() => this.setState({ rules: true })}
-                  >
-                    Rules
-                  </Button>
-                </Row>
-                <Row className="d-flex justify-content-end">
+              <Row className="d-flex justify-content-end">
                   <Button
                     variant="outline-danger"
                     className="outlineWhite-Dashboard"
@@ -322,6 +314,16 @@ class Evalution extends React.Component {
                     End Game
                   </Button>
                 </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-light"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ rules: true })}
+                  >
+                    Rules
+                  </Button>
+                </Row>
+                
                 <Row className="d-flex justify-content-end">
                   <p hidden={!this.state.hint} className="score">
                     Your clue was {this.state.hint}

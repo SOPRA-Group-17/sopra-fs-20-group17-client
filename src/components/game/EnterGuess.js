@@ -219,6 +219,16 @@ class EnterGuess extends React.Component {
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
           <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+          <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+              </Row>
+              
             <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
@@ -229,15 +239,7 @@ class EnterGuess extends React.Component {
               </Button>
 
             </Row>
-            <Row className="d-flex justify-content-end">
-                  <Button
-                    variant="outline-danger"
-                    className="outlineWhite-Dashboard"
-                    onClick={() => this.setState({ endGame: true })}
-                  >
-                    End Game
-                  </Button>
-              </Row>
+            
           </Col>
         </Row>
         <Modal

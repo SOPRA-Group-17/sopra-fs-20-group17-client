@@ -39,7 +39,7 @@ class Validation extends React.Component {
       rules: false,
       progressBar: null,
       endGame: false,
-      timerGameEnded: null
+      timerGameEnded: null,
     };
 
     this.creatReportHintArray = this.creatReportHintArray.bind(this);
@@ -55,14 +55,13 @@ class Validation extends React.Component {
 
       const response = await api.get(`/games/${this.state.gameId}`);
 
-      if (response.data.status === "FINISHED"){
+      if (response.data.status === "FINISHED") {
         this.props.history.push(`/game/${this.state.gameId}/Score`);
-      }
-      else {
+      } else {
         const response = await api.get(
           `/games/${this.props.match.params.gameId}/terms`
         );
-  
+
         //check if user was on this site before, in same game
         if (localStorage.getItem("sawHelp") != null) {
           if (localStorage.getItem("sawHelp") == 0) {
@@ -70,20 +69,21 @@ class Validation extends React.Component {
             this.setState({ help: true });
           }
         }
-  
+
         // Get the returned terme and update the state.
         this.setState({ word: response.data.content });
-  
-        this.getHints();
-  
-        this.timer = setInterval(() => this.getHints(), 1000);
-        
-        this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
 
+        this.getHints();
+
+        this.timer = setInterval(() => this.getHints(), 1000);
+
+        this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
       }
     } catch (error) {
       alert(
-        `Something went wrong while setting up the page and getting the term: \n${handleError(error)}`
+        `Something went wrong while setting up the page and getting the term: \n${handleError(
+          error
+        )}`
       );
     }
   }
@@ -91,21 +91,21 @@ class Validation extends React.Component {
   async checkGameEnded() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if(response.data.status == "FINISHED"){
+      if (response.data.status == "FINISHED") {
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
-      
     } catch (error) {
       alert(
-        `Something went wrong while checking if the game has ended: \n${handleError(error)}`
+        `Something went wrong while checking if the game has ended: \n${handleError(
+          error
+        )}`
       );
     }
   }
-
 
   async getHints() {
     try {
@@ -113,14 +113,13 @@ class Validation extends React.Component {
         const response = await api.get(`/games/${this.state.gameId}`);
 
         // check if game ready to give hints
-        if(response.data.status == "FINISHED"){
+        if (response.data.status == "FINISHED") {
           clearInterval(this.timer);
           this.timer = null;
           clearInterval(this.timerGameEnded);
           this.timerGameEnded = null;
           this.props.history.push(`/game/${this.state.gameId}/Score`);
-        }
-        else if (response.data.status === "VALIDATING_HINTS") {
+        } else if (response.data.status === "VALIDATING_HINTS") {
           const response2 = await api.get(`/games/${this.state.gameId}/hints`);
           console.log(response2.data);
           clearInterval(this.timer);
@@ -176,23 +175,18 @@ class Validation extends React.Component {
   async submitReportPut(listRequestBody) {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if(response.data.status == "FINISHED"){
+      if (response.data.status == "FINISHED") {
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
-      }
-      else{
+      } else {
         for (let i = 0; i < this.state.hintsReport.length; i++) {
           let requestBody = listRequestBody[i];
-          await api.put(
-            `/games/${this.state.gameId}/hints`,
-            requestBody
-          );
+          await api.put(`/games/${this.state.gameId}/hints`, requestBody);
         }
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/evalution`);
-
       }
     } catch (error) {
       alert(
@@ -208,9 +202,9 @@ class Validation extends React.Component {
   }
 
   async endGame() {
-    try{
+    try {
       const requestBody = JSON.stringify({
-        status: "FINISHED"
+        status: "FINISHED",
       });
       await api.put(`/games/${this.state.gameId}`, requestBody);
       clearInterval(this.timer);
@@ -219,15 +213,14 @@ class Validation extends React.Component {
       this.timerGameEnded = null;
       this.props.history.push(`/game/${this.state.gameId}/Score`);
       this.props.history.push(`/game/${this.state.gameId}/Score`);
+    } catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
     }
-    catch (error) {
-    alert(
-      `Something went wrong while trying to end the game: \n${handleError(
-        error
-      )}`
-    );
   }
-}
 
   //nr is the nr of card = array index +1
   //x is the nr of hints
@@ -254,7 +247,7 @@ class Validation extends React.Component {
             {i}
           </ToggleButton>
         );
-      } 
+      }
     }
     return Buttons;
   }
@@ -392,39 +385,38 @@ class Validation extends React.Component {
   async waitingBar() {
     try {
       const response = await api.get(`/games/${this.state.gameId}`);
-      if(response.data.status == "FINISHED"){
+      if (response.data.status == "FINISHED") {
         clearInterval(this.timer);
         this.timer = null;
         clearInterval(this.timerGameEnded);
         this.timerGameEnded = null;
         this.props.history.push(`/game/${this.state.gameId}/Score`);
         this.props.history.push(`/game/${this.state.gameId}/Score`);
+      } else {
+        //get all players in the game
+        //set player and playerstatus
+        const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
+        console.log(allPlayers.data);
+        //-1 because of the guesser
+        let amountPlayers = allPlayers.data.length - 1;
+        console.log(amountPlayers);
+        //get all hints to check afterwards
+        const hints = await api.get(`/games/${this.state.gameId}/hints`);
+
+        //get the game to check the game state
+        const gameStatus = await api.get(`/games/${this.state.gameId}`);
+
+        let sum = 0;
+
+        let percentage;
+        if (gameStatus.data.status === "RECEIVING_HINTS") {
+          sum = hints.data.length;
+          percentage = (sum / amountPlayers) * 100;
+        }
+        this.setState({
+          progressBar: percentage,
+        });
       }
-      else{
-      //get all players in the game
-      //set player and playerstatus
-      const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
-      console.log(allPlayers.data);
-      //-1 because of the guesser
-      let amountPlayers = allPlayers.data.length - 1;
-      console.log(amountPlayers);
-      //get all hints to check afterwards
-      const hints = await api.get(`/games/${this.state.gameId}/hints`);
-
-      //get the game to check the game state
-      const gameStatus = await api.get(`/games/${this.state.gameId}`);
-
-      let sum = 0;
-
-      let percentage;
-      if (gameStatus.data.status === "RECEIVING_HINTS") {
-        sum = hints.data.length;
-        percentage = (sum / amountPlayers) * 100;
-      }
-      this.setState({
-        progressBar: percentage,
-      });
-    }
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
@@ -446,21 +438,21 @@ class Validation extends React.Component {
               <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
                 <Row className="d-flex justify-content-end">
                   <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
                     variant="outline-light"
                     className="outlineWhite-Dashboard"
                     size="lg"
                     onClick={() => this.setState({ rules: true })}
                   >
                     Rules
-                  </Button>
-                </Row>
-                <Row className="d-flex justify-content-end">
-                  <Button
-                    variant="outline-danger"
-                    className="outlineWhite-Dashboard"
-                    onClick={() => this.setState({ endGame: true })}
-                  >
-                    End Game
                   </Button>
                 </Row>
               </Col>
@@ -497,7 +489,6 @@ class Validation extends React.Component {
                   size="lg"
                   className="outlineWhite-Dashboard"
                   onClick={() => this.endGame()}
-                  
                 >
                   YES
                 </Button>
@@ -547,6 +538,15 @@ class Validation extends React.Component {
               <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>
                 <Row className="d-flex justify-content-end">
                   <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Validation"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
                     variant="outline-light"
                     className="outlineWhite-Validation"
                     size="md"
@@ -554,9 +554,8 @@ class Validation extends React.Component {
                   >
                     Rules
                   </Button>
-
                 </Row>
-                
+
                 <Row className="d-flex justify-content-end">
                   <Button
                     variant="outline-light"
@@ -564,15 +563,6 @@ class Validation extends React.Component {
                     onClick={() => this.setState({ help: true })}
                   >
                     Help
-                  </Button>
-                </Row>
-                <Row className="d-flex justify-content-end">
-                  <Button
-                    variant="outline-danger"
-                    className="outlineWhite-Validation"
-                    onClick={() => this.setState({ endGame: true })}
-                  >
-                    End Game
                   </Button>
                 </Row>
               </Col>
@@ -671,13 +661,11 @@ class Validation extends React.Component {
                   size="lg"
                   className="outlineWhite-Dashboard"
                   onClick={() => this.endGame()}
-                  
                 >
                   YES
                 </Button>
               </Modal.Body>
             </Modal>
-
 
             <div
               class="row row-cols-1 row-cols-md-2 row-cols-lg-3 justify-content-center "
