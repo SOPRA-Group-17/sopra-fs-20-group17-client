@@ -21,6 +21,9 @@ class EnterGuess extends React.Component {
       readyToRender: null,
       noHintsValid: null,
       rules: false,
+      endGame: false,
+      timerGameEnded: null
+
     };
     this.getHints = this.getHints.bind(this);
   }
@@ -34,7 +37,9 @@ class EnterGuess extends React.Component {
       this.setState({ gameId: this.props.match.params.gameId });
       // get all the given hints
       this.getHints();
-      this.timer = setInterval(() => this.getHints(), 2000);
+      this.timer = setInterval(() => this.getHints(), 1000);
+     
+      this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
     } catch (error) {
       alert(
         `Something went wrong while setting up the page: \n${handleError(
@@ -44,9 +49,38 @@ class EnterGuess extends React.Component {
     }
   }
 
+  async checkGameEnded() {
+    try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      console.log("enterguess timer");
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      
+    } catch (error) {
+      alert(
+        `Something went wrong while checking if the game has ended: \n${handleError(error)}`
+      );
+    }
+  }
+
+
   async getHints() {
     try {
       if (this.state.gameId) {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      else{
         const response = await api.get(`/games/${this.state.gameId}`);
         // check if game ready to give hints
         console.log(response.data.status);
@@ -59,6 +93,7 @@ class EnterGuess extends React.Component {
           this.setState({ readyToRender: true });
         }
       }
+      }
     } catch (error) {
       alert(
         `Something went wrong while getting the hints: \n${handleError(error)}`
@@ -68,16 +103,30 @@ class EnterGuess extends React.Component {
 
   async submit() {
     try {
-      const requestBody = JSON.stringify({
-        content: this.state.guess,
-        token: this.state.playerToken,
-      });
-      // TODO: adapt url and request parameters
-      const response = await api.post(
-        `/games/${this.state.gameId}/guesses`,
-        requestBody
-      );
-      this.props.history.push(`/game/${this.state.gameId}/evalution`);
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      else{
+        const requestBody = JSON.stringify({
+          content: this.state.guess,
+          token: this.state.playerToken,
+        });
+        // TODO: adapt url and request parameters
+        await api.post(
+          `/games/${this.state.gameId}/guesses`,
+          requestBody
+        );
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/evalution`);
+
+
+      }
+      
+      
     } catch (error) {
       alert(
         `Something went wrong while submitting the guess: \n${handleError(
@@ -89,15 +138,24 @@ class EnterGuess extends React.Component {
 
   async skip() {
     try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+      else{
       console.log(this.state.playerToken);
       const requestBody = JSON.stringify({
         token: this.state.playerToken,
       });
-      await api.delete(`/games/${this.state.gameId}/guesses`, {
+       await api.delete(`/games/${this.state.gameId}/guesses`, {
         data: requestBody,
       });
-
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
       this.props.history.push(`/game/${this.state.gameId}/evalution`);
+    }
     } catch (error) {
       alert(`Something went wrong while skipping: \n${handleError(error)}`);
     }
@@ -109,6 +167,26 @@ class EnterGuess extends React.Component {
     this.setState({ [key]: value });
   }
 
+  async endGame() {
+    try{
+      const requestBody = JSON.stringify({
+        status: "FINISHED"
+      });
+      await api.put(`/games/${this.state.gameId}`, requestBody);
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
+    }
+    catch (error) {
+    alert(
+      `Something went wrong while trying to end the game: \n${handleError(
+        error
+      )}`
+    );
+  }
+}
   //creats a table containning all VALID Hints
   createTable = () => {
     let table = [];
@@ -142,6 +220,16 @@ class EnterGuess extends React.Component {
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
           <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+          <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+              </Row>
+              
             <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
@@ -150,7 +238,9 @@ class EnterGuess extends React.Component {
               >
                 Rules
               </Button>
+
             </Row>
+            
           </Col>
         </Row>
         <Modal
@@ -161,6 +251,36 @@ class EnterGuess extends React.Component {
         >
           <Rules />
         </Modal>
+        <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGame()}
+                  
+                >
+                  YES
+                </Button>
+              </Modal.Body>
+            </Modal>
         {!this.state.readyToRender ? (
           <div>
             <div

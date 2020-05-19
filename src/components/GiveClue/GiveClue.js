@@ -1,7 +1,7 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
 import { withRouter } from "react-router-dom";
-import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 import Rules from "../rules/Rules";
@@ -18,6 +18,8 @@ class GiveClue extends React.Component {
       timer: null,
       rules: false,
       id: localStorage.getItem("Id"),
+      endGame: false,
+      timerGameEnded: null,
     };
   }
 
@@ -29,6 +31,8 @@ class GiveClue extends React.Component {
 
       this.checkTermAvailible();
       this.timer = setInterval(() => this.checkTermAvailible(), 1000);
+
+      this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
     } catch (error) {
       alert(
         `Something went wrong while setting up the page: \n${handleError(
@@ -38,17 +42,46 @@ class GiveClue extends React.Component {
     }
   }
 
-  //checks if state of game receiving_Hints
+  async checkGameEnded() {
+    try {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      console.log("giveClue timer");
+      if (response.data.status == "FINISHED") {
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+    } catch (error) {
+      alert(
+        `Something went wrong while checking if the game has ended: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
+  //checks if state of game receiving_Hints, if yes it calls getTerm which gets the term of the round
   async checkTermAvailible() {
     try {
       if (this.state.gameId) {
         const response = await api.get(`/games/${this.state.gameId}`);
-        // check if game ready to give hints
-        console.log(response.data.status);
-        if (response.data.status === "RECEIVING_HINTS") {
+        if (response.data.status == "FINISHED") {
           clearInterval(this.timer);
           this.timer = null;
-          this.getTerme();
+          clearInterval(this.timerGameEnded);
+          this.timerGameEnded = null;
+          this.props.history.push(`/game/${this.state.gameId}/Score`);
+        } else {
+          const response = await api.get(`/games/${this.state.gameId}`);
+          // check if game ready to give hints
+          console.log(response.data.status);
+          if (response.data.status === "RECEIVING_HINTS") {
+            clearInterval(this.timer);
+            this.timer = null;
+            this.getTerme();
+          }
         }
       }
     } catch (error) {
@@ -62,10 +95,17 @@ class GiveClue extends React.Component {
 
   async getTerme() {
     try {
-      const response = await api.get(`/games/${this.state.gameId}/terms`);
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if (response.data.status == "FINISHED") {
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      } else {
+        const response = await api.get(`/games/${this.state.gameId}/terms`);
 
-      // Get the returned terme and update the state.
-      this.setState({ word: response.data.content });
+        // Get the returned terme and update the state.
+        this.setState({ word: response.data.content });
+      }
     } catch (error) {
       alert(
         `Something went wrong while getting the term: \n${handleError(error)}`
@@ -75,16 +115,22 @@ class GiveClue extends React.Component {
 
   async submitClue() {
     try {
-      const requestBody = JSON.stringify({
-        content: this.state.clue,
-        token: this.state.token,
-      });
-      console.log(this.state.newGame);
-      const response = await api.post(
-        `/games/${this.state.gameId}/hints`,
-        requestBody
-      );
-      this.props.history.push(`/game/${this.state.gameId}/validation`);
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if (response.data.status == "FINISHED") {
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      } else {
+        const requestBody = JSON.stringify({
+          content: this.state.clue,
+          token: this.state.token,
+        });
+
+        await api.post(`/games/${this.state.gameId}/hints`, requestBody);
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/validation`);
+      }
     } catch (error) {
       alert(
         `Something went wrong while submiting the clue \n${handleError(error)}`
@@ -96,6 +142,26 @@ class GiveClue extends React.Component {
     this.setState({ [key]: value });
   }
 
+  async endGame() {
+    try {
+      const requestBody = JSON.stringify({
+        status: "FINISHED",
+      });
+      await api.put(`/games/${this.state.gameId}`, requestBody);
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
+    } catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
   render() {
     return (
       <Container fluid>
@@ -104,6 +170,15 @@ class GiveClue extends React.Component {
             <img className="logoImgSmall" src={logo} alt="Just One Logo"></img>
           </Col>
           <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+            <Row className="d-flex justify-content-end">
+              <Button
+                variant="outline-danger"
+                className="outlineWhite-Dashboard"
+                onClick={() => this.setState({ endGame: true })}
+              >
+                End Game
+              </Button>
+            </Row>
             <Row className="d-flex justify-content-end">
               <Button
                 variant="outline-light"
@@ -122,6 +197,32 @@ class GiveClue extends React.Component {
           aria-labelledby="rules-dashboard"
         >
           <Rules />
+        </Modal>
+        <Modal
+          size="lg"
+          show={this.state.endGame}
+          onHide={() => this.setState({ endGame: false })}
+          aria-labelledby="rules-dashboard"
+        >
+          <Modal.Header closeButton className="rules-header">
+            <Modal.Title id="rules-dashboard-title" className="rules-header">
+              End Game
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="rules-text">
+            <p className="rules-text">
+              Are you sure that you want to end the game? This will end the game
+              for all players.
+            </p>
+            <Button
+              variant="outline-danger"
+              size="lg"
+              className="outlineWhite-Dashboard"
+              onClick={() => this.endGame()}
+            >
+              YES
+            </Button>
+          </Modal.Body>
         </Modal>
         {!this.state.word ? (
           <div style={{ marginTop: "5vw" }}>

@@ -6,6 +6,7 @@ import Rules from "../rules/Rules";
 import logo from "../styling/JustOne_logo_white.svg";
 import { Spinner } from "../../views/design/Spinner";
 
+
 class Evalution extends React.Component {
   constructor() {
     super();
@@ -28,6 +29,8 @@ class Evalution extends React.Component {
       timeNewRound: 10,
       timerScore: null,
       hint: null,
+      endGame: false,
+      gameFinished: null
     };
   }
 
@@ -46,6 +49,7 @@ class Evalution extends React.Component {
       this.getGuessAndTerm();
 
       this.timer = setInterval(() => this.getGuessAndTerm(), 1000);
+      
     } catch (error) {
       alert(`Something went wrong while mounting: \n${handleError(error)}`);
     }
@@ -72,12 +76,17 @@ class Evalution extends React.Component {
       if (this.state.gameId) {
         const response = await api.get(`/games/${this.state.gameId}`);
         this.setState({ gameStatus: response.data.status });
-        // check if game ready to give hints
+        // check if game ready to get guess, add Validating_Hints
         console.log(response.data.status);
         if (
           response.data.status === "FINISHED" ||
-          response.data.status === "RECEIVING_TERM"
+          response.data.status === "RECEIVING_TERM" ||
+          response.data.status === "VALIDATING_TERM"
         ) {
+          if(response.data.status === "FINISHED"){
+            localStorage.setItem("endedNormal", "true");
+            this.setState({gameFinished: true})
+          }
           const response2 = await api.get(
             `/games/${this.state.gameId}/rounds?lastRound=true`
           );
@@ -115,6 +124,7 @@ class Evalution extends React.Component {
               }
             }
           });
+          
 
           this.setState({ readyToRender: true });
 
@@ -133,9 +143,32 @@ class Evalution extends React.Component {
     }
   }
 
+  
   decreaseTime() {
     if (this.state.timeNewRound > 0) {
       this.setState({ timeNewRound: this.state.timeNewRound - 1 });
+    }
+  }
+
+  async endGameF() {
+      try{
+        if (this.state.gameId) {
+          const response = await api.get(`/games/${this.state.gameId}`);
+          if( response.data.status != "FINISHED"){
+            const requestBody = JSON.stringify({
+              status: "FINISHED"
+            });
+            await api.put(`/games/${this.state.gameId}`, requestBody);
+            this.props.history.push(`/game/${this.state.gameId}/Score`);
+          }
+      }
+      }
+      catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
     }
   }
 
@@ -149,9 +182,14 @@ class Evalution extends React.Component {
       clearInterval(this.timerScore);
       this.timerScore = null;
 
-      const Player = await api.get(`/games/players/${this.state.id}`);
-      console.log(Player.data);
-      if (this.state.gameStatus == "RECEIVING_TERM") {
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if(response.data.status == "FINISHED"){
+        
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+        
+      }
+      else{
+        const Player = await api.get(`/games/players/${this.state.id}`);
         console.log(Player.data.status);
         if (Player.data.status === "GUESSER") {
           localStorage.setItem("status", "GUESSER");
@@ -160,10 +198,8 @@ class Evalution extends React.Component {
           localStorage.setItem("status", "CLUE_GIVER");
           this.props.history.push(`/game/${this.state.gameId}/reportWord`);
         }
-      } //check if this works, is Finished the correct state
-      else if (this.state.gameStatus == "FINISHED") {
-        this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
+      
     } catch (error) {
       alert(
         `Something went wrong while starting a new round: \n${handleError(
@@ -187,6 +223,16 @@ class Evalution extends React.Component {
                 ></img>
               </Col>
               <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
+              <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    hidden={this.state.gameFinished}
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
                 <Row className="d-flex justify-content-end">
                   <Button
                     variant="outline-light"
@@ -196,6 +242,7 @@ class Evalution extends React.Component {
                     Rules
                   </Button>
                 </Row>
+                
               </Col>
             </Row>
             <Modal
@@ -205,6 +252,37 @@ class Evalution extends React.Component {
               aria-labelledby="rules-dashboard"
             >
               <Rules />
+            </Modal>
+
+            <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGameF()}
+                  
+                >
+                  YES
+                </Button>
+              </Modal.Body>
             </Modal>
 
             <div style={{ marginTop: "5vw" }}>
@@ -227,6 +305,16 @@ class Evalution extends React.Component {
                 ></img>
               </Col>
               <Col xs={{ span: 6, offset: 1 }} md={{ span: 4, offset: 5 }}>
+              <Row className="d-flex justify-content-end">
+                  <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    hidden={this.state.gameFinished}
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
                 <Row className="d-flex justify-content-end">
                   <Button
                     variant="outline-light"
@@ -236,6 +324,7 @@ class Evalution extends React.Component {
                     Rules
                   </Button>
                 </Row>
+                
                 <Row className="d-flex justify-content-end">
                   <p hidden={!this.state.hint} className="score">
                     Your clue was {this.state.hint}
@@ -251,6 +340,36 @@ class Evalution extends React.Component {
               aria-labelledby="rules-dashboard"
             >
               <Rules />
+            </Modal>
+            <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGameF()}
+                  
+                >
+                  YES
+                </Button>
+              </Modal.Body>
             </Modal>
             <div>
               <div class="row justify-content-center">

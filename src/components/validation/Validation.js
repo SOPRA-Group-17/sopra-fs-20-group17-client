@@ -1,6 +1,6 @@
 import React from "react";
 import { api, handleError } from "../../helpers/api";
-import { withRouter, useParams } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Rules from "../rules/Rules";
 
 import {
@@ -10,7 +10,6 @@ import {
   Button,
   ToggleButton,
   ToggleButtonGroup,
-  Form,
   Modal,
   ProgressBar,
 } from "react-bootstrap";
@@ -39,6 +38,8 @@ class Validation extends React.Component {
       help: false,
       rules: false,
       progressBar: null,
+      endGame: false,
+      timerGameEnded: null,
     };
 
     this.creatReportHintArray = this.creatReportHintArray.bind(this);
@@ -52,27 +53,57 @@ class Validation extends React.Component {
       this.state.gameId = this.props.match.params.gameId;
       this.setState({ gameId: this.props.match.params.gameId });
 
-      const response = await api.get(
-        `/games/${this.props.match.params.gameId}/terms`
-      );
+      const response = await api.get(`/games/${this.state.gameId}`);
 
-      //check if user was on this site before, in same game
-      if (localStorage.getItem("sawHelp") != null) {
-        if (localStorage.getItem("sawHelp") == 0) {
-          localStorage.setItem("sawHelp", 1);
-          this.setState({ help: true });
+      if (response.data.status === "FINISHED") {
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      } else {
+        const response = await api.get(
+          `/games/${this.props.match.params.gameId}/terms`
+        );
+
+        //check if user was on this site before, in same game
+        if (localStorage.getItem("sawHelp") != null) {
+          if (localStorage.getItem("sawHelp") == 0) {
+            localStorage.setItem("sawHelp", 1);
+            this.setState({ help: true });
+          }
         }
+
+        // Get the returned terme and update the state.
+        this.setState({ word: response.data.content });
+
+        this.getHints();
+
+        this.timer = setInterval(() => this.getHints(), 1000);
+
+        this.timerGameEnded = setInterval(() => this.checkGameEnded(), 1100);
       }
-
-      // Get the returned terme and update the state.
-      this.setState({ word: response.data.content });
-
-      this.getHints();
-
-      this.timer = setInterval(() => this.getHints(), 1000);
     } catch (error) {
       alert(
-        `Something went wrong while fetching the users: \n${handleError(error)}`
+        `Something went wrong while setting up the page and getting the term: \n${handleError(
+          error
+        )}`
+      );
+    }
+  }
+
+  async checkGameEnded() {
+    try {
+      console.log("validation timer");
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if (response.data.status == "FINISHED") {
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      }
+    } catch (error) {
+      alert(
+        `Something went wrong while checking if the game has ended: \n${handleError(
+          error
+        )}`
       );
     }
   }
@@ -83,8 +114,13 @@ class Validation extends React.Component {
         const response = await api.get(`/games/${this.state.gameId}`);
 
         // check if game ready to give hints
-        console.log(response.data.status);
-        if (response.data.status === "VALIDATING_HINTS") {
+        if (response.data.status == "FINISHED") {
+          clearInterval(this.timer);
+          this.timer = null;
+          clearInterval(this.timerGameEnded);
+          this.timerGameEnded = null;
+          this.props.history.push(`/game/${this.state.gameId}/Score`);
+        } else if (response.data.status === "VALIDATING_HINTS") {
           const response2 = await api.get(`/games/${this.state.gameId}/hints`);
           console.log(response2.data);
           clearInterval(this.timer);
@@ -139,14 +175,20 @@ class Validation extends React.Component {
 
   async submitReportPut(listRequestBody) {
     try {
-      for (let i = 0; i < this.state.hintsReport.length; i++) {
-        let requestBody = listRequestBody[i];
-        const response = await api.put(
-          `/games/${this.state.gameId}/hints`,
-          requestBody
-        );
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if (response.data.status == "FINISHED") {
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      } else {
+        for (let i = 0; i < this.state.hintsReport.length; i++) {
+          let requestBody = listRequestBody[i];
+          await api.put(`/games/${this.state.gameId}/hints`, requestBody);
+        }
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/evalution`);
       }
-      this.props.history.push(`/game/${this.state.gameId}/evalution`);
     } catch (error) {
       alert(
         `Something went wrong while submiting your reports \n${handleError(
@@ -158,6 +200,27 @@ class Validation extends React.Component {
 
   handleInputChange(key, value) {
     this.setState({ [key]: value });
+  }
+
+  async endGame() {
+    try {
+      const requestBody = JSON.stringify({
+        status: "FINISHED",
+      });
+      await api.put(`/games/${this.state.gameId}`, requestBody);
+      clearInterval(this.timer);
+      this.timer = null;
+      clearInterval(this.timerGameEnded);
+      this.timerGameEnded = null;
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
+      this.props.history.push(`/game/${this.state.gameId}/Score`);
+    } catch (error) {
+      alert(
+        `Something went wrong while trying to end the game: \n${handleError(
+          error
+        )}`
+      );
+    }
   }
 
   //nr is the nr of card = array index +1
@@ -185,7 +248,6 @@ class Validation extends React.Component {
             {i}
           </ToggleButton>
         );
-      } else {
       }
     }
     return Buttons;
@@ -323,29 +385,39 @@ class Validation extends React.Component {
 
   async waitingBar() {
     try {
-      //get all players in the game
-      //set player and playerstatus
-      const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
-      console.log(allPlayers.data);
-      //-1 because of the guesser
-      let amountPlayers = allPlayers.data.length - 1;
-      console.log(amountPlayers);
-      //get all hints to check afterwards
-      const hints = await api.get(`/games/${this.state.gameId}/hints`);
+      const response = await api.get(`/games/${this.state.gameId}`);
+      if (response.data.status == "FINISHED") {
+        clearInterval(this.timer);
+        this.timer = null;
+        clearInterval(this.timerGameEnded);
+        this.timerGameEnded = null;
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+        this.props.history.push(`/game/${this.state.gameId}/Score`);
+      } else {
+        //get all players in the game
+        //set player and playerstatus
+        const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
+        console.log(allPlayers.data);
+        //-1 because of the guesser
+        let amountPlayers = allPlayers.data.length - 1;
+        console.log(amountPlayers);
+        //get all hints to check afterwards
+        const hints = await api.get(`/games/${this.state.gameId}/hints`);
 
-      //get the game to check the game state
-      const gameStatus = await api.get(`/games/${this.state.gameId}`);
+        //get the game to check the game state
+        const gameStatus = await api.get(`/games/${this.state.gameId}`);
 
-      let sum = 0;
+        let sum = 0;
 
-      let percentage;
-      if (gameStatus.data.status === "RECEIVING_HINTS") {
-        sum = hints.data.length;
-        percentage = (sum / amountPlayers) * 100;
+        let percentage;
+        if (gameStatus.data.status === "RECEIVING_HINTS") {
+          sum = hints.data.length;
+          percentage = (sum / amountPlayers) * 100;
+        }
+        this.setState({
+          progressBar: percentage,
+        });
       }
-      this.setState({
-        progressBar: percentage,
-      });
     } catch (error) {
       alert(`Something went wrong while reporting: \n${handleError(error)}`);
     }
@@ -367,6 +439,15 @@ class Validation extends React.Component {
               <Col xs={{ span: 3, offset: 4 }} md={{ span: 2, offset: 7 }}>
                 <Row className="d-flex justify-content-end">
                   <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Dashboard"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
                     variant="outline-light"
                     className="outlineWhite-Dashboard"
                     size="lg"
@@ -385,6 +466,36 @@ class Validation extends React.Component {
             >
               <Rules />
             </Modal>
+            <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGame()}
+                >
+                  YES
+                </Button>
+              </Modal.Body>
+            </Modal>
+
             <div
               class="row justify-content-center"
               style={{ marginTop: "5vw" }}
@@ -428,18 +539,28 @@ class Validation extends React.Component {
               <Col xs={{ span: 3, offset: 1 }} md={{ span: 2, offset: 2 }}>
                 <Row className="d-flex justify-content-end">
                   <Button
+                    variant="outline-danger"
+                    className="outlineWhite-Validation"
+                    onClick={() => this.setState({ endGame: true })}
+                  >
+                    End Game
+                  </Button>
+                </Row>
+                <Row className="d-flex justify-content-end">
+                  <Button
                     variant="outline-light"
-                    className="outlineWhite-Dashboard"
+                    className="outlineWhite-Validation"
                     size="md"
                     onClick={() => this.setState({ rules: true })}
                   >
                     Rules
                   </Button>
                 </Row>
+
                 <Row className="d-flex justify-content-end">
                   <Button
                     variant="outline-light"
-                    className="outlineWhite-Dashboard"
+                    className="outlineWhite-Validation"
                     onClick={() => this.setState({ help: true })}
                   >
                     Help
@@ -515,6 +636,35 @@ class Validation extends React.Component {
                     </li>
                   </ul>
                 </p>
+              </Modal.Body>
+            </Modal>
+            <Modal
+              size="lg"
+              show={this.state.endGame}
+              onHide={() => this.setState({ endGame: false })}
+              aria-labelledby="rules-dashboard"
+            >
+              <Modal.Header closeButton className="rules-header">
+                <Modal.Title
+                  id="rules-dashboard-title"
+                  className="rules-header"
+                >
+                  End Game
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body className="rules-text">
+                <p className="rules-text">
+                  Are you sure that you want to end the game? This will end the
+                  game for all players.
+                </p>
+                <Button
+                  variant="outline-danger"
+                  size="lg"
+                  className="outlineWhite-Dashboard"
+                  onClick={() => this.endGame()}
+                >
+                  YES
+                </Button>
               </Modal.Body>
             </Modal>
 

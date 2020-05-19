@@ -19,6 +19,16 @@ class GameRouter extends React.Component {
     /**
      * "this.props.base" is "/game/:id" because as been passed as a prop in the parent of GameRouter,
      * add a guard each for active player actions and clue giver actions
+     *  render={() => (
+            <GuesserGuard>
+              
+            </GuesserGuard>
+          )}
+          render={() => (
+            <ClueGiverGuard>
+              
+            </ClueGiverGuard>
+          )}
      */
 
     return (
