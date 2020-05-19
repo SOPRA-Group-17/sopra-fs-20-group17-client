@@ -86,6 +86,9 @@ class Score extends React.Component {
     if (this.state.players) {
       for (let i = 0; i < this.state.players.length; i++) {
         let children = [];
+        var best = 100;
+        var middle = 50;
+        
         //Inner loop to create children
         for (let j = 0; j < 3; j++) {
           if (j === 0) {
@@ -95,18 +98,18 @@ class Score extends React.Component {
             children.push(<td>{this.state.players[i].name}</td>);
           }
           if (j === 2) {
-            if (this.state.players[i].score > 200) {
+            if (this.state.players[i].score >= best) {
               children.push(
                 <td class="text-success">{this.state.players[i].score}</td>
               );
             } else if (
-              this.state.players[i].score < 200 &&
-              this.state.players[i].score > 50
+              this.state.players[i].score < best &&
+              this.state.players[i].score >= middle
             ) {
               children.push(
                 <td class="text-warning">{this.state.players[i].score}</td>
               );
-            } else if (this.state.players[i].score < 50) {
+            } else if (this.state.players[i].score < middle) {
               children.push(
                 <td class="text-danger">{this.state.players[i].score}</td>
               );
@@ -263,12 +266,10 @@ class Score extends React.Component {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body className="rules-text">
-              <p className="rules-text-title">fast ending</p>
+
               <p className="rules-text">
-                A player has ended the game early. <br></br>
-                Afterwards you will receive your early game evaluation.{" "}
-                <br></br>
-                <br></br>
+                A player has ended the game. <br></br>
+
                 Thanks for playing the game
               </p>
             </Modal.Body>
