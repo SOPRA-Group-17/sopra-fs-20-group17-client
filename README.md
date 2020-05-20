@@ -99,7 +99,6 @@ During one round of the game the user is either the guesser or one of the clue g
 
 After evaluation a new round starts if the game is not finished yet, else the user gets redirected to the End screen.
 
-
 <img src="/src/images/Score.png" width="200">
 
 
