@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { BaseContainer } from "../../helpers/layout";
 import { api, handleError } from "../../helpers/api";
-import User from "../shared/models/User";
 import { withRouter } from "react-router-dom";
 import Link from "react-router-dom/Link";
 import logo from "../styling/JustOne_logo_white.svg";

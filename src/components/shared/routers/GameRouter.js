@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Redirect, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import GiveClue from "../../GiveClue/GiveClue";
 import Evalution from "../../Evalution/Evalution";
 import Validation from "../../validation/Validation";

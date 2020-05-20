@@ -126,20 +126,20 @@ class Dashboard extends React.Component {
 
       // Get the returned users and update the state.
 
-      if (response.data.length != 0) {
+      if (response.data.length !== 0) {
         this.setState({ games: response.data });
         for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].gameId == this.state.selectLobby) {
+          if (response.data[i].gameId === this.state.selectLobby) {
             console.log("found match");
-            if (response.data[i].status == "LOBBY") {
+            if (response.data[i].status === "LOBBY") {
               selectedValid = 1;
               break;
             }
           }
         }
-        if (selectedValid == 0) {
+        if (selectedValid === 0) {
           for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].status == "LOBBY") {
+            if (response.data[i].status === "LOBBY") {
               console.log("resetting because not valid");
               this.setState({ selectLobby: response.data[i].gameId });
               break;
@@ -283,8 +283,8 @@ class Dashboard extends React.Component {
       return selectionList;
     } else {
       for (let i = 0; i < this.state.games.length; i++) {
-        if (this.state.games[i].gameId == this.state.selectLobby) {
-          if (this.state.games[i].status == "LOBBY") {
+        if (this.state.games[i].gameId === this.state.selectLobby) {
+          if (this.state.games[i].status === "LOBBY") {
             selected = i;
             selectionList.push(
               <option value={this.state.games[i].gameId}>
@@ -295,8 +295,8 @@ class Dashboard extends React.Component {
         }
       }
       for (let i = 0; i < this.state.games.length; i++) {
-        if (i != selected) {
-          if (this.state.games[i].status == "LOBBY") {
+        if (i !== selected) {
+          if (this.state.games[i].status === "LOBBY") {
             selectionList.push(
               <option value={this.state.games[i].gameId}>
                 {this.state.games[i].name}
@@ -313,7 +313,7 @@ class Dashboard extends React.Component {
     let table = [];
     // Outer loop to create parent
     this.state.scoarboardList.forEach((player, index) => {
-      if (player.id == this.state.userId) {
+      if (player.id === this.state.userId) {
         table.push(
           <tr
             className="scoardboard-text"
@@ -474,7 +474,7 @@ class Dashboard extends React.Component {
 
                   <Form.Group as={Col} controlId="Lobbys">
                     <Button
-                      disabled={this.state.games.length == 0}
+                      disabled={this.state.games.length === 0}
                       variant="outline-light"
                       className="outlineWhite-Form"
                       onClick={() => {

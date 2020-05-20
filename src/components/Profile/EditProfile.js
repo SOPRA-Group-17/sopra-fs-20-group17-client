@@ -273,13 +273,6 @@ class EditProfile extends React.Component {
                     this.handleInputChange("newUsername", e.target.value);
                   }}
                 />
-                {this.state.changedUsername ? (
-                  <Badge pill variant="success" style={{ marginTop: "1vw" }}>
-                    the username was changed succesfully
-                  </Badge>
-                ) : (
-                  <p> </p>
-                )}
                 <Button
                   variant="outline-light"
                   className="outlineWhite-Dashboard"
@@ -297,6 +290,13 @@ class EditProfile extends React.Component {
                 >
                   Save username
                 </Button>
+                {this.state.changedUsername ? (
+                  <Badge pill variant="success" style={{ marginTop: "1vw" }}>
+                    the username was changed succesfully
+                  </Badge>
+                ) : (
+                  <p> </p>
+                )}
               </Col>
             </div>
           ) : (
