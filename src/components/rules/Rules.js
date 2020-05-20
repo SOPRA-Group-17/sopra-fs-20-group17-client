@@ -15,7 +15,7 @@ class Rules extends React.Component {
           <p className="rules-text-title">Object of the Game</p>
           <p className="rules-text">
           Just One is a cooperative game. You need to work together to get the best score! 
-          In each round there is one active player. His goal is to guess the mystery word. 
+          In each round there is one guesser. His goal is to guess the mystery word. 
           He gets some clues from the other players(clue givers) which help him guessing correctly. 
           </p>
           <p className="rules-text-title">Game Overview</p>
@@ -95,7 +95,7 @@ class Rules extends React.Component {
           </p>
           <p className="rules-text">
             Note: If all clues have been cancelled, no hints are displayed to
-            the active player. Nevertheless, he may submit a guess or just skip
+            the guesser. Nevertheless, he may submit a guess or just skip
             it.
           </p>
           <p className="rules-text-s-title">Guess</p>
@@ -110,18 +110,18 @@ class Rules extends React.Component {
           Evaluation:
             <ul>
               <li>
-                Success: If the active player correctly guesses the mystery
+                Success: If the guesser correctly guesses the mystery
                 word, he gets a lot of points (also dependent on how fast he
                 guessed it!). Note: Upper and lowercase characters don’t matter.
                  Example: Prince is a correct guess for the mystery word prince. 
               </li>
               <li>
-                Failure: If the active player makes a wrong guess, he will get
+                Failure: If the guesser makes a wrong guess, he will get
                 minus points and as an additional penalty there will be one
                 round less for the team to play.
               </li>
               <li>
-                Skip: If the active player chooses not to answer and skips, the guesser gets 0 points and there won't be an additional
+                Skip: If the guesser chooses not to answer and skips, the guesser gets 0 points and there won't be an additional
                 penalty of removing one round.
               </li>
             </ul>
