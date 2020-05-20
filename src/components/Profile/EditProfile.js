@@ -268,7 +268,7 @@ class EditProfile extends React.Component {
                 <OutputField placeholder={this.state.user.id} />
                 <Label>Username</Label>
                 <InputField
-                  placeholder={this.state.user.username}
+                  placeholder={"place here your new username"}
                   onChange={(e) => {
                     this.handleInputChange("newUsername", e.target.value);
                   }}
