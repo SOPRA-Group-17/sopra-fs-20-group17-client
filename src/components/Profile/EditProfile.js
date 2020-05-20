@@ -118,7 +118,7 @@ class EditProfile extends React.Component {
       let requestBody;
       requestBody = JSON.stringify({
         password: this.state.newPassword,
-      });
+      }); 
       //console.log(requestBody);
       await api.put(`/users/${this.state.ID}`, requestBody);
       //console.log(response);
