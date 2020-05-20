@@ -120,7 +120,7 @@ class EditProfile extends React.Component {
         password: this.state.newPassword,
       });
       //console.log(requestBody);
-      const response = await api.put(`/users/${this.state.ID}`, requestBody);
+      await api.put(`/users/${this.state.ID}`, requestBody);
       //console.log(response);
     } catch (error) {
       alert(
