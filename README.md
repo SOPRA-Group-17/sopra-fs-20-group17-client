@@ -75,7 +75,7 @@ After login the user gets redirected to the dashboard. He can create or join a l
 
 If a user joined or created a lobby he gets redirected to the Lobby-screen, here he can set his status to ready, only if all players are ready, the game starts. If he created the lobby, he can also kick players out of the lobby.
 
-![](/src/images/Lobby_host.png | width=100)
+![](/src/images/Lobby_host.png =300x)
 
 During one round of the game the user is either the guesser or one of the clue givers.
 
@@ -99,7 +99,7 @@ During one round of the game the user is either the guesser or one of the clue g
 
 After evaluation a new round starts if the game is not finished yet, else the user gets redirected to the End screen.
 
-<img src="/src/images/Score.png" width="200">
+<img src="/src/images/Score.png" width="400">
 
 
 ## Roadmap
