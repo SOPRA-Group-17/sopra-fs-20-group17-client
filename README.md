@@ -86,9 +86,9 @@ During one round of the game the user is either the guesser or one of the clue g
 
 - **Pick a number:** The user must choose a number between 1 and 5.
 
-- **Enter guess**: He can see all given clues which are valid. He can either make a guess or skip if he doesn’t want to guess.
+- **Enter guess:** The guesser see all given clues which are valid. He can either make a guess or skip if he doesn’t want to guess.
 
-- **Evaluation**: On this screen the user can evaluate if he guessed correct or not and see his current score.
+- **Evaluation:** On this screen the user can evaluate if he guessed correct or not and see his current score.
 
 ### Flow of the clue giver:
 

@@ -593,10 +593,10 @@ class Validation extends React.Component {
               <Modal.Body className="rules-text">
                 <p className="rules-text-s-title">Report similar</p>
                 <p className="rules-text">
-                  The number of a clue is written on the top of the Cluecard. If
-                  a clue is too similiar to an other clue, click on the number
-                  of the similar clue in the numberlist. E.g. If Clue Nr.1 is
-                  similiar to clue Nr. 2. Click on 2 in the numberlist of clue
+                  The number of a clue is written on the top of the Clue card. If
+                  a clue is too similar to another clue, click on the number
+                  of the similar clue in the number list. E.g. If Clue Nr.1 is
+                  similar to clue Nr. 2. Click on 2 in the numberlist of clue Nr.1
                   1.
                 </p>
 
@@ -606,7 +606,7 @@ class Validation extends React.Component {
                   button after clicking the button the clue is marked as
                   INVALID.
                   <br />
-                  To change the clue back to Valide click on the INVALID button
+                  To change the clue back to Valid click on the INVALID button
                   after clicking the button the clue is marked as VALID.
                 </p>
                 <p className="rules-text">

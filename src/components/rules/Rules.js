@@ -14,23 +14,21 @@ class Rules extends React.Component {
         <Modal.Body className="rules-text">
           <p className="rules-text-title">Object of the Game</p>
           <p className="rules-text">
-            Just One is a cooperative game. You need to work together in order
-            to get the best score! In each round there is one player - he is
-            called the active player - who needs to guess a mystery word. He
-            gets some clues from the other players which help him guessing the
-            correct answer.
+          Just One is a cooperative game. You need to work together to get the best score! 
+          In each round there is one active player. His goal is to guess the mystery word. 
+          He gets some clues from the other players(clue givers) which help him guessing correctly. 
           </p>
           <p className="rules-text-title">Game Overview</p>
           <p className="rules-text">
-            One game includes 13 rounds. Each of these is divided into 5 phases.
+            One game includes 13 rounds. Each of these is divided into 4 phases.
           </p>
           <p className="rules-text-s-title">Choose the Mystery Word</p>
           <p className="rules-text">
-            The active player chooses a number between 1 and 5. The
-            corresponding mystery word gets displayed to all the other players -
-            the clue givers. These clue givers have now the opportunity to
-            report whether they know the mystery word or not. If the word is
-            unknown to many players, it is replaced by another mystery word.
+            The guesser chooses a number between 1 and 5. The
+            corresponding mystery word gets displayed to
+            the clue givers. The clue givers have now the opportunity to
+            report whether they know the mystery word or not. If the word is unknown to many players. 
+            The guesser has to choose another number and the clue givers have to decide again if they know the word. 
           </p>
           <p className="rules-text-s-title">Clue Section</p>
           <p className="rules-text">
@@ -48,16 +46,14 @@ class Rules extends React.Component {
             Invalid clues:
             <ul>
               <li>
-                The Mystery word but written differently. Example: Shurt is not
-                allowed when trying to make the player guess Shirt.
+              -	The Mystery word but written differently. Example: Shurt is not allowed when the mystery word is Shirt.
               </li>
               <li>
-                The Mystery word written in a foreign language. Example: Buisson
-                is not allowed if the word to be guessed is Shrub.
+                The Mystery word written in a foreign language. Example: Buisson is not allowed if the word to be guessed is Shrub.
               </li>
               <li>
-                A word from the same family as the Mystery word. Example:
-                Princess is not allowed if the word to be guessed is Prince
+                A word from the same word family as the Mystery word. Example:
+                Princess is not allowed if the word to be guessed is Prince.
               </li>
               <li>
                 An invented word. Example: Swee’ting is not allowed to try to
@@ -70,15 +66,14 @@ class Rules extends React.Component {
               </li>
             </ul>
           </p>
-          <p className="rules-text-s-title">Comparing Clues</p>
+          <p className="rules-text-s-title">Validating Clues</p>
           <p className="rules-text">
-            Once all players have submitted their clues, they are compared in
+            Once all players have submitted their clues, they are validated in
             two steps: First an API cancels all clues that are certainly invalid
             or have been submitted several times. In a second step, all the
-            submitted clues are displayed to all the clue givers and each one
-            can report invalid clues and duplicates. If several players choose
-            the same clues to be invalid respectively duplicates, they also get
-            cancelled.
+            submitted clues are displayed to the clue givers and each one
+            can report invalid clues and duplicates. 
+            If more than the half of the clue givers choose the same clues to be invalid respectively duplicates, they get deleted. 
           </p>
           <p className="rules-text">
             Identical clues:
@@ -92,7 +87,7 @@ class Rules extends React.Component {
               </li>
               <li>
                 Variants of the same word: plurals, gender differentiations, and
-                spelling mistakes don’t count as actual differences. Example:
+                spelling mistakes don’t count as actual differences. Examples:
                 Prince and Princes, Actor and Actress, Philosophy and Filosofie
                 are identical.
               </li>
@@ -105,19 +100,20 @@ class Rules extends React.Component {
           </p>
           <p className="rules-text-s-title">Guess</p>
           <p className="rules-text">
-            Once the identical or invalid clues have been cancelled, all the
-            remaining clues are displayed to the active player. He can now try
+            Once the identical or invalid clues have been deleted, all the
+            remaining clues are displayed to the guesser. He can now try
             to guess the mystery word. To do so, he is only allowed to submit
             one guess! However, if he has no idea what the mystery word could
             be, he is also allowed to skip the word.
           </p>
           <p className="rules-text">
-            Results:
+          Evaluation:
             <ul>
               <li>
                 Success: If the active player correctly guesses the mystery
                 word, he gets a lot of points (also dependent on how fast he
-                guessed it!).
+                guessed it!). Note: Upper and lowercase characters don’t matter.
+                 Example: Prince is a correct guess for the mystery word prince. 
               </li>
               <li>
                 Failure: If the active player makes a wrong guess, he will get
@@ -125,8 +121,7 @@ class Rules extends React.Component {
                 round less for the team to play.
               </li>
               <li>
-                Skip: If the active player chooses not to answer and skips their
-                turn, the guesser gets 0 points and there won't be an additional
+                Skip: If the active player chooses not to answer and skips, the guesser gets 0 points and there won't be an additional
                 penalty of removing one round.
               </li>
             </ul>
@@ -134,7 +129,7 @@ class Rules extends React.Component {
 
           <p className="rules-text-s-title">End of Turn</p>
           <p className="rules-text">
-            A new player becomes the active player and a new round begins.
+              If the game is not over yet a new round starts with a new player as a guesser.
           </p>
           <p className="rules-text-s-title">Scoring System</p>
           <p className="rules-text">
