@@ -68,15 +68,15 @@ class EditProfile extends React.Component {
   async componentDidMount() {
     try {
       this.state.ID = this.props.match.params.userId;
-      console.log(this.state.ID);
+      //console.log(this.state.ID);
       //get the user
       const response = await api.get(`/users/${this.state.ID}`);
 
-      console.log(response.data);
+      //console.log(response.data);
       // Get the returned users and update the state.
       this.setState({ user: response.data });
-      console.log(this.state.ID);
-      console.log(this.state.user);
+      //console.log(this.state.ID);
+      //console.log(this.state.user);
     } catch (error) {
       alert(
         `Something went wrong while fetching the users: \n${handleError(error)}`
@@ -93,9 +93,9 @@ class EditProfile extends React.Component {
           username: this.state.newUsername,
         });
       }
-      console.log(requestBody);
+      //console.log(requestBody);
       const response = await api.put(`/users/${this.state.ID}`, requestBody);
-      console.log(response.data);
+      //console.log(response.data);
       this.setState({
         changedUsername: true,
       });
@@ -119,9 +119,9 @@ class EditProfile extends React.Component {
       requestBody = JSON.stringify({
         password: this.state.newPassword,
       });
-      console.log(requestBody);
+      //console.log(requestBody);
       const response = await api.put(`/users/${this.state.ID}`, requestBody);
-      console.log(response);
+      //console.log(response);
     } catch (error) {
       alert(
         `Something went wrong during updating your password: \n${handleError(
@@ -156,12 +156,12 @@ class EditProfile extends React.Component {
           password: this.state.currentPassword,
         });
 
-        console.log(requestBody);
+        //console.log(requestBody);
         const response = await api.post(
           `/users/${this.state.ID}/passwords`,
           requestBody
         );
-        console.log(response.data.id);
+        //console.log(response.data.id);
         if (response.data.id) {
           this.setState({
             passwordValidation: true,

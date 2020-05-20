@@ -63,4 +63,4 @@ const Game = ({ game }) => {
   );
 };
 
-export default Player;
+export default Game;

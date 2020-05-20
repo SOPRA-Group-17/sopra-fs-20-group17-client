@@ -66,10 +66,10 @@ class Dashboard extends React.Component {
       //this.state.token = localStorage.getItem("token");
 
       const response = await api.get(`/users/${this.state.userId}`);
-      console.log(response);
+      //console.log(response);
       // Get the returned users and update the state.
       this.setState({ user: new User(response.data) });
-      console.log(this.state.user.username);
+      //console.log(this.state.user.username);
 
       this.getGames();
       this.timer = setInterval(() => this.getGames(), 1000);
@@ -85,7 +85,7 @@ class Dashboard extends React.Component {
   }
   async getScoarboard() {
     try {
-      console.log("getScoreboard");
+      //console.log("getScoreboard");
       const response = await api.get(`/users?sort_by=score.desc`);
 
       this.setState({ scoarboard: response.data }, () =>
@@ -102,7 +102,7 @@ class Dashboard extends React.Component {
 
   creatScoarboardList() {
     let list = [];
-    console.log(this.state.userId);
+    //console.log(this.state.userId);
     this.state.scoarboard.forEach((player) => {
       list.push({
         username: player.username,
@@ -116,7 +116,7 @@ class Dashboard extends React.Component {
     this.setState({ scoarboardList: list }, () =>
       this.setState({ readyToRender: true })
     );
-    console.log(list);
+    //console.log(list);
   }
 
   async getGames() {
@@ -130,7 +130,7 @@ class Dashboard extends React.Component {
         this.setState({ games: response.data });
         for (let i = 0; i < response.data.length; i++) {
           if (response.data[i].gameId === this.state.selectLobby) {
-            console.log("found match");
+            //console.log("found match");
             if (response.data[i].status === "LOBBY") {
               selectedValid = 1;
               break;
@@ -140,7 +140,7 @@ class Dashboard extends React.Component {
         if (selectedValid === 0) {
           for (let i = 0; i < response.data.length; i++) {
             if (response.data[i].status === "LOBBY") {
-              console.log("resetting because not valid");
+              //console.log("resetting because not valid");
               this.setState({ selectLobby: response.data[i].gameId });
               break;
             }
@@ -167,20 +167,20 @@ class Dashboard extends React.Component {
       this.setState({ ["toLong"]: null });
       this.setState({ [key]: value });
     }
-    console.log(this.state.newGame);
+    //console.log(this.state.newGame);
   }
 
   async creatLobby() {
     try {
-      console.log("you reached CREATE LOBBY");
+      //console.log("you reached CREATE LOBBY");
       const requestBody = JSON.stringify({
         name: this.state.newGame,
       });
-      console.log(this.state.newGame);
+      //console.log(this.state.newGame);
       const response = await api.post("/games", requestBody);
 
       const game = new Game(response.data);
-      console.log(game.gameId);
+      //console.log(game.gameId);
       //add put to add player to the lobby that we got back
 
       //TODO: get this to work this.props.history.push(`/lobby/host/${game.id}`);
@@ -188,7 +188,7 @@ class Dashboard extends React.Component {
         name: this.state.user.username,
         userToken: this.state.token,
       });
-      console.log(requestBody2);
+      //console.log(requestBody2);
 
       const player = await api.post(
         `/games/${game.gameId}/players`,
@@ -277,7 +277,7 @@ class Dashboard extends React.Component {
   createSelectionList = () => {
     let selectionList = [];
     let selected = -1;
-    console.log(this.state.selectLobby);
+    //console.log(this.state.selectLobby);
 
     if (this.state.games === undefined || this.state.games.length === 0) {
       return selectionList;

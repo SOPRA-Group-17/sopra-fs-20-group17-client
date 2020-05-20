@@ -66,7 +66,7 @@ class Number extends React.Component {
   async getGameStatus() {
     try {
       this.checkGameEnded();
-      console.log("number timer");
+      //console.log("number timer");
       //if the game is not ready for the next page then we are waiting and ask for the state again
       if (!this.state.readyForNext) {
         //get the game and its status
@@ -163,10 +163,10 @@ class Number extends React.Component {
 
       // Add new data to localStorage Array
       existing.push(number);
-      console.log(existing);
+      //console.log(existing);
       //check how many times the player has to take the word again (if five times, then word has to be considered as known and then redirected to the hint screen the others)
       if (existing) {
-        console.log(existing.length);
+        //console.log(existing.length);
 
         if (existing.length > 4) {
           this.allKnowTheWord();
@@ -193,10 +193,10 @@ class Number extends React.Component {
       //get all players in the game
       //set player and playerstatus
       const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
-      console.log(allPlayers.data);
+      //console.log(allPlayers.data);
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
-          console.log(allPlayers.data[i].id);
+          //console.log(allPlayers.data[i].id);
           //this player has to know the word
           let requestBody;
 
@@ -230,7 +230,7 @@ class Number extends React.Component {
 
       this.saveChangeAlternative(number);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
@@ -313,14 +313,14 @@ class Number extends React.Component {
       const hints = await api.get(`/games/${this.state.gameId}/hints`);
 
       let amountHints = amountPlayers * amountPlayers;
-      console.log(amountHints);
+      //console.log(amountHints);
       let sum = 0;
 
       let percentage;
       for (let i = 0; i < allPlayers.data.length; i++) {
         if (allPlayers.data[i].status !== "GUESSER") {
           if (this.state.gameStatus === "VALIDATING_TERM") {
-            console.log(allPlayers.data[i].playerTermStatus);
+            //console.log(allPlayers.data[i].playerTermStatus);
             if (allPlayers.data[i].playerTermStatus !== "NOT_SET") {
               sum++;
             }
@@ -331,13 +331,13 @@ class Number extends React.Component {
           } else if (this.state.gameStatus === "VALIDATING_HINTS") {
             if (hints.data[i]) {
               if (hints.data[i].reporters) {
-                console.log(hints.data[i].reporters.length);
+                //console.log(hints.data[i].reporters.length);
                 sum += hints.data[i].reporters.length;
-                console.log(sum);
+                //console.log(sum);
               }
             }
             percentage = (sum / amountHints) * 100;
-            console.log(percentage);
+            //console.log(percentage);
           }
         }
       }
@@ -396,8 +396,6 @@ class Number extends React.Component {
     return (
       <Container fluid>
         {this.getGameStatus}
-
-        {console.log(this.state.gameStatus)}
 
         <Row>
           {" "}
