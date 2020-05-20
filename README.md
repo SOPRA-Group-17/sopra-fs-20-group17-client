@@ -107,7 +107,7 @@ After evaluation a new round starts if the game is not finished yet, else the us
 
 ## Roadmap
 
-- Add a chat function, so that user can communicate whith each other.
+- Add a chat function, so that users can communicate whith each other.
 - Add the option to add bots to the game so that the game can be played if there are to few people.
 
 ### gender clause
