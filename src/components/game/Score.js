@@ -135,7 +135,7 @@ class Score extends React.Component {
 
   correctGuesses() {
     //shows amount of correct guesses
-    console.log(this.state.game);
+    //console.log(this.state.game);
     if (this.state.game) {
       if (this.state.game.correctCards >= 0) {
         return this.state.game.correctCards;
@@ -163,7 +163,7 @@ class Score extends React.Component {
         player: this.state.player,
       });
       // send request body to the backend
-      console.log(requestBody);
+      //console.log(requestBody);
       await api.delete(
         `/games/${this.state.gameId}/players/${this.state.playerId}`,
         requestBody

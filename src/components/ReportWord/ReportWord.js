@@ -66,7 +66,7 @@ class ReportWord extends React.Component {
       this.state.playerId = localStorage.getItem("Id");
       this.state.gameId = this.props.match.params.gameId;
 
-      console.log(this.state.playerId);
+      //console.log(this.state.playerId);
       //get current player
       const current_player = await api.get(
         `/games/players/${this.state.playerId}`
@@ -122,7 +122,7 @@ class ReportWord extends React.Component {
         },
         this.callback
       );
-      console.log(this.state.word);
+      //console.log(this.state.word);
       //get all players
       const all_players = await api.get(`/games/${this.state.gameId}/players`);
       this.setState(
@@ -266,7 +266,7 @@ class ReportWord extends React.Component {
 
   async checkGameEnded() {
     try {
-      console.log("report word timer");
+      //console.log("report word timer");
       const response = await api.get(`/games/${this.state.gameId}`);
       if (response.data.status === "FINISHED") {
         clearInterval(this.timer);
@@ -358,7 +358,6 @@ class ReportWord extends React.Component {
           </div>
         ) : (
           <div>
-            {console.log(this.state.word)}
             <Row>
               <Col>
                 <div>

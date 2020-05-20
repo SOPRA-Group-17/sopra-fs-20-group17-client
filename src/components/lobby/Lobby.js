@@ -225,8 +225,8 @@ class Lobby extends React.Component {
         }
         //player status
         if (j === 2) {
-          console.log(this.state.players[i].status);
-          console.log(this.state.players);
+          //console.log(this.state.players[i].status);
+          //console.log(this.state.players);
           if (this.state.players[i].status === "READY") {
             children.push(<td class="text-success">{`ready`}</td>);
           } else if (this.state.players[i].status === "NOT_READY") {
@@ -291,7 +291,7 @@ class Lobby extends React.Component {
         player: this.state.player,
       });
       // send request body to the backend
-      console.log(requestBody);
+      //console.log(requestBody);
       await api.delete(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody

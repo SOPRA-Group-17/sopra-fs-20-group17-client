@@ -53,8 +53,8 @@ class LobbyHost extends React.Component {
 
       //player id aus local storage, set in dahboard
       this.state.ID_player = localStorage.getItem("Id");
-      console.log(localStorage.getItem("Id"));
-      console.log(this.state.ID_player);
+      //console.log(localStorage.getItem("Id"));
+      //console.log(this.state.ID_player);
       //set player and playerstatus
       const response = await api.get(
         `/games/players/${localStorage.getItem("Id")}`
@@ -72,7 +72,7 @@ class LobbyHost extends React.Component {
       //helper state for the if else clause in the render function (needs true false value)
       if (this.state.player.status === "READY") {
         this.setState({ help_status: true });
-        console.log(this.state.help_status);
+        //console.log(this.state.help_status);
       } else {
         this.setState({ help_status: false });
       }
@@ -90,7 +90,7 @@ class LobbyHost extends React.Component {
     try {
       //check if we already want to exit the lobby, if so all the get functions dont have to be called
       if (!this.state.exit && !this.state.kick) {
-        console.log(localStorage);
+        //console.log(localStorage);
         //get current player
         const current_player = await api.get(
           `/games/players/${this.state.ID_player}`
@@ -202,8 +202,8 @@ class LobbyHost extends React.Component {
         }
         //player status
         if (j === 2) {
-          console.log(this.state.players[i].status);
-          console.log(this.state.players);
+          //console.log(this.state.players[i].status);
+          //console.log(this.state.players);
           if (this.state.players[i].status === "READY") {
             children.push(<td class="text-success">{`ready`}</td>);
           } else if (this.state.players[i].status === "NOT_READY") {
@@ -295,10 +295,10 @@ class LobbyHost extends React.Component {
   //clear timer before starting
   startGame() {
     //as soon as game ready, start the game
-    console.log(this.state.game.status);
-    console.log(this.state.player.status);
+    //console.log(this.state.game.status);
+    //console.log(this.state.player.status);
     if (this.state.game_status === "RECEIVING_TERM") {
-      console.log("am i getting here");
+      //console.log("am i getting here");
       if (this.state.player.status === "GUESSER") {
         clearInterval(this.timer);
         this.timer = null;
@@ -343,7 +343,7 @@ class LobbyHost extends React.Component {
         player: this.state.player,
       });
       // send request body to the backend
-      console.log(requestBody);
+      //console.log(requestBody);
       await api.delete(
         `/games/${this.state.ID_game}/players/${this.state.ID_player}`,
         requestBody
@@ -459,7 +459,6 @@ class LobbyHost extends React.Component {
             </Col>
 
             <div className="d-flex flex-md-column flex-row">
-              {console.log(this.state.help_status)}
               {this.state.help_status ? (
                 <div>
                   <button
@@ -481,7 +480,6 @@ class LobbyHost extends React.Component {
                   </button>
                 </div>
               )}
-              {console.log(this.state.status)}
             </div>
           </Row>
         </Container>

@@ -51,9 +51,9 @@ class EnterGuess extends React.Component {
 
   async checkGameEnded() {
     try {
-      console.log("game ended enterguess")
+      //console.log("game ended enterguess")
       const response = await api.get(`/games/${this.state.gameId}`);
-      console.log("enterguess timer");
+      //console.log("enterguess timer");
       if(response.data.status === "FINISHED"){
         clearInterval(this.timer);
         this.timer = null;
@@ -84,10 +84,10 @@ class EnterGuess extends React.Component {
       else{
         const response = await api.get(`/games/${this.state.gameId}`);
         // check if game ready to give hints
-        console.log(response.data.status);
+        //console.log(response.data.status);
         if (response.data.status === "RECEIVING_GUESS") {
           const response = await api.get(`/games/${this.state.gameId}/hints`);
-          console.log(response.data);
+          //console.log(response.data);
           this.setState({ hints: response.data });
           clearInterval(this.timer);
           this.timer = null;
@@ -150,7 +150,7 @@ class EnterGuess extends React.Component {
         this.props.history.push(`/game/${this.state.gameId}/Score`);
       }
       else{
-      console.log(this.state.playerToken);
+      //console.log(this.state.playerToken);
       const requestBody = JSON.stringify({
         token: this.state.playerToken,
       });

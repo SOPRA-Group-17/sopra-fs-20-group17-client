@@ -72,10 +72,10 @@ class Profile extends React.Component {
 
       // Get the returned users and update the state.
       this.setState({ user: response.data[0] });
-      console.log(this.state.tokenMatch);
+      //console.log(this.state.tokenMatch);
       if (localStorage.getItem("token") === this.state.user.token) {
         this.setState({ tokenMatch: "true" });
-        console.log(this.state.tokenMatch);
+        //console.log(this.state.tokenMatch);
       }
     } catch (error) {
       alert(
@@ -93,7 +93,7 @@ class Profile extends React.Component {
     if (this.state.user.birthDate == null) {
       return "Birth date is not set";
     } else {
-      console.log(this.state.user.birthDate);
+      //console.log(this.state.user.birthDate);
       return this.state.user.birthDate;
     }
   }

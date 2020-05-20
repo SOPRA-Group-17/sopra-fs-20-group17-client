@@ -59,10 +59,10 @@ class Evalution extends React.Component {
   async getScore() {
     try {
       if (this.state.gameId) {
-        console.log(this.state.id);
+        //console.log(this.state.id);
         const player = await api.get(`/games/players/${this.state.id}`);
         this.setState({ score: player.data.score });
-        console.log(player);
+        //console.log(player);
       }
     } catch (error) {
       alert(
@@ -77,7 +77,7 @@ class Evalution extends React.Component {
         const response = await api.get(`/games/${this.state.gameId}`);
         this.setState({ gameStatus: response.data.status });
         // check if game ready to get guess, add Validating_Hints
-        console.log(response.data.status);
+        //console.log(response.data.status);
         if (
           response.data.status === "FINISHED" ||
           response.data.status === "RECEIVING_TERM" ||
@@ -98,7 +98,7 @@ class Evalution extends React.Component {
           //checking if guess null, happens if guesser skipped
           if (!response2.data[0].guess) {
             this.setState({ skiped: true });
-            console.log("Skipped");
+            //console.log("Skipped");
           } else {
             if (response2.data[0].guess.status === "VALID") {
               this.setState({ guessCorrect: "correct" });
@@ -174,7 +174,7 @@ class Evalution extends React.Component {
 
   async startNewRound() {
     try {
-      console.log("starting new round");
+      //console.log("starting new round");
       clearInterval(this.timer);
       this.timer = null;
       clearInterval(this.timerDown);
@@ -190,7 +190,7 @@ class Evalution extends React.Component {
       }
       else{
         const Player = await api.get(`/games/players/${this.state.id}`);
-        console.log(Player.data.status);
+        //console.log(Player.data.status);
         if (Player.data.status === "GUESSER") {
           localStorage.setItem("status", "GUESSER");
           this.props.history.push(`/game/${this.state.gameId}/number`);

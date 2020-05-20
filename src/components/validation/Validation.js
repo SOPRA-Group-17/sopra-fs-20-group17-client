@@ -90,7 +90,7 @@ class Validation extends React.Component {
 
   async checkGameEnded() {
     try {
-      console.log("validation timer");
+      //console.log("validation timer");
       const response = await api.get(`/games/${this.state.gameId}`);
       if (response.data.status === "FINISHED") {
         clearInterval(this.timer);
@@ -122,7 +122,7 @@ class Validation extends React.Component {
           this.props.history.push(`/game/${this.state.gameId}/Score`);
         } else if (response.data.status === "VALIDATING_HINTS") {
           const response2 = await api.get(`/games/${this.state.gameId}/hints`);
-          console.log(response2.data);
+          //console.log(response2.data);
           clearInterval(this.timer);
           this.timer = null;
           this.setState({ hints: response2.data }, () =>
@@ -139,7 +139,7 @@ class Validation extends React.Component {
   }
 
   creatReportHintArray() {
-    console.log(this.state.hints);
+    //console.log(this.state.hints);
     this.state.hints.forEach((hint) => {
       let marked = "VALID";
       if (hint.status === "INVALID") {
@@ -153,7 +153,7 @@ class Validation extends React.Component {
         reporters: [],
       });
     });
-    console.log(this.state.hintsReport);
+    //console.log(this.state.hintsReport);
     this.setState({ readyToRender: true });
   }
 
@@ -236,7 +236,7 @@ class Validation extends React.Component {
             value={i - 1}
             onClick={(e) => {
               if (this.state.hintsReport[nr - 1].similarity.includes(i - 1)) {
-                console.log("unreport get called to");
+                //console.log("unreport get called to");
                 this.unReportSimilar(nr - 1, i - 1);
                 e.preventDefault();
               } else {
@@ -280,7 +280,7 @@ class Validation extends React.Component {
       }
     }
 
-    console.log(this.state.hintsReport);
+    //console.log(this.state.hintsReport);
   }
 
   reportSimilar(index1, index2) {
@@ -302,7 +302,7 @@ class Validation extends React.Component {
       newArray2[index2] = { ...newArray2[index2], similarity: similar2 };
       this.setState({ hintsReport: newArray2 });
     }
-    console.log(this.state.hintsReport);
+    //console.log(this.state.hintsReport);
   }
 
   //creats a card for each hint
@@ -350,9 +350,9 @@ class Validation extends React.Component {
                   onClick={() => {
                     let newArray = this.state.hintsReport;
                     newArray[index] = { ...newArray[index], marked: "INVALID" };
-                    console.log(newArray);
+                    //console.log(newArray);
                     this.setState({ hintsReport: newArray });
-                    console.log(this.state.hintsReport);
+                    //console.log(this.state.hintsReport);
                   }}
                 >
                   VALID
@@ -366,9 +366,9 @@ class Validation extends React.Component {
                   onClick={() => {
                     let newArray = this.state.hintsReport;
                     newArray[index] = { ...newArray[index], marked: "VALID" };
-                    console.log(newArray);
+                    //console.log(newArray);
                     this.setState({ hintsReport: newArray });
-                    console.log(this.state.hintsReport);
+                    //console.log(this.state.hintsReport);
                   }}
                 >
                   INVALID
@@ -397,10 +397,10 @@ class Validation extends React.Component {
         //get all players in the game
         //set player and playerstatus
         const allPlayers = await api.get(`/games/${this.state.gameId}/players`);
-        console.log(allPlayers.data);
+        //console.log(allPlayers.data);
         //-1 because of the guesser
         let amountPlayers = allPlayers.data.length - 1;
-        console.log(amountPlayers);
+        //console.log(amountPlayers);
         //get all hints to check afterwards
         const hints = await api.get(`/games/${this.state.gameId}/hints`);
 
