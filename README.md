@@ -72,7 +72,7 @@ This file includes CSS classes that are used to style our application. It is use
 ## Illustrations of the main user flows
 
 First a user must register and login with a username and password.
-After login the user gets redirected to the dashboard. He can create or join a lobby. S/he also has the option to logout or edit his profile.
+After login the user gets redirected to the dashboard where he can create or join a lobby. He also has the option to logout or edit his profile.
 
 <img src="/src/images/dashboard.png" width="700">
 
@@ -98,7 +98,7 @@ During one round of the game the user is either the guesser or one of the clue g
 
 - **Validation:** The user must validate if the given clues are Valid or Invalid and which clues are similar to each other.
 
-- **Evaluation:** On this screen the user can evaluate if the guesser guessed correct or not. Also shown is his current and if the clue he gave was valid.
+- **Evaluation:** On this screen the user can evaluate if the guesser guessed correct or not. Also shown is his current score and if the clue he gave was valid.
 
 After evaluation a new round starts if the game is not finished yet, else the user gets redirected to the End screen.
 
@@ -110,7 +110,7 @@ After evaluation a new round starts if the game is not finished yet, else the us
 - Add a chat function, so that user can communicate whith each other.
 - Add the option to add bots to the game so that the game can be played if there are to few people.
 
-## gender clause
+### gender clause
 Where the context so requires, the use of the masculine gender shall include the feminine and/or neuter genders and the singular shall include the plural, and vice versa.
 
 ## Authors and acknoledgments
