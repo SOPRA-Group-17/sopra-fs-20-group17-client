@@ -1,5 +1,7 @@
 # SoPra Group 17 - Client
 
+<img align="right" width="100" height="100" src="/src/images/Logo_favicon.svg">
+
 ## Introduction
 
 The Project aim is to provide the client side infrastrucute for our Just One Web Application. It provides user Interface so that the user can play the Just One Game. Communication with the backend is achieved by REST-API calls.
@@ -71,11 +73,11 @@ This file includes CSS classes that are used to style our application. It is use
 First a user must register and login with a username and password.
 After login the user gets redirected to the dashboard. He can create or join a lobby. S/he also has the option to logout or edit his profile.
 
-<img src="/src/images/dashboard.png" width="600">
+<img src="/src/images/dashboard.png" width="700">
 
 If a user joined or created a lobby he gets redirected to the Lobby-screen, here he can set his status to ready, only if all players are ready, the game starts. If he created the lobby, he can also kick players out of the lobby.
 
-<img src="/src/images/Lobby_host.png" width="600">
+<img src="/src/images/Lobby_host.png" width="700">
 
 During one round of the game the user is either the guesser or one of the clue givers.
 
@@ -99,7 +101,7 @@ During one round of the game the user is either the guesser or one of the clue g
 
 After evaluation a new round starts if the game is not finished yet, else the user gets redirected to the End screen.
 
-<img src="/src/images/Score.png" width="600">
+<img src="/src/images/Score.png" width="700">
 
 
 ## Roadmap
