@@ -1,6 +1,7 @@
+<img align="right" width="100" height="100" src="/src/images/Logo_favicon.svg">
+
 # SoPra Group 17 - Client
 
-<img align="right" width="100" height="100" src="/src/images/Logo_favicon.svg">
 
 ## Introduction
 
