@@ -138,13 +138,17 @@ class Rules extends React.Component {
             Gets plus points for a correct guess and minus points for an
             incorrect Guess. He gets more plus or less minus points the faster
             he submits his guess. Skipping gives 0 points.
+
+            If he submits 2 correct guesses per game, then he gets for every additional correct guess 10 points on top.
             <br />
             Clue giver
             <br />
             Gets plus points for a valid clue and minus points for an invalid or
             duplicate clue. He gets more plus or less minus points the faster he
             submits his clue.
-            If he submits 7 valid clues per game, then he gets for every additional valid clue 10 points.
+            
+            If he submits 7 valid clues per game, then he gets for every additional valid clue 5 points.
+
           </p>
         </Modal.Body>
       </div>
