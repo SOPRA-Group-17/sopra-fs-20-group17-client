@@ -126,20 +126,20 @@ class Dashboard extends React.Component {
 
       // Get the returned users and update the state.
 
-      if (response.data.length !== 0) {
+      if (response.data.length != 0) {
         this.setState({ games: response.data });
         for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].gameId === this.state.selectLobby) {
+          if (response.data[i].gameId == this.state.selectLobby) {
             //console.log("found match");
-            if (response.data[i].status === "LOBBY") {
+            if (response.data[i].status == "LOBBY") {
               selectedValid = 1;
               break;
             }
           }
         }
-        if (selectedValid === 0) {
+        if (selectedValid == 0) {
           for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].status === "LOBBY") {
+            if (response.data[i].status == "LOBBY") {
               //console.log("resetting because not valid");
               this.setState({ selectLobby: response.data[i].gameId });
               break;
