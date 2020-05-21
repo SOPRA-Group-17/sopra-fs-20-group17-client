@@ -295,7 +295,7 @@ class Dashboard extends React.Component {
         }
       }
       for (let i = 0; i < this.state.games.length; i++) {
-        if (i !== selected) {
+        if (i != selected) {
           if (this.state.games[i].status == "LOBBY") {
             selectionList.push(
               <option value={this.state.games[i].gameId}>
@@ -474,7 +474,7 @@ class Dashboard extends React.Component {
 
                   <Form.Group as={Col} controlId="Lobbys">
                     <Button
-                      disabled={this.state.games.length === 0}
+                      disabled={this.state.games.length == 0}
                       variant="outline-light"
                       className="outlineWhite-Form"
                       onClick={() => {
