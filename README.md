@@ -2,7 +2,6 @@
 
 # SoPra Group 17 - Client
 
-
 ## Introduction
 
 The Project aim is to provide the client side infrastrucute for our Just One Web Application. It provides user Interface so that the user can play the Just One Game. Communication with the backend is achieved by REST-API calls.
@@ -74,7 +73,7 @@ This file includes CSS classes that are used to style our application. It is use
 First a user must register and login with a username and password.
 After login the user gets redirected to the dashboard where he can create or join a lobby. He also has the option to logout or edit his profile.
 
-<img src="/src/images/dashboard.png" width="700">
+<img src="/src/images/11Dashboard.png" width="700">
 
 If a user joined or created a lobby he gets redirected to the Lobby-screen, here he can set his status to ready, only if all players are ready, the game starts. If he created the lobby, he can also kick players out of the lobby.
 
@@ -102,16 +101,16 @@ During one round of the game the user is either the guesser or one of the clue g
 
 After evaluation a new round starts if the game is not finished yet, else the user gets redirected to the End screen.
 
-<img src="/src/images/Score.png" width="700">
-
+<img src="/src/images/10score.png" width="700">
 
 ## Roadmap
 
 - Add a chat function, so that users can communicate whith each other.
 - Add the option to add bots to the game so that the game can be played if there are to few people.
 
-### gender clause
-Where the context so requires, the use of the masculine gender shall include the feminine and/or neuter genders and the singular shall include the plural, and vice versa.
+## Gender clause
+
+- Where the context so requires, the use of the masculine gender shall include the feminine and/or neuter genders and the singular shall include the plural, and vice versa.
 
 ## Authors and acknoledgments
 
@@ -127,13 +126,10 @@ Big thanks to Nik Zaugg for assisting our group during the project aswell as Roy
 
 This project is licensed under the MIT liscence.
 
-Copyright (c) [2020][Jonas Zürcher, Lennart Jung]
+Copyright (c) [2020][jonas zürcher, lennart jung]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
