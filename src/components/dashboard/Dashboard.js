@@ -283,8 +283,8 @@ class Dashboard extends React.Component {
       return selectionList;
     } else {
       for (let i = 0; i < this.state.games.length; i++) {
-        if (this.state.games[i].gameId === this.state.selectLobby) {
-          if (this.state.games[i].status === "LOBBY") {
+        if (this.state.games[i].gameId == this.state.selectLobby) {
+          if (this.state.games[i].status == "LOBBY") {
             selected = i;
             selectionList.push(
               <option value={this.state.games[i].gameId}>
@@ -296,7 +296,7 @@ class Dashboard extends React.Component {
       }
       for (let i = 0; i < this.state.games.length; i++) {
         if (i !== selected) {
-          if (this.state.games[i].status === "LOBBY") {
+          if (this.state.games[i].status == "LOBBY") {
             selectionList.push(
               <option value={this.state.games[i].gameId}>
                 {this.state.games[i].name}
@@ -432,7 +432,7 @@ class Dashboard extends React.Component {
               <Form className="DashboardForm">
                 <Form.Row>
                   <p style={{ color: "red" }} hidden={!this.state.toLong}>
-                    Lobbyname is to long
+                    Lobbyname is too long
                   </p>
                 </Form.Row>
                 <Form.Row>
