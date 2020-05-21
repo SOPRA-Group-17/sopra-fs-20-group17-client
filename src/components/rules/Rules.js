@@ -144,6 +144,7 @@ class Rules extends React.Component {
             Gets plus points for a valid clue and minus points for an invalid or
             duplicate clue. He gets more plus or less minus points the faster he
             submits his clue.
+            If he submits 7 valid clues per game, then he gets for every additional valid clue 10 points.
           </p>
         </Modal.Body>
       </div>
